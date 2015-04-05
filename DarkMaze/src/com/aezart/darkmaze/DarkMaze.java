@@ -5,17 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.RGBImageFilter;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +22,8 @@ import javax.swing.SwingUtilities;
 
 public class DarkMaze extends JFrame{
 	
+	int lives = 3;
+	
 	static final int FULLBRIGHT = 0;
 	static final int ALL_TORCHES = 1;
 	static final int ENEMY_TORCHES = 2;
@@ -39,8 +35,10 @@ public class DarkMaze extends JFrame{
 	BufferedImage mapSurface = new BufferedImage(608, 480, BufferedImage.TYPE_3BYTE_BGR);
 	BufferedImage displaySurface = new BufferedImage(608, 480, BufferedImage.TYPE_3BYTE_BGR);
 	BufferedImage glowingEyes;
+	BufferedImage redEyes;
 	BufferedImage light;
-	BufferedImage lightsurface = new BufferedImage(608,480,BufferedImage.TYPE_4BYTE_ABGR);
+	BufferedImage lightsurface = new BufferedImage(608,480,BufferedImage.TYPE_4BYTE_ABGR_PRE);
+	BufferedImage droppedTorch;
 	BufferedImage wallshadow;
 	boolean showmap = false;
 	Random rng = new Random();
@@ -48,6 +46,8 @@ public class DarkMaze extends JFrame{
 	boolean[][] coins = new boolean[7][9];
 	HashMap<Integer, Boolean> keyStates = new HashMap<Integer, Boolean>();
 	Entity knight = new Entity("littleknight.png");
+	Entity[] torches = new Entity[5];
+	int lastTorch = -1;
 	BufferedImage tileset;
 	JPanel screen = new JPanel(){
 		@Override
@@ -74,7 +74,14 @@ public class DarkMaze extends JFrame{
 				if (displayMode == FULLBRIGHT || 
 						displayMode == ALL_TORCHES || 
 						displayMode == ENEMY_TORCHES){
-					lg.drawImage(light, entities[i].x-28, entities[i].y-28, null);
+					//lg.drawImage(light, entities[i].x-28, entities[i].y-28, null);
+				}
+			}
+			
+			for (Entity e: torches){
+				if (e != null){
+					dg.drawImage(droppedTorch, e.x,e.y,null);
+					lg.drawImage(light, e.x-28, e.y-28, null);
 				}
 			}
 
@@ -99,8 +106,14 @@ public class DarkMaze extends JFrame{
 			g2D.fillRect(0, 0, 608, 480);
 			g2D.drawImage(lightsurface, 0, 0, null);
 			for (int i = 1; i < entities.length; ++i){
-				g.drawImage(glowingEyes, entities[i].x, entities[i].y, null);
+				if (lineOfSight(knight.xTile(), knight.yTile(), entities[i].xTile(), entities[i].yTile(), maze))
+				{
+					g.drawImage(redEyes, entities[i].x, entities[i].y, null);
+				}else{
+					g.drawImage(glowingEyes, entities[i].x, entities[i].y, null);
+				}
 			}
+			
 		}
 	};
 	
@@ -111,6 +124,12 @@ public class DarkMaze extends JFrame{
 		}
 		entities[1].x = 40;
 		entities[1].y = 40;
+		entities[2].x = 40;
+		entities[2].y = 424;
+		entities[3].x = 552;
+		entities[3].y = 40;
+		entities[4].x = 552;
+		entities[4].y = 424;
 		for (int i = 0; i < coins.length; ++i){
 			for (int k = 0; k < coins[0].length; ++k){
 				coins[i][k] = true;
@@ -121,6 +140,8 @@ public class DarkMaze extends JFrame{
 			light = ImageIO.read(new File("alphalight.png"));
 			wallshadow = ImageIO.read(new File("wallshadow.png"));
 			glowingEyes = ImageIO.read(new File("glowingeyes.png"));
+			redEyes = ImageIO.read(new File("redeyes.png"));
+			droppedTorch = ImageIO.read(new File("droppedtorch.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -147,10 +168,20 @@ public class DarkMaze extends JFrame{
 				if (arg0.getKeyCode() == KeyEvent.VK_Z){
 					generateMaze(maze);
 					paintBackground(sg);
-					for (int i = 1; i < entities.length; ++i){
-						entities[i].x = 40;
-						entities[i].y = 40;
-					}
+					entities[1].x = 40;
+					entities[1].y = 40;
+					entities[2].x = 40;
+					entities[2].y = 424;
+					entities[3].x = 552;
+					entities[3].y = 40;
+					entities[4].x = 552;
+					entities[4].y = 424;
+				}
+				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
+					lastTorch = (lastTorch+1)%5;
+					torches[lastTorch] = new Entity("droppedtorch.png");
+					torches[lastTorch].x = knight.x;
+					torches[lastTorch].y = knight.y;
 				}
 			}
 
@@ -286,7 +317,7 @@ public class DarkMaze extends JFrame{
 		
 		generateNext(firstX, firstY, maze, visited);
 		
-		for (int i = 0; i < 18; ++i){
+		/*for (int i = 0; i < 18; ++i){
 			int passageX = rng.nextInt(visited[0].length - 1);
 			int passageY = rng.nextInt(visited.length - 1);
 			
@@ -295,7 +326,7 @@ public class DarkMaze extends JFrame{
 			}else{
 				maze[2*passageY+2][2*passageX+1] = false;
 			}
-		}
+		}*/
 	}
 	
 	void generateNext(int x, int y, boolean[][] maze, boolean[][] visited){
