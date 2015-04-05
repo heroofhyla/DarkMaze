@@ -29,4 +29,31 @@ public class Entity {
 	int yTile(){
 		return (y+8)/32;
 	}
+	
+	int directionTo(Entity e){
+		if (x > e.x){
+			if (y > e.y){
+				return 3; 
+			}
+			if (y < e.y){
+				return 5;
+			}
+			return 4;
+			
+		}
+		if (x < e.x){
+			if (y > e.y){
+				return 1;
+			}
+			if (y < e.y){
+				return 7;
+			}
+			return 0;
+		}
+		
+		if (y > e.y){
+			return 2;
+		}
+		return 6;
+	}
 }

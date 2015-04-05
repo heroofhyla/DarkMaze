@@ -166,8 +166,6 @@ public class DarkMaze extends JFrame{
 					
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_Z){
-					generateMaze(maze);
-					paintBackground(sg);
 					entities[1].x = 40;
 					entities[1].y = 40;
 					entities[2].x = 40;
@@ -176,6 +174,9 @@ public class DarkMaze extends JFrame{
 					entities[3].y = 40;
 					entities[4].x = 552;
 					entities[4].y = 424;
+					generateMaze(maze);
+					paintBackground(sg);
+
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
 					lastTorch = (lastTorch+1)%5;
@@ -241,41 +242,123 @@ public class DarkMaze extends JFrame{
 					}
 					
 					for (int i = 1; i < darkMaze.entities.length; ++i){
+						if (darkMaze.lineOfSight(darkMaze.entities[i].xTile(), darkMaze.entities[i].yTile(), darkMaze.knight.xTile(), darkMaze.knight.yTile(), darkMaze.maze)){
+							darkMaze.directions[i] = darkMaze.entities[i].directionTo(darkMaze.knight);
+						}
 						int nextX = darkMaze.entities[i].x;
 						int nextY = darkMaze.entities[i].y;
-						switch (darkMaze.directions[i]){
+						/*switch (darkMaze.directions[i]){
 						case 0:
 							nextX += 2;
 							break;
 						case 1:
+							nextX += 2;
 							nextY -= 2;
 							break;
 						case 2:
-							nextX -= 2;
+							nextY -= 2;
 							break;
 						case 3:
+							nextY -= 2;
+							nextX -= 2;
+							break;
+						case 4:
+							nextX -= 2;
+							break;
+						case 5:
+							nextX -= 2;
 							nextY += 2;
 							break;
+						case 6:
+							nextY += 2;
+							break;
+						case 7:
+							nextY += 2;
+							nextX += 2;
+							break;
 						}
-						while (darkMaze.maze[(nextY + 16)/32][(nextX + 16)/32] || 
-								darkMaze.maze[nextY/32][nextX/32]){
-							darkMaze.directions[i] = darkMaze.rng.nextInt(4);
+						if (darkMaze.maze[(nextY+16)/32][(darkMaze.entities[i].x+16)/32] ||
+								darkMaze.maze[(nextY/32)][darkMaze.entities[i].x/32]){
+							nextY = darkMaze.entities[i].y;
+							if (darkMaze.directions[i] == 1 || darkMaze.directions[i] == 7){
+								darkMaze.directions[i] = 0;
+							}
+							if (darkMaze.directions[i] == 3 || darkMaze.directions[i] == 5){
+								darkMaze.directions[i] = 4;
+							}
+							
+						}
+						if (darkMaze.maze[(darkMaze.entities[i].y+16)/32][(nextX+16)/32] ||
+								darkMaze.maze[(darkMaze.entities[i].y)/32][nextX/32]){
+							nextX = darkMaze.entities[i].x;
+							
+							if (darkMaze.directions[i] == 1 || darkMaze.directions[i] == 3){
+								darkMaze.directions[i] = 2;
+							}
+							if (darkMaze.directions[i] == 5 || darkMaze.directions[i] == 7){
+								darkMaze.directions[i] = 6;
+							}
+						}*/
+						if (darkMaze.directions[i] == 0 || darkMaze.directions[i] == 1 || darkMaze.directions[i] == 7){
+							if (!darkMaze.maze[darkMaze.entities[i].y/32][(darkMaze.entities[i].x+18)/32] &&
+									!darkMaze.maze[(darkMaze.entities[i].y+16)/32][(darkMaze.entities[i].x+18)/32]){
+								nextX += 2;
+							}
+						}
+						if (darkMaze.directions[i] == 3 || darkMaze.directions[i] == 4 || darkMaze.directions[i] == 5){
+							if (!darkMaze.maze[darkMaze.entities[i].y/32][(darkMaze.entities[i].x-2)/32] &&
+									!darkMaze.maze[(darkMaze.entities[i].y+16)/32][(darkMaze.entities[i].x-2)/32]){
+								nextX -= 2;
+							}
+						}
+						if (darkMaze.directions[i] == 1 || darkMaze.directions[i] == 2 || darkMaze.directions[i] == 3){
+							if (!darkMaze.maze[(darkMaze.entities[i].y-2)/32][(darkMaze.entities[i].x)/32] &&
+									!darkMaze.maze[(darkMaze.entities[i].y-2)/32][(darkMaze.entities[i].x+16)/32]){
+								nextY -= 2;
+							}
+						}
+						if (darkMaze.directions[i] == 5 || darkMaze.directions[i] == 6 || darkMaze.directions[i] == 7){
+							if (!darkMaze.maze[(darkMaze.entities[i].y+18)/32][(darkMaze.entities[i].x)/32] &&
+									!darkMaze.maze[(darkMaze.entities[i].y+18)/32][(darkMaze.entities[i].x+16)/32]){
+								nextY += 2;
+							}
+						}
+						while (nextX == darkMaze.entities[i].x && nextY == darkMaze.entities[i].y){
+							darkMaze.directions[i] = darkMaze.rng.nextInt(8)/2 * 2;
 							nextX = darkMaze.entities[i].x;
 							nextY = darkMaze.entities[i].y;
-							switch (darkMaze.directions[i]){
-							case 0:
-								nextX += 2;
-								break;
-							case 1:
-								nextY -= 2;
-								break;
-							case 2:
-								nextX -= 2;
-								break;
-							case 3:
-								nextY += 2;
-								break;
+							if (darkMaze.directions[i] == 0 || darkMaze.directions[i] == 1 || darkMaze.directions[i] == 7){
+								if (!darkMaze.maze[darkMaze.entities[i].y/32][(darkMaze.entities[i].x+18)/32] &&
+										!darkMaze.maze[(darkMaze.entities[i].y+16)/32][(darkMaze.entities[i].x+18)/32]){
+									nextX += 2;
+								}
 							}
+							if (darkMaze.directions[i] == 3 || darkMaze.directions[i] == 4 || darkMaze.directions[i] == 5){
+								if (!darkMaze.maze[darkMaze.entities[i].y/32][(darkMaze.entities[i].x-2)/32] &&
+										!darkMaze.maze[(darkMaze.entities[i].y+16)/32][(darkMaze.entities[i].x-2)/32]){
+									nextX -= 2;
+								}
+							}
+							if (darkMaze.directions[i] == 1 || darkMaze.directions[i] == 2 || darkMaze.directions[i] == 3){
+								if (!darkMaze.maze[(darkMaze.entities[i].y-2)/32][(darkMaze.entities[i].x)/32] &&
+										!darkMaze.maze[(darkMaze.entities[i].y-2)/32][(darkMaze.entities[i].x+16)/32]){
+									nextY -= 2;
+								}
+							}
+							if (darkMaze.directions[i] == 5 || darkMaze.directions[i] == 6 || darkMaze.directions[i] == 7){
+								if (!darkMaze.maze[(darkMaze.entities[i].y+18)/32][(darkMaze.entities[i].x)/32] &&
+										!darkMaze.maze[(darkMaze.entities[i].y+18)/32][(darkMaze.entities[i].x+16)/32]){
+									nextY += 2;
+								}
+							}
+							/*if (darkMaze.maze[(nextY+16)/32][(darkMaze.entities[i].x+16)/32] ||
+									darkMaze.maze[(nextY/32)][darkMaze.entities[i].x/32]){
+								nextY = darkMaze.entities[i].y;
+							}
+							if (darkMaze.maze[(darkMaze.entities[i].y+16)/32][(nextX+16)/32] ||
+									darkMaze.maze[(darkMaze.entities[i].y)/32][nextX/32]){
+								nextX = darkMaze.entities[i].x;
+							}*/
 							
 						}
 						
@@ -317,7 +400,7 @@ public class DarkMaze extends JFrame{
 		
 		generateNext(firstX, firstY, maze, visited);
 		
-		/*for (int i = 0; i < 18; ++i){
+		for (int i = 0; i < 18; ++i){
 			int passageX = rng.nextInt(visited[0].length - 1);
 			int passageY = rng.nextInt(visited.length - 1);
 			
@@ -326,7 +409,7 @@ public class DarkMaze extends JFrame{
 			}else{
 				maze[2*passageY+2][2*passageX+1] = false;
 			}
-		}*/
+		}
 	}
 	
 	void generateNext(int x, int y, boolean[][] maze, boolean[][] visited){
