@@ -106,7 +106,7 @@ public class DarkMaze extends JFrame{
 			g2D.fillRect(0, 0, 608, 480);
 			g2D.drawImage(lightsurface, 0, 0, null);
 			for (int i = 1; i < entities.length; ++i){
-				if (lineOfSight(knight.xTile(), knight.yTile(), entities[i].xTile(), entities[i].yTile(), maze))
+				if (lineOfSight(knight.xTile(), knight.yTile(), entities[i].xTile(), entities[i].yTile()))
 				{
 					g.drawImage(redEyes, entities[i].x, entities[i].y, null);
 				}else{
@@ -242,7 +242,7 @@ public class DarkMaze extends JFrame{
 					}
 					
 					for (int i = 1; i < darkMaze.entities.length; ++i){
-						if (darkMaze.lineOfSight(darkMaze.entities[i].xTile(), darkMaze.entities[i].yTile(), darkMaze.knight.xTile(), darkMaze.knight.yTile(), darkMaze.maze)){
+						if (darkMaze.lineOfSight(darkMaze.entities[i].xTile(), darkMaze.entities[i].yTile(), darkMaze.knight.xTile(), darkMaze.knight.yTile())){
 							darkMaze.directions[i] = darkMaze.entities[i].directionTo(darkMaze.knight);
 						}
 						int nextX = darkMaze.entities[i].x;
@@ -441,7 +441,7 @@ public class DarkMaze extends JFrame{
 		
 	}
 	
-	boolean lineOfSight(int x1, int y1, int x2, int y2, boolean[][] maze){
+	boolean lineOfSight(int x1, int y1, int x2, int y2){
 		boolean lineOfSight = false;
 		if (y1 == y2){
 			lineOfSight = true;
