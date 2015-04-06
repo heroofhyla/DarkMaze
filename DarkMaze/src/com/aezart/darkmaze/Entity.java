@@ -1,5 +1,7 @@
 package com.aezart.darkmaze;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,15 +13,12 @@ public class Entity {
 	int x;
 	int y;
 	
-	public Entity(String imageString){
-		try {
-			sprite = ImageIO.read(new File(imageString));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	EntityType entityType;
+	
+	public Entity(EntityType entityType){
 		x = 228;
 		y = 228;
+		this.entityType = entityType;
 	}
 	
 	int xTile(){
@@ -55,5 +54,17 @@ public class Entity {
 			return 2;
 		}
 		return 6;
+	}
+
+	public void draw(Graphics dg) {
+		entityType.draw(dg, this);
+	}
+	
+	public void drawLights(Graphics2D lg){
+		entityType.drawLights(lg, this);
+	}
+	
+	public void drawEffects(Graphics g){
+		entityType.drawEffects(g, this);
 	}
 }
