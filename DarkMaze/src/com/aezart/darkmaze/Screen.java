@@ -37,7 +37,7 @@ public class Screen extends JPanel{
 		for (int i = 0; i < darkMaze.coins.length; ++i){
 			for (int k = 0; k < darkMaze.coins[0].length; ++k){
 				if (darkMaze.coins[i][k]){
-					dg.drawImage(darkMaze.tileset, k*64+32, i*64+32, k*64+64, i*64+64, 32, 0, 48, 16, null);
+					//dg.drawImage(darkMaze.tileset, k*64+32, i*64+32, k*64+64, i*64+64, 32, 0, 48, 16, null);
 				}
 			}
 		}

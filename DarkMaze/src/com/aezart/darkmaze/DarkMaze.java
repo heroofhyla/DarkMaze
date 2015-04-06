@@ -143,11 +143,19 @@ public class DarkMaze extends JFrame{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		generateMaze(maze);
 		
 		final Graphics sg = screen.mapSurface.getGraphics();
-		paintBackground(sg);
 		
+		screen.setPreferredSize(new Dimension(608,480));
+		add(screen);
+		pack();
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setVisible(true);
+
+		generateMaze(maze);
+
+		paintBackground(sg);
+
 		this.addKeyListener(new KeyListener(){
 
 			@Override
@@ -193,11 +201,6 @@ public class DarkMaze extends JFrame{
 		keyStates.put(KeyEvent.VK_RIGHT, false);
 		keyStates.put(KeyEvent.VK_UP, false);
 		keyStates.put(KeyEvent.VK_DOWN, false);
-		screen.setPreferredSize(new Dimension(608,480));
-		add(screen);
-		pack();
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
 	}
 	
 	public static void main(String[] args){
@@ -322,6 +325,7 @@ public class DarkMaze extends JFrame{
 	}
 	
 	void generateMaze(boolean[][] maze){
+		Vector<TileXY> deadEnds = new Vector<TileXY>();
 		for (int i = 0; i < maze.length; ++i){
 			for (int k = 0; k < maze[0].length; ++k){
 				if (i%2 == 1 && k%2 == 1){
@@ -335,46 +339,75 @@ public class DarkMaze extends JFrame{
 		int firstX = rng.nextInt(visited[0].length);
 		int firstY = rng.nextInt(visited.length);
 		
-		generateNext(firstX, firstY, maze, visited);
+		deadEnds.add(new TileXY(firstX,firstY));
+		//entities.add(new Entity(torchType));
+		entities.lastElement().x = 64 * firstX + 40;
+		entities.lastElement().y = 64 * firstY + 40;
+
+		generateNext(firstX, firstY, maze, visited, deadEnds);
 		
-		for (int i = 0; i < 18; ++i){
-			int passageX = rng.nextInt(visited[0].length - 1);
-			int passageY = rng.nextInt(visited.length - 1);
-			
-			if (rng.nextBoolean()){
-				maze[2*passageY+1][2*passageX+2] = false;
-			}else{
-				maze[2*passageY+2][2*passageX+1] = false;
+		for (TileXY d: deadEnds){
+			ArrayList<TileXY> adjacentCells = new ArrayList<TileXY>();
+			if (d.x > 0){
+				adjacentCells.add(new TileXY(2*d.x,2*d.y+1));
+			}
+			if (d.x < (maze[0].length-1)/2-1){
+				adjacentCells.add(new TileXY(2*d.x+2,2*d.y+1));
+			}
+			if (d.y > 0){
+				adjacentCells.add(new TileXY(2*d.x+1,2*d.y));
+			}
+			if (d.y < (maze.length-1)/2-1){
+				adjacentCells.add(new TileXY(2*d.x+1,2*d.y+2));
+			}
+			Collections.shuffle(adjacentCells);
+			for (TileXY t: adjacentCells){
+				if (maze[t.y][t.x]){
+					maze[t.y][t.x] = false;
+					break;
+				}
 			}
 		}
 	}
 	
-	void generateNext(int x, int y, boolean[][] maze, boolean[][] visited){
+	void generateNext(int x, int y, boolean[][] maze, boolean[][] visited, Vector<TileXY> deadEnds){
 		visited[y][x] = true;
-		ArrayList<Dimension> adjacentCells = new ArrayList<Dimension>();
+		ArrayList<TileXY> adjacentCells = new ArrayList<TileXY>();
 		if (x > 0){
-			adjacentCells.add(new Dimension(x-1,y));
+			adjacentCells.add(new TileXY(x-1,y));
 		}
 		if (x < visited[0].length - 1){
-			adjacentCells.add(new Dimension(x+1,y));
+			adjacentCells.add(new TileXY(x+1,y));
 		}
 		if (y>0){
-			adjacentCells.add(new Dimension(x,y-1));
+			adjacentCells.add(new TileXY(x,y-1));
 		}
 		if (y < visited.length - 1){
-			adjacentCells.add(new Dimension(x,y+1));
+			adjacentCells.add(new TileXY(x,y+1));
 		}
 		
 		Collections.shuffle(adjacentCells);
-		for (Dimension d: adjacentCells){
-			if (!visited[d.height][d.width]){
-				int deltaX = x - d.width;
-				int deltaY = y - d.height;
+		int numVisited = 0;
+
+		for (TileXY d: adjacentCells){
+
+			if (!visited[d.y][d.x]){
+				++numVisited;
+				int deltaX = x - d.x;
+				int deltaY = y - d.y;
 				
 				maze[y*2 + 1 - deltaY][x*2 + 1 - deltaX] = false;
-				generateNext(d.width, d.height, maze, visited);
+				generateNext(d.x, d.y, maze, visited, deadEnds);
 			}
 		}
+		if (numVisited == 0){
+			deadEnds.add(new TileXY(x,y));
+			//entities.add(new Entity(torchType));
+			entities.lastElement().x = 64 * x + 40;
+			entities.lastElement().y = 64 * y + 40;
+
+		}
+
 		
 	}
 	
