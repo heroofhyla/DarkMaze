@@ -77,20 +77,13 @@ public class DarkMaze extends JFrame{
 		for (int i = 0; i < 4; ++i){
 			cloaks.add(new Cloak(this));
 		}
-		cloaks.get(0).x = 40;
-		cloaks.get(0).y = 40;
-		cloaks.get(1).x = 40;
-		cloaks.get(1).y = 424;
-		cloaks.get(2).x = 552;
-		cloaks.get(2).y = 40;
-		cloaks.get(3).x = 552;
-		cloaks.get(3).y = 424;
-		
+		cloaks.get(0).setPosition(XYCoords.fromTile(1, 1));
+		cloaks.get(1).setPosition(XYCoords.fromTile(1,13));
+		cloaks.get(2).setPosition(XYCoords.fromTile(17,1));
+		cloaks.get(3).setPosition(XYCoords.fromTile(17,13));
 		entities.addAll(cloaks);
 		
-		knight.x = 288;
-		knight.y = 288;
-
+		knight.setPosition(XYCoords.fromTile(9, 7));
 		final Graphics sg = screen.mapSurface.getGraphics();
 		
 		screen.setPreferredSize(new Dimension(608,480));
@@ -121,10 +114,10 @@ public class DarkMaze extends JFrame{
 				if (arg0.getKeyCode() == KeyEvent.VK_Z){
 					generateMaze(maze);
 
-					cloaks.get(0).setPositionTile(1,1);
-					cloaks.get(1).setPositionTile(1,13);
-					cloaks.get(2).setPositionTile(17,1);
-					cloaks.get(3).setPositionTile(17,13);
+					cloaks.get(0).setPosition(XYCoords.fromTile(1, 1));
+					cloaks.get(1).setPosition(XYCoords.fromTile(1,13));
+					cloaks.get(2).setPosition(XYCoords.fromTile(17,1));
+					cloaks.get(3).setPosition(XYCoords.fromTile(17,13));
 					paintBackground(sg);
 
 				}
@@ -185,7 +178,7 @@ public class DarkMaze extends JFrame{
 				itr.remove();
 			}
 		}*/
-		Vector<TileXY> deadEnds = new Vector<TileXY>();
+		Vector<XYCoords> deadEnds = new Vector<XYCoords>();
 		for (int i = 0; i < maze.length; ++i){
 			for (int k = 0; k < maze[0].length; ++k){
 				if (i%2 == 1 && k%2 == 1){
@@ -199,69 +192,69 @@ public class DarkMaze extends JFrame{
 		int firstX = rng.nextInt(visited[0].length);
 		int firstY = rng.nextInt(visited.length);
 		
-		deadEnds.add(new TileXY(firstX,firstY));
+		deadEnds.add(XYCoords.fromTile(firstX,firstY));
 		//entities.add(new Entity(torchType));
 		//entities.lastElement().x = 64 * firstX + 40;
 		//entities.lastElement().y = 64 * firstY + 40;
 
 		generateNext(firstX, firstY, maze, visited, deadEnds);
 		
-		for (TileXY d: deadEnds){
-			ArrayList<TileXY> adjacentCells = new ArrayList<TileXY>();
-			if (d.xTile > 0){
-				adjacentCells.add(new TileXY(2*d.xTile,2*d.yTile+1));
+		for (XYCoords d: deadEnds){
+			ArrayList<XYCoords> adjacentCells = new ArrayList<XYCoords>();
+			if (d.xTile() > 0){
+				adjacentCells.add(XYCoords.fromTile(2*d.xTile(),2*d.yTile()+1));
 			}
-			if (d.xTile < (maze[0].length-1)/2-1){
-				adjacentCells.add(new TileXY(2*d.xTile+2,2*d.yTile+1));
+			if (d.xTile() < (maze[0].length-1)/2-1){
+				adjacentCells.add(XYCoords.fromTile(2*d.xTile()+2,2*d.yTile()+1));
 			}
-			if (d.yTile > 0){
-				adjacentCells.add(new TileXY(2*d.xTile+1,2*d.yTile));
+			if (d.yTile() > 0){
+				adjacentCells.add(XYCoords.fromTile(2*d.xTile()+1,2*d.yTile()));
 			}
-			if (d.yTile < (maze.length-1)/2-1){
-				adjacentCells.add(new TileXY(2*d.xTile+1,2*d.yTile+2));
+			if (d.yTile() < (maze.length-1)/2-1){
+				adjacentCells.add(XYCoords.fromTile(2*d.xTile()+1,2*d.yTile()+2));
 			}
 			Collections.shuffle(adjacentCells);
-			for (TileXY t: adjacentCells){
-				if (maze[t.yTile][t.xTile]){
-					maze[t.yTile][t.xTile] = false;
+			for (XYCoords t: adjacentCells){
+				if (maze[t.yTile()][t.xTile()]){
+					maze[t.yTile()][t.xTile()] = false;
 					break;
 				}
 			}
 		}
 	}
 	
-	void generateNext(int x, int y, boolean[][] maze, boolean[][] visited, Vector<TileXY> deadEnds){
+	void generateNext(int x, int y, boolean[][] maze, boolean[][] visited, Vector<XYCoords> deadEnds){
 		visited[y][x] = true;
-		ArrayList<TileXY> adjacentCells = new ArrayList<TileXY>();
+		ArrayList<XYCoords> adjacentCells = new ArrayList<XYCoords>();
 		if (x > 0){
-			adjacentCells.add(new TileXY(x-1,y));
+			adjacentCells.add(XYCoords.fromTile(x-1,y));
 		}
 		if (x < visited[0].length - 1){
-			adjacentCells.add(new TileXY(x+1,y));
+			adjacentCells.add(XYCoords.fromTile(x+1,y));
 		}
 		if (y>0){
-			adjacentCells.add(new TileXY(x,y-1));
+			adjacentCells.add(XYCoords.fromTile(x,y-1));
 		}
 		if (y < visited.length - 1){
-			adjacentCells.add(new TileXY(x,y+1));
+			adjacentCells.add(XYCoords.fromTile(x,y+1));
 		}
 		
 		Collections.shuffle(adjacentCells);
 		int numVisited = 0;
 
-		for (TileXY d: adjacentCells){
+		for (XYCoords d: adjacentCells){
 
-			if (!visited[d.yTile][d.xTile]){
+			if (!visited[d.yTile()][d.xTile()]){
 				++numVisited;
-				int deltaX = x - d.xTile;
-				int deltaY = y - d.yTile;
+				int deltaX = x - d.xTile();
+				int deltaY = y - d.yTile();
 				
 				maze[y*2 + 1 - deltaY][x*2 + 1 - deltaX] = false;
-				generateNext(d.xTile, d.yTile, maze, visited, deadEnds);
+				generateNext(d.xTile(), d.yTile(), maze, visited, deadEnds);
 			}
 		}
 		if (numVisited == 0){
-			deadEnds.add(new TileXY(x,y));
+			deadEnds.add(XYCoords.fromTile(x,y));
 			//entities.add(new Entity(torchType));
 			//entities.lastElement().x = 64 * x + 40;
 			//entities.lastElement().y = 64 * y + 40;
