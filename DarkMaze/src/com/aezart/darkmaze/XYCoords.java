@@ -47,4 +47,19 @@ public class XYCoords {
 	public int yTile(int yOffset){
 		return (y+yOffset)/32;
 	}
+	
+	public void setX(int x){
+		this.x = x;
+	}
+	
+	public void setY(int y){
+		this.y = y;
+	}
+	
+	public void setXTile(int xTile){
+		this.x = xTile*32;
+	}
+	public void setYTile(int yTile){
+		this.y = yTile*32;
+	}
 }

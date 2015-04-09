@@ -10,6 +10,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public abstract class Entity {
+	int bboxX1;
+	int bboxX2;
+	int bboxY1;
+	int bboxY2;
+	
 	XYCoords position = XYCoords.fromAbsolute(0,0);
 	//int x;
 	//int y;
@@ -22,6 +27,10 @@ public abstract class Entity {
 		this.game = game;
 		//x = 0;
 		//y = 0;
+		bboxX1 = 0;
+		bboxY1 = 0;
+		bboxX2 = sprite.getWidth();
+		bboxY2 = sprite.getHeight();
 	}
 	
 	int x(){
@@ -89,8 +98,6 @@ public abstract class Entity {
 	}
 
 	public void draw(Graphics g) {
-		g.setColor(Color.white);
-		g.drawRect(x(), y(), 32, 32);
 		g.drawImage(sprite, x(), y(), null);
 	}
 	//TODO: Don't assume light is 72x72
