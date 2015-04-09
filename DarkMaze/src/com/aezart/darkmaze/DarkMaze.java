@@ -1,6 +1,5 @@
 package com.aezart.darkmaze;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,12 +12,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class DarkMaze extends JFrame{
@@ -30,69 +29,8 @@ public class DarkMaze extends JFrame{
 	static final int ENEMY_TORCHES = 2;
 	static final int PLAYER_TORCH = 3;
 	static final int FULLDARK = 4;
-	
-	EntityType knightType = new EntityType("littleknight.png"){
-
-		@Override
-		public void draw(Graphics dg, Entity e) {
-			dg.drawImage(sprite, e.x, e.y, null);
-		}
-
-		@Override
-		public void drawLights(Graphics2D lg, Entity e) {
-			lg.drawImage(light, e.x-28, e.y-28, null);
-			
-		}
-
-		@Override
-		public void drawEffects(Graphics g, Entity e) {
-			//no effects
-		}
-	};
-	
-	EntityType cloakType = new EntityType("littlecloak.png"){
-		@Override
-		public void draw(Graphics dg, Entity e) {
-			dg.drawImage(sprite, e.x, e.y, null);
-		}
-
-		@Override
-		public void drawLights(Graphics2D lg, Entity e) {
-			//no light
-		}
-
-		@Override
-		public void drawEffects(Graphics g, Entity e) {
-			if (lineOfSight(knight.xTile(), knight.yTile(), e.xTile(), e.yTile()))
-			{
-				g.drawImage(redEyes, e.x, e.y, null);
-			}else{
-				g.drawImage(glowingEyes, e.x, e.y, null);
-			}
-		}
-	};
-	
-	
-	EntityType torchType = new EntityType("droppedtorch.png"){
-
-		@Override
-		public void draw(Graphics dg, Entity e) {
-			dg.drawImage(sprite, e.x, e.y, null);
-		}
-
-		@Override
-		public void drawLights(Graphics2D lg, Entity e) {
-			lg.drawImage(light, e.x-28, e.y-28, null);
-		}
-
-		@Override
-		public void drawEffects(Graphics g, Entity e) {
-			//no effects
-		}
 		
-	};
-	
-	
+	EntityType destinationFlag = new EntityType(null, null, null, null);
 	int displayMode = ALL_TORCHES;
 	int[] directions = new int[5];
 	Vector<Entity> entities = new Vector<Entity>();
@@ -102,32 +40,22 @@ public class DarkMaze extends JFrame{
 	BufferedImage light;
 	BufferedImage droppedTorch;
 	BufferedImage wallshadow;
+	BufferedImage knightSprite;
+	BufferedImage cloakSprite;
+	
 	boolean showmap = false;
 	Random rng = new Random();
 	boolean[][] maze = new boolean[15][19];
 	boolean[][] coins = new boolean[7][9];
 	HashMap<Integer, Boolean> keyStates = new HashMap<Integer, Boolean>();
-	Entity knight = new Entity(knightType);
-	//Entity[] torches = new Entity[5];
+	Entity knight;
+		
 	int lastTorch = -1;
 	BufferedImage tileset;
 	Screen screen = new Screen(this);
 		
 	public DarkMaze(){
-		entities.add(knight);
-		for (int i = 0; i < 4; ++i){
-			cloaks.add(new Entity(cloakType));
-		}
-		cloaks.get(0).x = 40;
-		cloaks.get(0).y = 40;
-		cloaks.get(1).x = 40;
-		cloaks.get(1).y = 424;
-		cloaks.get(2).x = 552;
-		cloaks.get(2).y = 40;
-		cloaks.get(3).x = 552;
-		cloaks.get(3).y = 424;
 		
-		entities.addAll(cloaks);
 		for (int i = 0; i < coins.length; ++i){
 			for (int k = 0; k < coins[0].length; ++k){
 				coins[i][k] = true;
@@ -140,10 +68,30 @@ public class DarkMaze extends JFrame{
 			glowingEyes = ImageIO.read(new File("glowingeyes.png"));
 			redEyes = ImageIO.read(new File("redeyes.png"));
 			droppedTorch = ImageIO.read(new File("droppedtorch.png"));
+			knightSprite = ImageIO.read(new File("littleknight.png"));
+			cloakSprite = ImageIO.read(new File("littlecloak.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		knight = new Knight(this);
+		entities.add(knight);
+		for (int i = 0; i < 4; ++i){
+			cloaks.add(new Cloak(this));
+		}
+		cloaks.get(0).x = 40;
+		cloaks.get(0).y = 40;
+		cloaks.get(1).x = 40;
+		cloaks.get(1).y = 424;
+		cloaks.get(2).x = 552;
+		cloaks.get(2).y = 40;
+		cloaks.get(3).x = 552;
+		cloaks.get(3).y = 424;
 		
+		entities.addAll(cloaks);
+		
+		knight.x = 288;
+		knight.y = 288;
+
 		final Graphics sg = screen.mapSurface.getGraphics();
 		
 		screen.setPreferredSize(new Dimension(608,480));
@@ -168,26 +116,23 @@ public class DarkMaze extends JFrame{
 				keyStates.put(arg0.getKeyCode(), false);
 				if (arg0.getKeyCode() == KeyEvent.VK_SHIFT){
 					//showmap = !showmap;
-					//displayMode = (displayMode+1)%5;
+					displayMode = (displayMode+1)%5;
 					
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_Z){
-					cloaks.get(0).x = 40;
-					cloaks.get(0).y = 40;
-					cloaks.get(1).x = 40;
-					cloaks.get(1).y = 424;
-					cloaks.get(2).x = 552;
-					cloaks.get(2).y = 40;
-					cloaks.get(3).x = 552;
-					cloaks.get(3).y = 424;
 					generateMaze(maze);
+
+					cloaks.get(0).setPositionTile(1,1);
+					cloaks.get(1).setPositionTile(1,13);
+					cloaks.get(2).setPositionTile(17,1);
+					cloaks.get(3).setPositionTile(17,13);
 					paintBackground(sg);
 
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
-					entities.add(new Entity(torchType));
-					entities.lastElement().x = knight.x;
-					entities.lastElement().y = knight.y;
+					//entities.add(new Entity(torchType));
+					//entities.lastElement().x = knight.x;
+					//entities.lastElement().y = knight.y;
 				}
 			}
 
@@ -211,99 +156,8 @@ public class DarkMaze extends JFrame{
 			@Override
 			public void run() {
 				while(true){
-					
-					if (darkMaze.knight.x%64 > 26 && darkMaze.knight.x%64 < 54 && 
-							darkMaze.knight.y%64 >26 && darkMaze.knight.y%64 < 54){
-						darkMaze.coins[darkMaze.knight.y/64][darkMaze.knight.x/64] = false;
-					}
-					if ((darkMaze.keyStates.get(KeyEvent.VK_LEFT) == true)){
-						if (!darkMaze.maze[darkMaze.knight.y/32][(darkMaze.knight.x-2)/32] &&
-								!darkMaze.maze[(darkMaze.knight.y+16)/32][(darkMaze.knight.x-2)/32]){
-							darkMaze.knight.x -= 2;
-						}
-					}
-					if ((darkMaze.keyStates.get(KeyEvent.VK_RIGHT) == true)){
-						if (!darkMaze.maze[darkMaze.knight.y/32][(darkMaze.knight.x+18)/32] &&
-								!darkMaze.maze[(darkMaze.knight.y+16)/32][(darkMaze.knight.x+18)/32]){
-							darkMaze.knight.x += 2;
-						}
-					}
-					if ((darkMaze.keyStates.get(KeyEvent.VK_UP) == true)){
-						if (!darkMaze.maze[(darkMaze.knight.y-2)/32][(darkMaze.knight.x)/32] &&
-								!darkMaze.maze[(darkMaze.knight.y-2)/32][(darkMaze.knight.x+16)/32]){
-							darkMaze.knight.y -= 2;
-						}
-					}
-					if ((darkMaze.keyStates.get(KeyEvent.VK_DOWN) == true)){
-						if (!darkMaze.maze[(darkMaze.knight.y+18)/32][(darkMaze.knight.x)/32] &&
-								!darkMaze.maze[(darkMaze.knight.y+18)/32][(darkMaze.knight.x+16)/32]){
-							darkMaze.knight.y += 2;
-						}
-					}
-					
-					for (int i = 0; i < darkMaze.cloaks.size(); ++i){
-						if (darkMaze.lineOfSight(darkMaze.cloaks.get(i).xTile(), darkMaze.cloaks.get(i).yTile(), darkMaze.knight.xTile(), darkMaze.knight.yTile())){
-							darkMaze.directions[i] = darkMaze.cloaks.get(i).directionTo(darkMaze.knight);
-						}
-						int nextX = darkMaze.cloaks.get(i).x;
-						int nextY = darkMaze.cloaks.get(i).y;
-						
-						if (darkMaze.directions[i] == 0 || darkMaze.directions[i] == 1 || darkMaze.directions[i] == 7){
-							if (!darkMaze.maze[darkMaze.cloaks.get(i).y/32][(darkMaze.cloaks.get(i).x+18)/32] &&
-									!darkMaze.maze[(darkMaze.cloaks.get(i).y+16)/32][(darkMaze.cloaks.get(i).x+18)/32]){
-								nextX += 2;
-							}
-						}
-						if (darkMaze.directions[i] == 3 || darkMaze.directions[i] == 4 || darkMaze.directions[i] == 5){
-							if (!darkMaze.maze[darkMaze.cloaks.get(i).y/32][(darkMaze.cloaks.get(i).x-2)/32] &&
-									!darkMaze.maze[(darkMaze.cloaks.get(i).y+16)/32][(darkMaze.cloaks.get(i).x-2)/32]){
-								nextX -= 2;
-							}
-						}
-						if (darkMaze.directions[i] == 1 || darkMaze.directions[i] == 2 || darkMaze.directions[i] == 3){
-							if (!darkMaze.maze[(darkMaze.cloaks.get(i).y-2)/32][(darkMaze.cloaks.get(i).x)/32] &&
-									!darkMaze.maze[(darkMaze.cloaks.get(i).y-2)/32][(darkMaze.cloaks.get(i).x+16)/32]){
-								nextY -= 2;
-							}
-						}
-						if (darkMaze.directions[i] == 5 || darkMaze.directions[i] == 6 || darkMaze.directions[i] == 7){
-							if (!darkMaze.maze[(darkMaze.cloaks.get(i).y+18)/32][(darkMaze.cloaks.get(i).x)/32] &&
-									!darkMaze.maze[(darkMaze.cloaks.get(i).y+18)/32][(darkMaze.cloaks.get(i).x+16)/32]){
-								nextY += 2;
-							}
-						}
-						while (nextX == darkMaze.cloaks.get(i).x && nextY == darkMaze.cloaks.get(i).y){
-							darkMaze.directions[i] = darkMaze.rng.nextInt(8)/2 * 2;
-							nextX = darkMaze.cloaks.get(i).x;
-							nextY = darkMaze.cloaks.get(i).y;
-							if (darkMaze.directions[i] == 0 || darkMaze.directions[i] == 1 || darkMaze.directions[i] == 7){
-								if (!darkMaze.maze[darkMaze.cloaks.get(i).y/32][(darkMaze.cloaks.get(i).x+18)/32] &&
-										!darkMaze.maze[(darkMaze.cloaks.get(i).y+16)/32][(darkMaze.cloaks.get(i).x+18)/32]){
-									nextX += 2;
-								}
-							}
-							if (darkMaze.directions[i] == 3 || darkMaze.directions[i] == 4 || darkMaze.directions[i] == 5){
-								if (!darkMaze.maze[darkMaze.cloaks.get(i).y/32][(darkMaze.cloaks.get(i).x-2)/32] &&
-										!darkMaze.maze[(darkMaze.cloaks.get(i).y+16)/32][(darkMaze.cloaks.get(i).x-2)/32]){
-									nextX -= 2;
-								}
-							}
-							if (darkMaze.directions[i] == 1 || darkMaze.directions[i] == 2 || darkMaze.directions[i] == 3){
-								if (!darkMaze.maze[(darkMaze.cloaks.get(i).y-2)/32][(darkMaze.cloaks.get(i).x)/32] &&
-										!darkMaze.maze[(darkMaze.cloaks.get(i).y-2)/32][(darkMaze.cloaks.get(i).x+16)/32]){
-									nextY -= 2;
-								}
-							}
-							if (darkMaze.directions[i] == 5 || darkMaze.directions[i] == 6 || darkMaze.directions[i] == 7){
-								if (!darkMaze.maze[(darkMaze.cloaks.get(i).y+18)/32][(darkMaze.cloaks.get(i).x)/32] &&
-										!darkMaze.maze[(darkMaze.cloaks.get(i).y+18)/32][(darkMaze.cloaks.get(i).x+16)/32]){
-									nextY += 2;
-								}
-							}
-						}
-						
-						darkMaze.cloaks.get(i).x = nextX;
-						darkMaze.cloaks.get(i).y = nextY;
+					for (Entity e: darkMaze.entities){
+						e.tick();
 					}
 						SwingUtilities.invokeLater(new Runnable(){
 
@@ -325,6 +179,13 @@ public class DarkMaze extends JFrame{
 	}
 	
 	void generateMaze(boolean[][] maze){
+		/*Iterator<Entity> itr = entities.iterator();
+		while (itr.hasNext()){
+			Entity e = itr.next();
+			if (e.entityType == torchType){
+				itr.remove();
+			}
+		}*/
 		Vector<TileXY> deadEnds = new Vector<TileXY>();
 		for (int i = 0; i < maze.length; ++i){
 			for (int k = 0; k < maze[0].length; ++k){
@@ -341,29 +202,29 @@ public class DarkMaze extends JFrame{
 		
 		deadEnds.add(new TileXY(firstX,firstY));
 		//entities.add(new Entity(torchType));
-		entities.lastElement().x = 64 * firstX + 40;
-		entities.lastElement().y = 64 * firstY + 40;
+		//entities.lastElement().x = 64 * firstX + 40;
+		//entities.lastElement().y = 64 * firstY + 40;
 
 		generateNext(firstX, firstY, maze, visited, deadEnds);
 		
 		for (TileXY d: deadEnds){
 			ArrayList<TileXY> adjacentCells = new ArrayList<TileXY>();
-			if (d.x > 0){
-				adjacentCells.add(new TileXY(2*d.x,2*d.y+1));
+			if (d.xTile > 0){
+				adjacentCells.add(new TileXY(2*d.xTile,2*d.yTile+1));
 			}
-			if (d.x < (maze[0].length-1)/2-1){
-				adjacentCells.add(new TileXY(2*d.x+2,2*d.y+1));
+			if (d.xTile < (maze[0].length-1)/2-1){
+				adjacentCells.add(new TileXY(2*d.xTile+2,2*d.yTile+1));
 			}
-			if (d.y > 0){
-				adjacentCells.add(new TileXY(2*d.x+1,2*d.y));
+			if (d.yTile > 0){
+				adjacentCells.add(new TileXY(2*d.xTile+1,2*d.yTile));
 			}
-			if (d.y < (maze.length-1)/2-1){
-				adjacentCells.add(new TileXY(2*d.x+1,2*d.y+2));
+			if (d.yTile < (maze.length-1)/2-1){
+				adjacentCells.add(new TileXY(2*d.xTile+1,2*d.yTile+2));
 			}
 			Collections.shuffle(adjacentCells);
 			for (TileXY t: adjacentCells){
-				if (maze[t.y][t.x]){
-					maze[t.y][t.x] = false;
+				if (maze[t.yTile][t.xTile]){
+					maze[t.yTile][t.xTile] = false;
 					break;
 				}
 			}
@@ -391,24 +252,21 @@ public class DarkMaze extends JFrame{
 
 		for (TileXY d: adjacentCells){
 
-			if (!visited[d.y][d.x]){
+			if (!visited[d.yTile][d.xTile]){
 				++numVisited;
-				int deltaX = x - d.x;
-				int deltaY = y - d.y;
+				int deltaX = x - d.xTile;
+				int deltaY = y - d.yTile;
 				
 				maze[y*2 + 1 - deltaY][x*2 + 1 - deltaX] = false;
-				generateNext(d.x, d.y, maze, visited, deadEnds);
+				generateNext(d.xTile, d.yTile, maze, visited, deadEnds);
 			}
 		}
 		if (numVisited == 0){
 			deadEnds.add(new TileXY(x,y));
 			//entities.add(new Entity(torchType));
-			entities.lastElement().x = 64 * x + 40;
-			entities.lastElement().y = 64 * y + 40;
-
+			//entities.lastElement().x = 64 * x + 40;
+			//entities.lastElement().y = 64 * y + 40;
 		}
-
-		
 	}
 	
 	boolean lineOfSight(int x1, int y1, int x2, int y2){

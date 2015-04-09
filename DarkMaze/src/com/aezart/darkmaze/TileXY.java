@@ -1,11 +1,19 @@
 package com.aezart.darkmaze;
 
 public class TileXY {
-	int x;
-	int y;
+	int xTile;
+	int yTile;
 	
 	public TileXY(int x, int y){
-		this.x = x;
-		this.y = y;
+		this.xTile = x;
+		this.yTile = y;
+	}
+	
+	public int x(){
+		return 32*xTile + 16;
+	}
+	
+	public int y(){
+		return 32*yTile + 16;
 	}
 }

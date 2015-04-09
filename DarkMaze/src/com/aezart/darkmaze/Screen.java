@@ -29,18 +29,21 @@ public class Screen extends JPanel{
 		lg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
 		
 		dg.drawImage(mapSurface, 0, 0, null);
-		for (Entity e: darkMaze.entities){
-			e.draw(dg);
-			e.drawLights(lg);
-		}
+		
 
 		for (int i = 0; i < darkMaze.coins.length; ++i){
 			for (int k = 0; k < darkMaze.coins[0].length; ++k){
 				if (darkMaze.coins[i][k]){
-					//dg.drawImage(darkMaze.tileset, k*64+32, i*64+32, k*64+64, i*64+64, 32, 0, 48, 16, null);
+					dg.drawImage(darkMaze.tileset, k*64+32, i*64+32, k*64+64, i*64+64, 32, 0, 48, 16, null);
 				}
 			}
 		}
+		
+		for (Entity e: darkMaze.entities){
+			e.draw(dg);
+			e.drawLights(lg);
+		}
+		
 		if (darkMaze.displayMode == DarkMaze.FULLBRIGHT){
 			lg.fillRect(0, 0, 608, 480);
 		}
@@ -56,6 +59,7 @@ public class Screen extends JPanel{
 		g2D.drawImage(lightsurface, 0, 0, null);
 		for (Entity e: darkMaze.entities){
 			e.drawEffects(g2D);
+			//e.draw(g2D);
 		}
 	}
 }
