@@ -30,7 +30,6 @@ public class DarkMaze extends JFrame{
 	static final int PLAYER_TORCH = 3;
 	static final int FULLDARK = 4;
 		
-	EntityType destinationFlag = new EntityType(null, null, null, null);
 	int displayMode = ALL_TORCHES;
 	int[] directions = new int[5];
 	Vector<Entity> entities = new Vector<Entity>();

@@ -10,10 +10,10 @@ public class TileXY {
 	}
 	
 	public int x(){
-		return 32*xTile + 16;
+		return 32*xTile + 8;
 	}
 	
 	public int y(){
-		return 32*yTile + 16;
+		return 32*yTile + 8;
 	}
 }

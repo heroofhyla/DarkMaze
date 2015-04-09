@@ -20,6 +20,7 @@ public class Cloak extends Entity{
 	
 	@Override
 	public void tick(){
+		int lastdirection = direction;
 		if (lineOfSight(game.knight)){
 			playerLastSeen.xTile = game.knight.xTile();
 			playerLastSeen.yTile = game.knight.yTile();			
@@ -29,6 +30,9 @@ public class Cloak extends Entity{
 			direction = directionTo(playerLastSeen);
 		}
 		
+		if (xTile() == game.knight.xTile() && yTile() == game.knight.yTile()){
+			direction = directionTo(game.knight);
+		}
 		int nextX = x;
 		int nextY = y;
 
@@ -88,6 +92,11 @@ public class Cloak extends Entity{
 		}
 		
 		 x = nextX;
-		 y = nextY;			
+		 y = nextY;
+		 
+		 if (x == playerLastSeen.x() && y == playerLastSeen.y()){
+			 playerLastSeen.xTile = 0;
+			 playerLastSeen.yTile = 0;
+		 }
 	}
 }
