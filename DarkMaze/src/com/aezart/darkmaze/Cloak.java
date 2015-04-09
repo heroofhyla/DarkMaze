@@ -3,7 +3,6 @@ package com.aezart.darkmaze;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.image.TileObserver;
 
 public class Cloak extends Entity{
 	int direction = game.rng.nextInt(4) * 2;
@@ -105,8 +104,6 @@ public class Cloak extends Entity{
 				playerNextTurn.y = 0;
 			}
 		}
-		int nextX = x();
-		int nextY = y();
 
 		XYCoords nextCoord = nextCoord(direction);
 		
@@ -127,6 +124,12 @@ public class Cloak extends Entity{
 			 playerLastSeen.y = 0;
 		 }
 		 
+		 if (xTile() == game.knight.xTile() && yTile() == game.knight.yTile()){
+			 game.lives -= 1;
+			 game.resetMaze();
+			 game.knight.setPosition(XYCoords.fromTile(9, 7, 8, 8));
+
+		 }
 	}
 	
 	@Override

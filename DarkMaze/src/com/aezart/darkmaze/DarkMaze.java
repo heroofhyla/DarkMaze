@@ -23,6 +23,7 @@ import javax.swing.SwingUtilities;
 public class DarkMaze extends JFrame{
 	
 	int lives = 3;
+	int coinCount = 0;
 	
 	static final int FULLBRIGHT = 0;
 	static final int ALL_TORCHES = 1;
@@ -59,6 +60,8 @@ public class DarkMaze extends JFrame{
 			for (int k = 0; k < coins[0].length; ++k){
 				coins[i][k] = true;
 			}
+			coins[3][4] = false;
+			
 		}
 		try {
 			tileset  = ImageIO.read(new File("tileset2.png"));
@@ -91,7 +94,7 @@ public class DarkMaze extends JFrame{
 		cloaks.get(3).drawYOffset = 8;
 		entities.addAll(cloaks);
 		
-		knight.setPosition(XYCoords.fromTile(9, 7));
+		knight.setPosition(XYCoords.fromTile(9, 7, 8, 8));
 		final Graphics sg = screen.mapSurface.getGraphics();
 		
 		screen.setPreferredSize(new Dimension(608,480));
@@ -121,14 +124,7 @@ public class DarkMaze extends JFrame{
 					
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_Z){
-					generateMaze(maze);
-
-					cloaks.get(0).setPosition(XYCoords.fromTile(1, 1));
-					cloaks.get(1).setPosition(XYCoords.fromTile(1,13));
-					cloaks.get(2).setPosition(XYCoords.fromTile(17,1));
-					cloaks.get(3).setPosition(XYCoords.fromTile(17,13));
-					paintBackground(sg);
-
+					resetMaze();
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
 					//entities.add(new Entity(torchType));
@@ -316,5 +312,16 @@ public class DarkMaze extends JFrame{
 				}
 			}
 		}
+	}
+	
+	void resetMaze(){
+		generateMaze(maze);
+
+		cloaks.get(0).setPosition(XYCoords.fromTile(1, 1, 8, 8));
+		cloaks.get(1).setPosition(XYCoords.fromTile(1,13, 8, 8));
+		cloaks.get(2).setPosition(XYCoords.fromTile(17,1, 8, 8));
+		cloaks.get(3).setPosition(XYCoords.fromTile(17,13, 8, 8));
+		paintBackground(screen.mapSurface.getGraphics());
+
 	}
 }

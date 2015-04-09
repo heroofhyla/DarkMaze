@@ -61,5 +61,9 @@ public class Screen extends JPanel{
 			e.drawEffects(g2D);
 			//e.draw(g2D);
 		}
+		g2D.setColor(Color.black);
+		g2D.fillRect(0,468,608,480);
+		g2D.setColor(Color.white);
+		g2D.drawString("Lives: " + darkMaze.lives + " Coins: " + darkMaze.coinCount, 0, 478);
 	}
 }

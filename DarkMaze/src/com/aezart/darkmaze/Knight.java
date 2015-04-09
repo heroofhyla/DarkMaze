@@ -21,7 +21,10 @@ public class Knight extends Entity{
 	public void tick(){
 		if ( x()%64 > 26 &&  x()%64 < 54 && 
 				 y()%64 >26 &&  y()%64 < 54){
-			game.coins[ y()/64][ x()/64] = false;
+			if (game.coins[ y()/64][ x()/64]){
+				game.coins[ y()/64][ x()/64] = false;
+				++ game.coinCount;
+			}
 		}
 		if ((game.keyStates.get(KeyEvent.VK_LEFT) == true)){
 			if (!game.maze[ y()/32][( x()-2)/32] &&
