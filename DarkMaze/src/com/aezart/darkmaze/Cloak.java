@@ -1,32 +1,61 @@
 package com.aezart.darkmaze;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.image.TileObserver;
 
 public class Cloak extends Entity{
 	int direction = game.rng.nextInt(4) * 2;
 	XYCoords playerLastSeen = XYCoords.fromTile(0,0);
 	XYCoords playerNextTurn = XYCoords.fromTile(0, 0);
-	boolean playerInSight = false;
+	boolean playerStillInView = false;
 	
 	public Cloak(DarkMaze game){
 		super(game.cloakSprite, game);
+		bboxX1 = -8;
+		bboxX2 = 23;
+		bboxY1 = -8;
+		bboxY2 = 23;
 	}
 	
 	@Override 
 	public void draw(Graphics g){
-		g.setColor(Color.white);
-		g.drawRect(playerLastSeen.x(), playerLastSeen.y(), 32, 32);
-		g.setColor(Color.red);
-		g.drawRect(playerNextTurn.x(), playerNextTurn.y(), 32, 32);
+		if (game.debug){
+			g.setColor(Color.green);
+			g.drawRect(position.xTile()*32, position.yTile()*32, 32, 32);
+			g.setColor(Color.white);
+			g.drawRect(playerLastSeen.xTile()*32, playerLastSeen.yTile()*32, 32, 32);
+			g.setColor(Color.red);
+			g.drawRect(playerNextTurn.xTile()*32, playerNextTurn.yTile()*32, 32, 32);
+		}
 		super.draw(g);
 	}
 	@Override
 	public void drawEffects(Graphics g){
-		if (lineOfSight(game.knight)){
-			g.drawImage(game.redEyes, x(), y(), null);
+		if (lineOfSight(playerLastSeen) || lineOfSight(playerNextTurn)){
+			g.drawImage(game.redEyes, x()+drawXOffset, y()+drawYOffset, null);
 		}else{
-			g.drawImage(game.glowingEyes, x(), y(), null);
+			g.drawImage(game.glowingEyes, x()+drawXOffset, y()+drawYOffset, null);
+		}
+		if (game.debug){
+			FontMetrics fm = g.getFontMetrics();
+			g.setColor(Color.black);
+			g.fillRect(position.x-fm.stringWidth(this.toString())/2, position.y-8, fm.stringWidth(this.toString()), 8);
+			g.fillRect(position.x-fm.stringWidth(this.toString())/2, position.y+1, 40, 27);
+			g.setColor(Color.cyan);
+			g.drawString(this.toString(), position.x-fm.stringWidth(this.toString())/2, position.y);
+			
+			g.drawString("x: " + position.x, position.x-fm.stringWidth(this.toString())/2, position.y+9);
+			
+			g.drawString("y: " + position.y, position.x-fm.stringWidth(this.toString())/2, position.y+18);
+			g.drawString("dir: " + direction, position.x-fm.stringWidth(this.toString())/2, position.y+27);
+			
+			g.setColor(Color.black);
+			
+			g.setColor(Color.cyan);
+			g.drawString("x: " + playerLastSeen.x(), playerLastSeen.x, playerLastSeen.y);
+			g.drawString("y: " + playerLastSeen.y(), playerLastSeen.x, playerLastSeen.y+9);
 		}
 	}
 	
@@ -34,98 +63,74 @@ public class Cloak extends Entity{
 	public void tick(){
 		int lastdirection = direction;
 		if (lineOfSight(game.knight)){
-			//playerLastSeen.x = game.knight.x();
-			//playerLastSeen.y = game.knight.y();
-			playerLastSeen.setXTile(game.knight.xTile());
-			playerLastSeen.setYTile(game.knight.yTile());
-			playerInSight = true;
-		}else if (playerInSight){
-			playerInSight = false;
-			playerNextTurn.setXTile(game.knight.xTile());
-			playerNextTurn.setYTile(game.knight.yTile());
+			if (game.debug){
+				System.out.println(this + " reports: player in line of sight!");
+			}
+			playerLastSeen.setXTile(game.knight.xTile(), 8);
+			playerLastSeen.setYTile(game.knight.yTile(), 8);
+			playerStillInView = true;
+		}else if (playerStillInView){
+			if (game.debug){
+				System.out.println(this + " lost sight of player.");
+			}
+			playerStillInView = false;
+			playerNextTurn.setXTile(game.knight.xTile(),8);
+			playerNextTurn.setYTile(game.knight.yTile(),8);
 		}
 
 		if (lineOfSight(playerLastSeen)){
-			direction = directionTo(playerLastSeen);
+			if (directionTo(playerLastSeen)%2 == 0){
+				if (validMove(nextCoord(directionTo(playerLastSeen)))){
+					direction = directionTo(playerLastSeen);
+					if (game.debug){
+						System.out.println(this + ": setting direction to " + direction);
+					}
+				}else{
+					//direction = directionTo(position.xTile()*32 + 8, position.yTile()*32 + 8);
+					//System.out.println("Recentering on tile: " + direction);
+				}
+			}
+			
 		}
 		
 		if (lineOfSight(playerNextTurn)){
-			direction = directionTo(playerNextTurn);
-			playerNextTurn.x = 0;
-			playerNextTurn.y = 0;
-		}
-		if (xTile() == game.knight.xTile() && yTile() == game.knight.yTile()){
-			direction = directionTo(game.knight);
+			if (directionTo(playerNextTurn)%2 == 0 && validMove(nextCoord(directionTo(playerNextTurn)))){
+				direction = directionTo(playerNextTurn);
+				if (game.debug){
+					System.out.println(this + " Following trail: " + direction);
+					System.out.println("my xy: " + position.x + "," + position.y);
+					System.out.println("target xy: " + playerNextTurn.x + "," + playerNextTurn.y);
+				}
+				playerNextTurn.x = 0;
+				playerNextTurn.y = 0;
+			}
 		}
 		int nextX = x();
 		int nextY = y();
 
+		XYCoords nextCoord = nextCoord(direction);
 		
-		if (direction == 0 || direction == 1 || direction == 7){
-			if (!game.maze[y()/32][(x()+18)/32] &&
-					!game.maze[(y()+16)/32][(x()+18)/32]){
-				nextX += 2;
-			}
-		}
-		if (direction == 3 || direction == 4 || direction == 5){
-			if (!game.maze[ y()/32][(x()-2)/32] &&
-					!game.maze[(y()+16)/32][(x()-2)/32]){
-				nextX -= 2;
-			}
-		}
-		if (direction == 1 || direction == 2 || direction == 3){
-			if (!game.maze[(y()-2)/32][(x())/32] &&
-					!game.maze[(y()-2)/32][(x()+16)/32]){
-				nextY -= 2;
-			}
-		}
-		if (direction == 5 || direction == 6 || direction == 7){
-			if (!game.maze[(y()+18)/32][(x())/32] &&
-					!game.maze[(y()+18)/32][(x()+16)/32]){
-				nextY += 2;
-			}
-		}
-		while (nextX ==  x() && nextY ==  y()){
-			//direction = game.rng.nextInt(8)/2 * 2;
+		while (!validMove(nextCoord.x, nextCoord.y)){
 			if (game.rng.nextBoolean()){
 				direction = (lastdirection+2)%8;
 			}else{
 				direction = (lastdirection+6)%8;
 			}
-			nextX =  x();
-			nextY =  y();
-			if (direction == 0 || direction == 1 || direction == 7){
-				if (!game.maze[ y()/32][(x()+18)/32] &&
-						!game.maze[(y()+16)/32][(x()+18)/32]){
-					nextX += 2;
-				}
-			}
-			if (direction == 3 || direction == 4 || direction == 5){
-				if (!game.maze[ y()/32][(x()-2)/32] &&
-						!game.maze[(y()+16)/32][(x()-2)/32]){
-					nextX -= 2;
-				}
-			}
-			if (direction == 1 || direction == 2 || direction == 3){
-				if (!game.maze[(y()-2)/32][(x())/32] &&
-						!game.maze[(y()-2)/32][(x()+16)/32]){
-					nextY -= 2;
-				}
-			}
-			if (direction == 5 || direction == 6 || direction == 7){
-				if (!game.maze[(y()+18)/32][(x())/32] &&
-						!game.maze[(y()+18)/32][(x()+16)/32]){
-					nextY += 2;
-				}
-			}
+			nextCoord = nextCoord(direction);
 		}
 		
-		 position.x = nextX;
-		 position.y = nextY;
+		 position.x = nextCoord.x();
+		 position.y = nextCoord.y();
 		 
 		 if (x() == playerLastSeen.x() && y() == playerLastSeen.y()){
 			 playerLastSeen.x = 0;
 			 playerLastSeen.y = 0;
 		 }
+		 
+	}
+	
+	@Override
+	public String toString(){
+		return super.toString().substring(25);
 	}
 }

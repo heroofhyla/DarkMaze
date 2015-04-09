@@ -1,5 +1,7 @@
 package com.aezart.darkmaze;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
@@ -9,6 +11,12 @@ public class Knight extends Entity{
 		super(game.knightSprite, game);
 	}
 	
+	@Override
+	public void draw(Graphics g){
+		//g.setColor(Color.green);
+		//g.drawRect(position.xTile()*32, position.yTile()*32, 32, 32);
+		super.draw(g);
+	}
 	@Override
 	public void tick(){
 		if ( x()%64 > 26 &&  x()%64 < 54 && 

@@ -14,6 +14,9 @@ public abstract class Entity {
 	int bboxX2;
 	int bboxY1;
 	int bboxY2;
+	int drawXOffset;
+	int drawYOffset;
+
 	
 	XYCoords position = XYCoords.fromAbsolute(0,0);
 	//int x;
@@ -25,8 +28,6 @@ public abstract class Entity {
 	public Entity(BufferedImage sprite, DarkMaze game){
 		this.sprite = sprite;
 		this.game = game;
-		//x = 0;
-		//y = 0;
 		bboxX1 = 0;
 		bboxY1 = 0;
 		bboxX2 = sprite.getWidth();
@@ -50,12 +51,6 @@ public abstract class Entity {
 		return position.yTile();
 		//return (y+8)/32;
 	}
-	/*
-	void setPositionTile(int x, int y){
-		this.x = x*32 + 8;
-		this.y = y*32 + 8;
-	}*/
-	
 	void setPosition(XYCoords xy){
 		this.position = xy;
 	}
@@ -98,11 +93,11 @@ public abstract class Entity {
 	}
 
 	public void draw(Graphics g) {
-		g.drawImage(sprite, x(), y(), null);
+		g.drawImage(sprite, x()+drawXOffset, y()+drawYOffset, null);
 	}
 	//TODO: Don't assume light is 72x72
 	public void drawLights(Graphics2D g){
-		g.drawImage(game.light, x()-28, y()-28, null);	
+		g.drawImage(game.light, x()-28 + drawXOffset, y()-28+drawYOffset, null);	
 	}
 	
 	public void drawEffects(Graphics g){
@@ -140,5 +135,53 @@ public abstract class Entity {
 
 	public void tick(){
 		//nothing unless overridden
+	}
+	
+	public boolean validMove(XYCoords xy){
+		return validMove(xy.x(), xy.y());
+	}
+	public boolean validMove(int x, int y){
+		XYCoords topLeft = XYCoords.fromAbsolute(x+bboxX1, y+bboxY1);
+		XYCoords bottomLeft = XYCoords.fromAbsolute(x+bboxX1, y+bboxY2);
+		
+		XYCoords topRight = XYCoords.fromAbsolute(x+bboxX2, y+bboxY1);
+		XYCoords bottomRight = XYCoords.fromAbsolute(x+bboxX2, y+bboxY2);
+
+		int x1 = x + bboxX1;
+		int x2 = x + bboxX2;
+		int y1 = y + bboxY1;
+		int y2 = y + bboxY2;
+		if (game.maze[topLeft.yTile()][topLeft.xTile()]){
+			return false;
+		}
+		if (game.maze[topRight.yTile()][topRight.xTile()]){
+			return false;
+		}
+		if (game.maze[bottomLeft.yTile()][bottomLeft.xTile()]){
+			return false;
+		}
+		if (game.maze[bottomRight.yTile()][bottomRight.xTile()]){
+			return false;
+		}
+		return true;
+	}
+	
+	public XYCoords nextCoord(int direction){
+		int nextX = x();
+		int nextY = y();
+		if (direction == 0 || direction == 1 || direction == 7){
+			nextX += 2;
+		}
+		if (direction == 3 || direction == 4 || direction == 5){
+			nextX -= 2;
+		}
+		if (direction == 1 || direction == 2 || direction == 3){
+			nextY -= 2;
+		}
+		if (direction == 5 || direction == 6 || direction == 7){
+			nextY += 2;
+		}
+		
+		return XYCoords.fromAbsolute(nextX, nextY);
 	}
 }

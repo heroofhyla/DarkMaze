@@ -62,4 +62,12 @@ public class XYCoords {
 	public void setYTile(int yTile){
 		this.y = yTile*32;
 	}
+	
+	public void setXTile(int xTile, int xOffset){
+		this.x = xTile*32 + xOffset;
+	}
+	
+	public void setYTile(int yTile, int yOffset){
+		this.y = yTile*32 + yOffset;
+	}
 }

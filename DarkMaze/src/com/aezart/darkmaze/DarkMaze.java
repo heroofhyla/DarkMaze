@@ -41,7 +41,7 @@ public class DarkMaze extends JFrame{
 	BufferedImage wallshadow;
 	BufferedImage knightSprite;
 	BufferedImage cloakSprite;
-	
+	boolean debug = false;
 	boolean showmap = false;
 	Random rng = new Random();
 	boolean[][] maze = new boolean[15][19];
@@ -77,10 +77,18 @@ public class DarkMaze extends JFrame{
 		for (int i = 0; i < 4; ++i){
 			cloaks.add(new Cloak(this));
 		}
-		cloaks.get(0).setPosition(XYCoords.fromTile(1, 1));
-		cloaks.get(1).setPosition(XYCoords.fromTile(1,13));
-		cloaks.get(2).setPosition(XYCoords.fromTile(17,1));
-		cloaks.get(3).setPosition(XYCoords.fromTile(17,13));
+		cloaks.get(0).setPosition(XYCoords.fromTile(1, 1, 8, 8));
+		cloaks.get(0).drawXOffset = -8;
+		cloaks.get(0).drawYOffset = -8;
+		cloaks.get(1).setPosition(XYCoords.fromTile(1,13, 8, 8));
+		cloaks.get(1).drawXOffset = -8;
+		cloaks.get(1).drawYOffset = 8; 
+		cloaks.get(2).setPosition(XYCoords.fromTile(17,1, 8, 8));
+		cloaks.get(2).drawXOffset = 8;
+		cloaks.get(2).drawYOffset = -8;
+		cloaks.get(3).setPosition(XYCoords.fromTile(17,13,8, 8));
+		cloaks.get(3).drawXOffset = 8;
+		cloaks.get(3).drawYOffset = 8;
 		entities.addAll(cloaks);
 		
 		knight.setPosition(XYCoords.fromTile(9, 7));
@@ -109,6 +117,7 @@ public class DarkMaze extends JFrame{
 				if (arg0.getKeyCode() == KeyEvent.VK_SHIFT){
 					//showmap = !showmap;
 					displayMode = (displayMode+1)%5;
+					debug = !debug;
 					
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_Z){
