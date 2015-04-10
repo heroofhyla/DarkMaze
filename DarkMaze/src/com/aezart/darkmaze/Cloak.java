@@ -7,7 +7,7 @@ import java.awt.Graphics;
 public class Cloak extends Entity{
 	int direction = game.rng.nextInt(4) * 2;
 	XYCoords playerLastSeen = XYCoords.fromTile(0,0);
-	XYCoords playerNextTurn = XYCoords.fromTile(0, 0);
+	XYCoords playerNextTurn = XYCoords.fromTile(0,0);
 	boolean playerStillInView = false;
 	
 	public Cloak(DarkMaze game){
@@ -19,6 +19,12 @@ public class Cloak extends Entity{
 	}
 	
 	@Override 
+	public void drawLights(java.awt.Graphics2D g) {
+		if (!lineOfSight(playerLastSeen)){
+			super.drawLights(g);
+		}
+	};
+	@Override 
 	public void draw(Graphics g){
 		if (game.debug){
 			g.setColor(Color.green);
@@ -28,7 +34,7 @@ public class Cloak extends Entity{
 			g.setColor(Color.red);
 			g.drawRect(playerNextTurn.xTile()*32, playerNextTurn.yTile()*32, 32, 32);
 		}
-		super.draw(g);
+			super.draw(g);
 	}
 	@Override
 	public void drawEffects(Graphics g){
@@ -38,6 +44,13 @@ public class Cloak extends Entity{
 			g.drawImage(game.glowingEyes, x()+drawXOffset, y()+drawYOffset, null);
 		}
 		if (game.debug){
+			if (playerLastSeen.x() != 0){
+				g.setColor(Color.white);
+				g.drawLine(x()+8, y()+8, playerLastSeen.x()+8, playerLastSeen.y()+8);
+			}else if (playerNextTurn.x() != 0){
+				g.setColor(Color.red);
+				g.drawLine(x()+8, y()+8, playerNextTurn.x()+8, playerNextTurn.y()+8);
+			}
 			FontMetrics fm = g.getFontMetrics();
 			g.setColor(Color.black);
 			g.fillRect(position.x-fm.stringWidth(this.toString())/2, position.y-8, fm.stringWidth(this.toString()), 8);
@@ -55,12 +68,27 @@ public class Cloak extends Entity{
 			g.setColor(Color.cyan);
 			g.drawString("x: " + playerLastSeen.x(), playerLastSeen.x, playerLastSeen.y);
 			g.drawString("y: " + playerLastSeen.y(), playerLastSeen.x, playerLastSeen.y+9);
+			
+			g.setColor(Color.cyan);
+			g.drawString("x: " + playerNextTurn.x(), playerNextTurn.x, playerNextTurn.y);
+			g.drawString("y: " + playerNextTurn.y(), playerNextTurn.x, playerNextTurn.y+9);
 		}
 	}
 	
 	@Override
 	public void tick(){
 		int lastdirection = direction;
+		int freedirections = 0;
+		for (int i = 0; i < 4; ++i){
+			if (validMove(nextCoord((lastdirection + 2*i)%8))){
+				++freedirections;
+			}
+		}
+		
+		if (freedirections > 2){
+			int variation = game.rng.nextInt(3) - 1;
+			direction = (direction + 2*variation)%8;
+		}
 		if (lineOfSight(game.knight)){
 			if (game.debug){
 				System.out.println(this + " reports: player in line of sight!");

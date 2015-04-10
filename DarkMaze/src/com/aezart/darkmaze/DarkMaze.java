@@ -34,7 +34,7 @@ public class DarkMaze extends JFrame{
 	int displayMode = ALL_TORCHES;
 	int[] directions = new int[5];
 	Vector<Entity> entities = new Vector<Entity>();
-	Vector<Entity> cloaks = new Vector<Entity>(4);
+	Vector<Cloak> cloaks = new Vector<Cloak>(4);
 	BufferedImage glowingEyes;
 	BufferedImage redEyes;
 	BufferedImage light;
@@ -321,6 +321,14 @@ public class DarkMaze extends JFrame{
 		cloaks.get(1).setPosition(XYCoords.fromTile(1,13, 8, 8));
 		cloaks.get(2).setPosition(XYCoords.fromTile(17,1, 8, 8));
 		cloaks.get(3).setPosition(XYCoords.fromTile(17,13, 8, 8));
+		
+		for (Cloak c: cloaks){
+			c.playerLastSeen.setX(0);
+			c.playerLastSeen.setY(0);
+			c.playerNextTurn.setX(0);
+			c.playerNextTurn.setY(0);
+			c.playerStillInView = false;
+		}
 		paintBackground(screen.mapSurface.getGraphics());
 
 	}
