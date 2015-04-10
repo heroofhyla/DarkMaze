@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public abstract class Entity {
+public class Entity {
 	int bboxX1;
 	int bboxX2;
 	int bboxY1;

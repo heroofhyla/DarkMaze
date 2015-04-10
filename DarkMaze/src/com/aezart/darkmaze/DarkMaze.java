@@ -48,8 +48,9 @@ public class DarkMaze extends JFrame{
 	boolean[][] maze = new boolean[15][19];
 	boolean[][] coins = new boolean[7][9];
 	HashMap<Integer, Boolean> keyStates = new HashMap<Integer, Boolean>();
-	Entity knight;
-		
+	Knight knight;
+	
+	Stairs stairs;
 	int lastTorch = -1;
 	BufferedImage tileset;
 	Screen screen = new Screen(this);
@@ -75,6 +76,9 @@ public class DarkMaze extends JFrame{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		stairs = new Stairs(this);
+		stairs.setPosition(XYCoords.fromTile(5, 5));
+		entities.add(stairs);
 		knight = new Knight(this);
 		entities.add(knight);
 		for (int i = 0; i < 4; ++i){
@@ -125,6 +129,9 @@ public class DarkMaze extends JFrame{
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_Z){
 					resetMaze();
+					generateMaze(maze);
+					paintBackground(screen.mapSurface.getGraphics());
+
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
 					//entities.add(new Entity(torchType));
@@ -315,8 +322,6 @@ public class DarkMaze extends JFrame{
 	}
 	
 	void resetMaze(){
-		generateMaze(maze);
-
 		cloaks.get(0).setPosition(XYCoords.fromTile(1, 1, 8, 8));
 		cloaks.get(1).setPosition(XYCoords.fromTile(1,13, 8, 8));
 		cloaks.get(2).setPosition(XYCoords.fromTile(17,1, 8, 8));
@@ -329,7 +334,6 @@ public class DarkMaze extends JFrame{
 			c.playerNextTurn.setY(0);
 			c.playerStillInView = false;
 		}
-		paintBackground(screen.mapSurface.getGraphics());
 
 	}
 }
