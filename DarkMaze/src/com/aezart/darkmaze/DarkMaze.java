@@ -134,6 +134,8 @@ public class DarkMaze extends JFrame{
 
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
+					entities.add(new Torch(DarkMaze.this));
+					entities.lastElement().setPosition(XYCoords.fromTile(knight.xTile(), knight.yTile(), 8, 8));
 					//entities.add(new Entity(torchType));
 					//entities.lastElement().x = knight.x;
 					//entities.lastElement().y = knight.y;
@@ -183,13 +185,13 @@ public class DarkMaze extends JFrame{
 	}
 	
 	void generateMaze(boolean[][] maze){
-		/*Iterator<Entity> itr = entities.iterator();
+		Iterator<Entity> itr = entities.iterator();
 		while (itr.hasNext()){
 			Entity e = itr.next();
-			if (e.entityType == torchType){
+			if (e instanceof Torch){
 				itr.remove();
 			}
-		}*/
+		}
 		Vector<XYCoords> deadEnds = new Vector<XYCoords>();
 		for (int i = 0; i < maze.length; ++i){
 			for (int k = 0; k < maze[0].length; ++k){

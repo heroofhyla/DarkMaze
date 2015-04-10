@@ -87,7 +87,7 @@ public class Cloak extends Entity{
 		
 		if (freedirections > 2){
 			int variation = game.rng.nextInt(3) - 1;
-			direction = (direction + 2*variation)%8;
+			direction = (direction + 2*variation+8)%8;
 		}
 		if (lineOfSight(game.knight)){
 			if (game.debug){
