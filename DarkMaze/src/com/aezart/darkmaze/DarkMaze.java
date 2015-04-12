@@ -35,6 +35,7 @@ public class DarkMaze extends JFrame{
 	int displayMode = ALL_TORCHES;
 	int[] directions = new int[5];
 	Vector<Entity> entities = new Vector<Entity>();
+	Vector<Entity> toRemove = new Vector<Entity>();
 	Vector<Cloak> cloaks = new Vector<Cloak>(4);
 	BufferedImage glowingEyes;
 	BufferedImage redEyes;
@@ -43,6 +44,7 @@ public class DarkMaze extends JFrame{
 	BufferedImage wallshadow;
 	BufferedImage knightSprite;
 	BufferedImage cloakSprite;
+	BufferedImage noSprite = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
 	boolean debug = false;
 	boolean showmap = false;
 	Random rng = new Random();
@@ -50,6 +52,7 @@ public class DarkMaze extends JFrame{
 	boolean[][] coins = new boolean[7][9];
 	HashMap<Integer, Boolean> keyStates = new HashMap<Integer, Boolean>();
 	Knight knight;
+	TextAlert textAlert;
 	
 	Stairs stairs;
 	int lastTorch = -1;
@@ -81,7 +84,9 @@ public class DarkMaze extends JFrame{
 		stairs.setPosition(XYCoords.fromTile(5, 5));
 		entities.add(stairs);
 		knight = new Knight(this);
+		textAlert = new TextAlert(this);
 		entities.add(knight);
+		entities.add(textAlert);
 		for (int i = 0; i < 4; ++i){
 			cloaks.add(new Cloak(this));
 		}
@@ -126,6 +131,8 @@ public class DarkMaze extends JFrame{
 					//showmap = !showmap;
 					displayMode = (displayMode+1)%5;
 					debug = !debug;
+					textAlert.showTextAlert("Debug mode toggle", 30);
+
 					
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_Z){
@@ -153,6 +160,9 @@ public class DarkMaze extends JFrame{
 		keyStates.put(KeyEvent.VK_RIGHT, false);
 		keyStates.put(KeyEvent.VK_UP, false);
 		keyStates.put(KeyEvent.VK_DOWN, false);
+		
+		textAlert.showTextAlert("Depth: " + 10*level + "ft", 60);
+
 	}
 	
 	public static void main(String[] args){
@@ -163,6 +173,10 @@ public class DarkMaze extends JFrame{
 			@Override
 			public void run() {
 				while(true){
+					for (Entity e: darkMaze.toRemove){
+						darkMaze.entities.remove(e);
+					}
+
 					for (Entity e: darkMaze.entities){
 						e.tick();
 					}
@@ -183,6 +197,7 @@ public class DarkMaze extends JFrame{
 			}
 			
 		}).start();
+		
 	}
 	
 	void generateMaze(boolean[][] maze){
@@ -341,6 +356,8 @@ public class DarkMaze extends JFrame{
 	}
 	
 	void nextLevel(){
+		++level;
+		textAlert.showTextAlert("Depth: " + 10*level + "ft", 60);
 		resetMaze();
 		generateMaze(maze);
 		paintBackground(screen.mapSurface.getGraphics());
