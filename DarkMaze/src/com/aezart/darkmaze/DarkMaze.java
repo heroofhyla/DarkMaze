@@ -186,13 +186,13 @@ public class DarkMaze extends JFrame{
 	}
 	
 	void generateMaze(boolean[][] maze){
-		Iterator<Entity> itr = entities.iterator();
+		/*Iterator<Entity> itr = entities.iterator();
 		while (itr.hasNext()){
 			Entity e = itr.next();
 			if (e instanceof Torch){
 				itr.remove();
 			}
-		}
+		}*/
 		Vector<XYCoords> deadEnds = new Vector<XYCoords>();
 		for (int i = 0; i < maze.length; ++i){
 			for (int k = 0; k < maze[0].length; ++k){
@@ -338,5 +338,19 @@ public class DarkMaze extends JFrame{
 			c.playerStillInView = false;
 		}
 
+	}
+	
+	void nextLevel(){
+		resetMaze();
+		generateMaze(maze);
+		paintBackground(screen.mapSurface.getGraphics());
+		knight.setPosition(XYCoords.fromTile(9, 7, 8, 8));
+		for (int i = 0; i < coins.length; ++i){
+			for (int k = 0; k < coins[0].length; ++k){
+				coins[i][k] = true;
+			}
+			coins[3][4] = false;
+			
+		}
 	}
 }
