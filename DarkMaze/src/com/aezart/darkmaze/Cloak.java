@@ -28,7 +28,7 @@ public class Cloak extends Entity{
 	public void draw(Graphics g){
 		if (game.debug){
 			g.setColor(Color.green);
-			g.drawRect(position.xTile()*32, position.yTile()*32, 32, 32);
+			g.drawRect(xTile()*32, yTile()*32, 32, 32);
 			g.setColor(Color.white);
 			g.drawRect(playerLastSeen.xTile()*32, playerLastSeen.yTile()*32, 32, 32);
 			g.setColor(Color.red);

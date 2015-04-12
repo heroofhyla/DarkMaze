@@ -43,12 +43,12 @@ public class Entity {
 	}
 	//TODO: Don't make these functions assume a 16x16 image
 	int xTile(){
-		return position.xTile();
+		return position.xTile(8);
 		//return (x+8)/32;
 	}
 	
 	int yTile(){
-		return position.yTile();
+		return position.yTile(8);
 		//return (y+8)/32;
 	}
 	void setPosition(XYCoords xy){

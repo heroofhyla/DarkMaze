@@ -24,6 +24,7 @@ public class DarkMaze extends JFrame{
 	
 	int lives = 3;
 	int coinCount = 0;
+	int level = 1;
 	
 	static final int FULLBRIGHT = 0;
 	static final int ALL_TORCHES = 1;
