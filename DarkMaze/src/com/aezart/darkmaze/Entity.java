@@ -35,11 +35,11 @@ public class Entity {
 	}
 	
 	int x(){
-		return position.x;
+		return position.x();
 	}
 	
 	int y(){
-		return position.y;
+		return position.y();
 	}
 	//TODO: Don't make these functions assume a 16x16 image
 	int xTile(){
@@ -47,14 +47,24 @@ public class Entity {
 		//return (x+8)/32;
 	}
 	
+	int xTile(int xOffset){
+		return position.xTile(8 + xOffset);
+	}
 	int yTile(){
 		return position.yTile(8);
 		//return (y+8)/32;
 	}
+	
+	int yTile(int yOffset){
+		return position.yTile(8 + yOffset);
+	}
 	void setPosition(XYCoords xy){
-		this.position = xy;
+		position.set(xy);
 	}
 	
+	void setTile(int xTile, int yTile, int xOffset, int yOffset){
+		position.setTile(xTile, yTile, xOffset, yOffset);
+	}
 	int directionTo(XYCoords t){
 		return directionTo(t.x(), t.y());
 	}
@@ -105,11 +115,11 @@ public class Entity {
 	}
 	
 	public boolean lineOfSight(Entity e){
-		return lineOfSight(e.xTile(),e.yTile());
+		return lineOfSight(e.xTile(0),e.yTile(0));
 	}
 	
 	public boolean lineOfSight(XYCoords t){
-		return lineOfSight(t.xTile(), t.yTile());
+		return lineOfSight(t.xTile(0), t.yTile(0));
 	}
 	public boolean lineOfSight(int xTile, int yTile){
 		boolean lineOfSight = false;
@@ -147,20 +157,16 @@ public class Entity {
 		XYCoords topRight = XYCoords.fromAbsolute(x+bboxX2, y+bboxY1);
 		XYCoords bottomRight = XYCoords.fromAbsolute(x+bboxX2, y+bboxY2);
 
-		int x1 = x + bboxX1;
-		int x2 = x + bboxX2;
-		int y1 = y + bboxY1;
-		int y2 = y + bboxY2;
-		if (game.maze[topLeft.yTile()][topLeft.xTile()]){
+		if (game.maze[topLeft.yTile(0)][topLeft.xTile(0)]){
 			return false;
 		}
-		if (game.maze[topRight.yTile()][topRight.xTile()]){
+		if (game.maze[topRight.yTile(0)][topRight.xTile(0)]){
 			return false;
 		}
-		if (game.maze[bottomLeft.yTile()][bottomLeft.xTile()]){
+		if (game.maze[bottomLeft.yTile(0)][bottomLeft.xTile(0)]){
 			return false;
 		}
-		if (game.maze[bottomRight.yTile()][bottomRight.xTile()]){
+		if (game.maze[bottomRight.yTile(0)][bottomRight.xTile(0)]){
 			return false;
 		}
 		return true;

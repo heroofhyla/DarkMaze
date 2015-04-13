@@ -81,7 +81,7 @@ public class DarkMaze extends JFrame{
 			e.printStackTrace();
 		}
 		stairs = new Stairs(this);
-		stairs.setPosition(XYCoords.fromTile(5, 5));
+		stairs.setPosition(XYCoords.fromTile(5, 5, 0, 0));
 		entities.add(stairs);
 		knight = new Knight(this);
 		textAlert = new TextAlert(this);
@@ -143,7 +143,7 @@ public class DarkMaze extends JFrame{
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
 					entities.add(new Torch(DarkMaze.this));
-					entities.lastElement().setPosition(XYCoords.fromTile(knight.xTile(), knight.yTile(), 8, 8));
+					entities.lastElement().setPosition(XYCoords.fromTile(knight.xTile(0), knight.yTile(0), 8, 8));
 					//entities.add(new Entity(torchType));
 					//entities.lastElement().x = knight.x;
 					//entities.lastElement().y = knight.y;
@@ -222,7 +222,7 @@ public class DarkMaze extends JFrame{
 		int firstX = rng.nextInt(visited[0].length);
 		int firstY = rng.nextInt(visited.length);
 		
-		deadEnds.add(XYCoords.fromTile(firstX,firstY));
+		deadEnds.add(XYCoords.fromTile(firstX, firstY, 0, 0));
 		//entities.add(new Entity(torchType));
 		//entities.lastElement().x = 64 * firstX + 40;
 		//entities.lastElement().y = 64 * firstY + 40;
@@ -231,22 +231,22 @@ public class DarkMaze extends JFrame{
 		
 		for (XYCoords d: deadEnds){
 			ArrayList<XYCoords> adjacentCells = new ArrayList<XYCoords>();
-			if (d.xTile() > 0){
-				adjacentCells.add(XYCoords.fromTile(2*d.xTile(),2*d.yTile()+1));
+			if (d.xTile(0) > 0){
+				adjacentCells.add(XYCoords.fromTile(2*d.xTile(0),2*d.yTile(0)+1, 0, 0));
 			}
-			if (d.xTile() < (maze[0].length-1)/2-1){
-				adjacentCells.add(XYCoords.fromTile(2*d.xTile()+2,2*d.yTile()+1));
+			if (d.xTile(0) < (maze[0].length-1)/2-1){
+				adjacentCells.add(XYCoords.fromTile(2*d.xTile(0)+2,2*d.yTile(0)+1, 0, 0));
 			}
-			if (d.yTile() > 0){
-				adjacentCells.add(XYCoords.fromTile(2*d.xTile()+1,2*d.yTile()));
+			if (d.yTile(0) > 0){
+				adjacentCells.add(XYCoords.fromTile(2*d.xTile(0)+1,2*d.yTile(0), 0, 0));
 			}
-			if (d.yTile() < (maze.length-1)/2-1){
-				adjacentCells.add(XYCoords.fromTile(2*d.xTile()+1,2*d.yTile()+2));
+			if (d.yTile(0) < (maze.length-1)/2-1){
+				adjacentCells.add(XYCoords.fromTile(2*d.xTile(0)+1,2*d.yTile(0)+2, 0, 0));
 			}
 			Collections.shuffle(adjacentCells);
 			for (XYCoords t: adjacentCells){
-				if (maze[t.yTile()][t.xTile()]){
-					maze[t.yTile()][t.xTile()] = false;
+				if (maze[t.yTile(0)][t.xTile(0)]){
+					maze[t.yTile(0)][t.xTile(0)] = false;
 					break;
 				}
 			}
@@ -257,16 +257,16 @@ public class DarkMaze extends JFrame{
 		visited[y][x] = true;
 		ArrayList<XYCoords> adjacentCells = new ArrayList<XYCoords>();
 		if (x > 0){
-			adjacentCells.add(XYCoords.fromTile(x-1,y));
+			adjacentCells.add(XYCoords.fromTile(x-1,y, 0, 0));
 		}
 		if (x < visited[0].length - 1){
-			adjacentCells.add(XYCoords.fromTile(x+1,y));
+			adjacentCells.add(XYCoords.fromTile(x+1,y, 0, 0));
 		}
 		if (y>0){
-			adjacentCells.add(XYCoords.fromTile(x,y-1));
+			adjacentCells.add(XYCoords.fromTile(x,y-1, 0, 0));
 		}
 		if (y < visited.length - 1){
-			adjacentCells.add(XYCoords.fromTile(x,y+1));
+			adjacentCells.add(XYCoords.fromTile(x,y+1, 0, 0));
 		}
 		
 		Collections.shuffle(adjacentCells);
@@ -274,17 +274,17 @@ public class DarkMaze extends JFrame{
 
 		for (XYCoords d: adjacentCells){
 
-			if (!visited[d.yTile()][d.xTile()]){
+			if (!visited[d.yTile(0)][d.xTile(0)]){
 				++numVisited;
-				int deltaX = x - d.xTile();
-				int deltaY = y - d.yTile();
+				int deltaX = x - d.xTile(0);
+				int deltaY = y - d.yTile(0);
 				
 				maze[y*2 + 1 - deltaY][x*2 + 1 - deltaX] = false;
-				generateNext(d.xTile(), d.yTile(), maze, visited, deadEnds);
+				generateNext(d.xTile(0), d.yTile(0), maze, visited, deadEnds);
 			}
 		}
 		if (numVisited == 0){
-			deadEnds.add(XYCoords.fromTile(x,y));
+			deadEnds.add(XYCoords.fromTile(x,y, 0, 0));
 			//entities.add(new Entity(torchType));
 			//entities.lastElement().x = 64 * x + 40;
 			//entities.lastElement().y = 64 * y + 40;
@@ -346,10 +346,8 @@ public class DarkMaze extends JFrame{
 		cloaks.get(3).setPosition(XYCoords.fromTile(17,13, 8, 8));
 		
 		for (Cloak c: cloaks){
-			c.playerLastSeen.setX(0);
-			c.playerLastSeen.setY(0);
-			c.playerNextTurn.setX(0);
-			c.playerNextTurn.setY(0);
+			c.playerLastSeen.set(0,0);
+			c.playerNextTurn.set(0,0);
 			c.playerStillInView = false;
 		}
 

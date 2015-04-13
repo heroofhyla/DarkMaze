@@ -10,7 +10,7 @@ public class TextAlert extends Entity {
 	String message;
 	public TextAlert(DarkMaze game){
 		super (game.noSprite, game);
-		position.y = 240;
+		position.setY(240);
 	}
 	
 	public void showTextAlert(String message, int duration){

@@ -6,8 +6,8 @@ import java.awt.Graphics;
 
 public class Cloak extends Entity{
 	int direction = game.rng.nextInt(4) * 2;
-	XYCoords playerLastSeen = XYCoords.fromTile(0,0);
-	XYCoords playerNextTurn = XYCoords.fromTile(0,0);
+	XYCoords playerLastSeen = XYCoords.fromAbsolute(0,0);
+	XYCoords playerNextTurn = XYCoords.fromAbsolute(0,0);
 	boolean playerStillInView = false;
 	
 	public Cloak(DarkMaze game){
@@ -30,9 +30,9 @@ public class Cloak extends Entity{
 			g.setColor(Color.green);
 			g.drawRect(xTile()*32, yTile()*32, 32, 32);
 			g.setColor(Color.white);
-			g.drawRect(playerLastSeen.xTile()*32, playerLastSeen.yTile()*32, 32, 32);
+			g.drawRect(playerLastSeen.xTile(0)*32, playerLastSeen.yTile(0)*32, 32, 32);
 			g.setColor(Color.red);
-			g.drawRect(playerNextTurn.xTile()*32, playerNextTurn.yTile()*32, 32, 32);
+			g.drawRect(playerNextTurn.xTile(0)*32, playerNextTurn.yTile(0)*32, 32, 32);
 		}
 			super.draw(g);
 	}
@@ -53,25 +53,25 @@ public class Cloak extends Entity{
 			}
 			FontMetrics fm = g.getFontMetrics();
 			g.setColor(Color.black);
-			g.fillRect(position.x-fm.stringWidth(this.toString())/2, position.y-8, fm.stringWidth(this.toString()), 8);
-			g.fillRect(position.x-fm.stringWidth(this.toString())/2, position.y+1, 40, 27);
+			g.fillRect(position.x()-fm.stringWidth(this.toString())/2, position.y()-8, fm.stringWidth(this.toString()), 8);
+			g.fillRect(position.x()-fm.stringWidth(this.toString())/2, position.y()+1, 40, 27);
 			g.setColor(Color.cyan);
-			g.drawString(this.toString(), position.x-fm.stringWidth(this.toString())/2, position.y);
+			g.drawString(this.toString(), position.x()-fm.stringWidth(this.toString())/2, position.y());
 			
-			g.drawString("x: " + position.x, position.x-fm.stringWidth(this.toString())/2, position.y+9);
+			g.drawString("x: " + position.x(), position.x()-fm.stringWidth(this.toString())/2, position.y()+9);
 			
-			g.drawString("y: " + position.y, position.x-fm.stringWidth(this.toString())/2, position.y+18);
-			g.drawString("dir: " + direction, position.x-fm.stringWidth(this.toString())/2, position.y+27);
+			g.drawString("y: " + position.y(), position.x()-fm.stringWidth(this.toString())/2, position.y()+18);
+			g.drawString("dir: " + direction, position.x()-fm.stringWidth(this.toString())/2, position.y()+27);
 			
 			g.setColor(Color.black);
 			
 			g.setColor(Color.cyan);
-			g.drawString("x: " + playerLastSeen.x(), playerLastSeen.x, playerLastSeen.y);
-			g.drawString("y: " + playerLastSeen.y(), playerLastSeen.x, playerLastSeen.y+9);
+			g.drawString("x: " + playerLastSeen.x(), playerLastSeen.x(), playerLastSeen.y());
+			g.drawString("y: " + playerLastSeen.y(), playerLastSeen.x(), playerLastSeen.y()+9);
 			
 			g.setColor(Color.cyan);
-			g.drawString("x: " + playerNextTurn.x(), playerNextTurn.x, playerNextTurn.y);
-			g.drawString("y: " + playerNextTurn.y(), playerNextTurn.x, playerNextTurn.y+9);
+			g.drawString("x: " + playerNextTurn.x(), playerNextTurn.x(), playerNextTurn.y());
+			g.drawString("y: " + playerNextTurn.y(), playerNextTurn.x(), playerNextTurn.y()+9);
 		}
 	}
 	
@@ -93,16 +93,15 @@ public class Cloak extends Entity{
 			if (game.debug){
 				System.out.println(this + " reports: player in line of sight!");
 			}
-			playerLastSeen.setXTile(game.knight.xTile(), 8);
-			playerLastSeen.setYTile(game.knight.yTile(), 8);
+			playerLastSeen.setTile(game.knight.position, 8, 8);
 			playerStillInView = true;
 		}else if (playerStillInView){
 			if (game.debug){
 				System.out.println(this + " lost sight of player.");
 			}
 			playerStillInView = false;
-			playerNextTurn.setXTile(game.knight.xTile(),8);
-			playerNextTurn.setYTile(game.knight.yTile(),8);
+			playerNextTurn.setTile(game.knight.position, 8, 8);
+			
 		}
 
 		if (lineOfSight(playerLastSeen)){
@@ -113,7 +112,7 @@ public class Cloak extends Entity{
 						System.out.println(this + ": setting direction to " + direction);
 					}
 				}else{
-					//direction = directionTo(position.xTile()*32 + 8, position.yTile()*32 + 8);
+					//direction = directionTo(position.xTile(0)*32 + 8, position.yTile(0)*32 + 8);
 					//System.out.println("Recentering on tile: " + direction);
 				}
 			}
@@ -125,17 +124,16 @@ public class Cloak extends Entity{
 				direction = directionTo(playerNextTurn);
 				if (game.debug){
 					System.out.println(this + " Following trail: " + direction);
-					System.out.println("my xy: " + position.x + "," + position.y);
-					System.out.println("target xy: " + playerNextTurn.x + "," + playerNextTurn.y);
-				}
-				playerNextTurn.x = 0;
-				playerNextTurn.y = 0;
+					System.out.println("my xy: " + position.x() + "," + position.y());
+					System.out.println("target xy: " + playerNextTurn.x() + "," + playerNextTurn.y());
+				}				
+				playerNextTurn.set(0,0);
 			}
 		}
 
 		XYCoords nextCoord = nextCoord(direction);
 		
-		while (!validMove(nextCoord.x, nextCoord.y)){
+		while (!validMove(nextCoord.x(), nextCoord.y())){
 			if (game.rng.nextBoolean()){
 				direction = (lastdirection+2)%8;
 			}else{
@@ -144,18 +142,16 @@ public class Cloak extends Entity{
 			nextCoord = nextCoord(direction);
 		}
 		
-		 position.x = nextCoord.x();
-		 position.y = nextCoord.y();
+		position.set(nextCoord);
 		 
 		 if (x() == playerLastSeen.x() && y() == playerLastSeen.y()){
-			 playerLastSeen.x = 0;
-			 playerLastSeen.y = 0;
+			 playerLastSeen.set(0,0);
 		 }
 		 
-		 if (xTile() == game.knight.xTile() && yTile() == game.knight.yTile()){
+		 if (xTile() == game.knight.xTile(0) && yTile() == game.knight.yTile(0)){
 			 game.lives -= 1;
 			 game.resetMaze();
-			 game.knight.setPosition(XYCoords.fromTile(9, 7, 8, 8));
+			 game.knight.setTile(9, 7, 8, 8);
 
 		 }
 	}

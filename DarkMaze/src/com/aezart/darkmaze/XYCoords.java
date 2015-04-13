@@ -1,8 +1,8 @@
 package com.aezart.darkmaze;
 
 public class XYCoords {
-	int x;
-	int y;
+	private int x;
+	private int y;
 	
 	private XYCoords(){
 	}
@@ -14,16 +14,13 @@ public class XYCoords {
 		return xy;
 	}
 	
-	static XYCoords fromTile(int xTile, int yTile){
-		return fromTile(xTile, yTile, 0, 0);
-	}
-	
 	static XYCoords fromTile(int xTile, int yTile, int xOffset, int yOffset){
 		XYCoords xy = new XYCoords();
 		xy.x = xTile*32 + xOffset;
 		xy.y = yTile*32 + yOffset;
 		return xy;
 	}
+	
 	public int x(){
 		return x;
 	}
@@ -32,12 +29,12 @@ public class XYCoords {
 		return y;
 	}
 	
-	public int xTile(){
-		return x/32;
+	public void xPlus(int x){
+		this.x += x;
 	}
 	
-	public int yTile(){
-		return y/32;
+	public void yPlus(int y){
+		this.y += y;
 	}
 	
 	public int xTile(int xOffset){
@@ -48,7 +45,7 @@ public class XYCoords {
 		return (y+yOffset)/32;
 	}
 	
-	public void setX(int x){
+	private void setX(int x){
 		this.x = x;
 	}
 	
@@ -56,18 +53,31 @@ public class XYCoords {
 		this.y = y;
 	}
 	
-	public void setXTile(int xTile){
-		this.x = xTile*32;
-	}
-	public void setYTile(int yTile){
-		this.y = yTile*32;
+	public void set(int x, int y){
+		this.x = x;
+		this.y = y;
 	}
 	
-	public void setXTile(int xTile, int xOffset){
+	public void set(XYCoords xy){
+		this.x = xy.x();
+		this.y = xy.y();
+	}
+
+	public void setTile(XYCoords xy, int xOffset, int yOffset){
+		setXTile(xy.xTile(0), xOffset);
+		setYTile(xy.yTile(0), yOffset);
+	}
+	
+	public void setTile(int xTile, int yTile, int xOffset, int yOffset){
+		setXTile(xTile, xOffset);
+		setYTile(yTile, yOffset);
+	}
+	
+	private void setXTile(int xTile, int xOffset){
 		this.x = xTile*32 + xOffset;
 	}
 	
-	public void setYTile(int yTile, int yOffset){
+	private void setYTile(int yTile, int yOffset){
 		this.y = yTile*32 + yOffset;
 	}
 }

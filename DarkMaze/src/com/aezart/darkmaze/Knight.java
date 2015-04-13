@@ -29,27 +29,23 @@ public class Knight extends Entity{
 			}
 		}
 		if ((game.keyStates.get(KeyEvent.VK_LEFT) == true)){
-			if (!game.maze[ y()/32][( x()-2)/32] &&
-					!game.maze[( y()+16)/32][( x()-2)/32]){
-				position.x -= 2;
+			if (validMove(x()-2,y())){
+				position.xPlus(-2);
 			}
 		}
 		if ((game.keyStates.get(KeyEvent.VK_RIGHT) == true)){
-			if (!game.maze[ y()/32][( x()+18)/32] &&
-					!game.maze[( y()+16)/32][( x()+18)/32]){
-				 position.x += 2;
+			if (validMove(x()+2, y())){
+				position.xPlus(2);
 			}
 		}
 		if ((game.keyStates.get(KeyEvent.VK_UP) == true)){
-			if (!game.maze[( y()-2)/32][( x())/32] &&
-					!game.maze[( y()-2)/32][( x()+16)/32]){
-				 position.y -= 2;
+			if (validMove(x(), y()-2)){
+				 position.yPlus(-2);
 			}
 		}
 		if ((game.keyStates.get(KeyEvent.VK_DOWN) == true)){
-			if (!game.maze[( y()+18)/32][( x())/32] &&
-					!game.maze[( y()+18)/32][( x()+16)/32]){
-				 position.y += 2;
+			if (validMove(x(), y()+2)){
+				 position.yPlus(2);
 			}
 		}
 	}
