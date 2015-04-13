@@ -45,7 +45,7 @@ public class XYCoords {
 		return (y+yOffset)/32;
 	}
 	
-	private void setX(int x){
+	public void setX(int x){
 		this.x = x;
 	}
 	
@@ -78,6 +78,9 @@ public class XYCoords {
 	}
 	
 	private void setYTile(int yTile, int yOffset){
+		javax.swing.JPanel c;
+		
 		this.y = yTile*32 + yOffset;
 	}
+	
 }
