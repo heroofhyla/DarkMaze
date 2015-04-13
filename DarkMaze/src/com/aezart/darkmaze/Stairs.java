@@ -33,7 +33,7 @@ public class Stairs extends Entity{
 		if (stairsReady && game.knight.xTile() == xTile() && game.knight.yTile() == yTile()){
 			game.nextLevel();
 			stairsReady = false;
-			coinTarget += 40;
+			coinTarget = game.coinCount + 40;
 		}
 	}
 }
