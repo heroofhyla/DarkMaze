@@ -12,10 +12,10 @@ public class Cloak extends Entity{
 	
 	public Cloak(DarkMaze game){
 		super(game.cloakSprite, game);
-		bboxX1 = -8;
-		bboxX2 = 23;
-		bboxY1 = -8;
-		bboxY2 = 23;
+		bboxX1 = -16;
+		bboxX2 = 15;
+		bboxY1 = -16;
+		bboxY2 = 15;
 	}
 	
 	@Override 
@@ -46,10 +46,10 @@ public class Cloak extends Entity{
 		if (game.debug){
 			if (playerLastSeen.x() != 0){
 				g.setColor(Color.white);
-				g.drawLine(x()+8, y()+8, playerLastSeen.x()+8, playerLastSeen.y()+8);
+				g.drawLine(x(), y(), playerLastSeen.x(), playerLastSeen.y());
 			}else if (playerNextTurn.x() != 0){
 				g.setColor(Color.red);
-				g.drawLine(x()+8, y()+8, playerNextTurn.x()+8, playerNextTurn.y()+8);
+				g.drawLine(x(), y(), playerNextTurn.x(), playerNextTurn.y());
 			}
 			FontMetrics fm = g.getFontMetrics();
 			g.setColor(Color.black);
@@ -93,14 +93,14 @@ public class Cloak extends Entity{
 			if (game.debug){
 				System.out.println(this + " reports: player in line of sight!");
 			}
-			playerLastSeen.setTile(game.knight.position, 8, 8);
+			playerLastSeen.setTile(game.knight.position,16,16);
 			playerStillInView = true;
 		}else if (playerStillInView){
 			if (game.debug){
 				System.out.println(this + " lost sight of player.");
 			}
 			playerStillInView = false;
-			playerNextTurn.setTile(game.knight.position, 8, 8);
+			playerNextTurn.setTile(game.knight.position,16,16);
 			
 		}
 
@@ -151,7 +151,7 @@ public class Cloak extends Entity{
 		 if (xTile() == game.knight.xTile(0) && yTile() == game.knight.yTile(0)){
 			 game.lives -= 1;
 			 game.resetMaze();
-			 game.knight.setTile(9, 7, 8, 8);
+			 game.knight.setTile(9, 7, 16, 16);
 
 		 }
 	}

@@ -1,13 +1,8 @@
 package com.aezart.darkmaze;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 public class Entity {
 	int bboxX1;
@@ -19,8 +14,6 @@ public class Entity {
 
 	
 	XYCoords position = XYCoords.fromAbsolute(0,0);
-	//int x;
-	//int y;
 	
 	BufferedImage sprite;
 	DarkMaze game;
@@ -28,10 +21,13 @@ public class Entity {
 	public Entity(BufferedImage sprite, DarkMaze game){
 		this.sprite = sprite;
 		this.game = game;
-		bboxX1 = 0;
-		bboxY1 = 0;
-		bboxX2 = sprite.getWidth();
-		bboxY2 = sprite.getHeight();
+		bboxX1 = 0 - sprite.getWidth()/2;
+		bboxY1 = 0 - sprite.getHeight()/2;
+		bboxX2 = sprite.getWidth()/2;
+		bboxY2 = sprite.getHeight()/2;
+		
+		drawXOffset = -sprite.getWidth()/2;
+		drawYOffset = -sprite.getHeight()/2;
 	}
 	
 	int x(){
@@ -43,20 +39,20 @@ public class Entity {
 	}
 	//TODO: Don't make these functions assume a 16x16 image
 	int xTile(){
-		return position.xTile(8);
+		return position.xTile(0);
 		//return (x+8)/32;
 	}
 	
 	int xTile(int xOffset){
-		return position.xTile(8 + xOffset);
+		return position.xTile(xOffset);
 	}
 	int yTile(){
-		return position.yTile(8);
+		return position.yTile(0);
 		//return (y+8)/32;
 	}
 	
 	int yTile(int yOffset){
-		return position.yTile(8 + yOffset);
+		return position.yTile(yOffset);
 	}
 	void setPosition(XYCoords xy){
 		position.set(xy);

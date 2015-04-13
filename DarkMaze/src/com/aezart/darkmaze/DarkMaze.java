@@ -90,18 +90,18 @@ public class DarkMaze extends JFrame{
 		for (int i = 0; i < 4; ++i){
 			cloaks.add(new Cloak(this));
 		}
-		cloaks.get(0).setPosition(XYCoords.fromTile(1, 1, 8, 8));
-		cloaks.get(0).drawXOffset = -8;
-		cloaks.get(0).drawYOffset = -8;
-		cloaks.get(1).setPosition(XYCoords.fromTile(1,13, 8, 8));
-		cloaks.get(1).drawXOffset = -8;
-		cloaks.get(1).drawYOffset = 8; 
-		cloaks.get(2).setPosition(XYCoords.fromTile(17,1, 8, 8));
-		cloaks.get(2).drawXOffset = 8;
-		cloaks.get(2).drawYOffset = -8;
-		cloaks.get(3).setPosition(XYCoords.fromTile(17,13,8, 8));
-		cloaks.get(3).drawXOffset = 8;
-		cloaks.get(3).drawYOffset = 8;
+		cloaks.get(0).setTile(1, 1, 16, 16);
+		cloaks.get(0).drawXOffset += -8;
+		cloaks.get(0).drawYOffset += -8;
+		cloaks.get(1).setTile(1,13, 16, 16);
+		cloaks.get(1).drawXOffset += -8;
+		cloaks.get(1).drawYOffset += 8; 
+		cloaks.get(2).setTile(17,1, 16, 16);
+		cloaks.get(2).drawXOffset += 8;
+		cloaks.get(2).drawYOffset += -8;
+		cloaks.get(3).setTile(17,13,16, 16);
+		cloaks.get(3).drawXOffset += 8;
+		cloaks.get(3).drawYOffset += 8;
 		entities.addAll(cloaks);
 		
 		knight.setPosition(XYCoords.fromTile(9, 7, 8, 8));
@@ -340,10 +340,10 @@ public class DarkMaze extends JFrame{
 	}
 	
 	void resetMaze(){
-		cloaks.get(0).setPosition(XYCoords.fromTile(1, 1, 8, 8));
-		cloaks.get(1).setPosition(XYCoords.fromTile(1,13, 8, 8));
-		cloaks.get(2).setPosition(XYCoords.fromTile(17,1, 8, 8));
-		cloaks.get(3).setPosition(XYCoords.fromTile(17,13, 8, 8));
+		cloaks.get(0).setTile(1, 1, 16, 16);
+		cloaks.get(1).setTile(1,13, 16, 16);
+		cloaks.get(2).setTile(17,1, 16, 16);
+		cloaks.get(3).setTile(17,13, 16, 16);
 		
 		for (Cloak c: cloaks){
 			c.playerLastSeen.set(0,0);
