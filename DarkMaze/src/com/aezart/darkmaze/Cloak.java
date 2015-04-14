@@ -38,7 +38,7 @@ public class Cloak extends Entity{
 	}
 	@Override
 	public void drawEffects(Graphics g){
-		if (lineOfSight(playerLastSeen) || lineOfSight(playerNextTurn)){
+		if ((lineOfSight(playerLastSeen)) || (lineOfSight(playerNextTurn))){
 			g.drawImage(game.redEyes, x()+drawXOffset, y()+drawYOffset, null);
 		}else{
 			g.drawImage(game.glowingEyes, x()+drawXOffset, y()+drawYOffset, null);
@@ -89,7 +89,7 @@ public class Cloak extends Entity{
 			int variation = game.rng.nextInt(3) - 1;
 			direction = (direction + 2*variation+8)%8;
 		}
-		if (lineOfSight(game.knight)){
+		if (lineOfSight(game.knight) && directionTo(new XYCoords(game.knight.position, 16, 16)) == direction){
 			if (game.debug){
 				System.out.println(this + " reports: player in line of sight!");
 			}
@@ -148,7 +148,7 @@ public class Cloak extends Entity{
 			 playerLastSeen = new XYCoords(0,0);
 		 }
 		 
-		 if (xTile(0) == game.knight.xTile(0) && yTile(0) == game.knight.yTile(0)){
+		 if (Math.abs(x() - game.knight.x()) < 10 && Math.abs(y() - game.knight.y()) < 10){
 			 game.lives -= 1;
 			 game.resetMaze();
 			 game.knight.setTile(9, 7, 16, 16);
