@@ -201,13 +201,13 @@ public class DarkMaze extends JFrame{
 	}
 	
 	void generateMaze(boolean[][] maze){
-		/*Iterator<Entity> itr = entities.iterator();
+		Iterator<Entity> itr = entities.iterator();
 		while (itr.hasNext()){
 			Entity e = itr.next();
 			if (e instanceof Torch){
 				itr.remove();
 			}
-		}*/
+		}
 		Vector<XYCoords> deadEnds = new Vector<XYCoords>();
 		for (int i = 0; i < maze.length; ++i){
 			for (int k = 0; k < maze[0].length; ++k){
@@ -223,9 +223,8 @@ public class DarkMaze extends JFrame{
 		int firstY = rng.nextInt(visited.length);
 		
 		deadEnds.add(XYCoords.fromTile(firstX, firstY, 0, 0));
-		//entities.add(new Entity(torchType));
-		//entities.lastElement().x = 64 * firstX + 40;
-		//entities.lastElement().y = 64 * firstY + 40;
+		entities.add(new Torch(this));
+		entities.lastElement().setTile(deadEnds.lastElement().xTile(0)*2 + 1, deadEnds.lastElement().yTile(0)*2 + 1, 16, 16);
 
 		generateNext(firstX, firstY, maze, visited, deadEnds);
 		
@@ -285,9 +284,8 @@ public class DarkMaze extends JFrame{
 		}
 		if (numVisited == 0){
 			deadEnds.add(XYCoords.fromTile(x,y, 0, 0));
-			//entities.add(new Entity(torchType));
-			//entities.lastElement().x = 64 * x + 40;
-			//entities.lastElement().y = 64 * y + 40;
+			entities.add(new Torch(this));
+			entities.lastElement().setTile(deadEnds.lastElement().xTile(0)*2 + 1, deadEnds.lastElement().yTile(0)*2 + 1, 16, 16);
 		}
 	}
 	
@@ -318,14 +316,12 @@ public class DarkMaze extends JFrame{
 			for (int k = 0; k < maze[0].length; ++k){
 				sg.setColor(Color.white);
 				sg.drawImage(tileset, 32*k, 32*i, 32*k+32, 32*i+32, 0, 0, 16, 16, null);
-				//sg.fillRect(32*k, 32*i, 32, 32);
 			}
 		}
 		sg.setColor(Color.black);
 		for (int i = 0; i < maze.length; ++i){
 			for (int k = 0; k < maze[0].length; ++k){
 				if (maze[i][k]){
-					//sg.fillRect(32*k-2, 32*i-2, 36, 36);
 					sg.drawImage(wallshadow, 32*k-3, 32*i-3, null);
 				}
 			}
