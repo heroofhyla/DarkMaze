@@ -31,9 +31,7 @@ public class Stairs extends Entity{
 		}
 		
 		if (stairsReady && game.knight.xTile(0) == xTile(0) && game.knight.yTile(0) == yTile(0)){
-			game.nextLevel();
-			stairsReady = false;
-			coinTarget = game.coinCount + 40;
+			game.readyForNextLevel = true;
 		}
 	}
 }

@@ -31,6 +31,8 @@ public class DarkMaze extends JFrame{
 	static final int ENEMY_TORCHES = 2;
 	static final int PLAYER_TORCH = 3;
 	static final int FULLDARK = 4;
+	
+	boolean readyForNextLevel = false;
 		
 	int displayMode = ALL_TORCHES;
 	int[] directions = new int[5];
@@ -168,12 +170,17 @@ public class DarkMaze extends JFrame{
 			@Override
 			public void run() {
 				while(true){
-					for (Entity e: darkMaze.toRemove){
-						darkMaze.entities.remove(e);
-					}
-
 					for (Entity e: darkMaze.entities){
 						e.tick();
+					}
+					
+					if (darkMaze.readyForNextLevel){
+						darkMaze.nextLevel();
+						darkMaze.stairs.stairsReady = false;
+						darkMaze.stairs.coinTarget = darkMaze.coinCount + 40;
+						
+						darkMaze.readyForNextLevel = false;
+
 					}
 						SwingUtilities.invokeLater(new Runnable(){
 
