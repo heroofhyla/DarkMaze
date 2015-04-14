@@ -21,8 +21,8 @@ public class Knight extends Entity{
 	}
 	@Override
 	public void tick(){
-		if ( x()%64 > 26 &&  x()%64 < 54 && 
-				 y()%64 >26 &&  y()%64 < 54){
+		if ( x()%64 > 34 &&  x()%64 < 62 && 
+				 y()%64 >34 &&  y()%64 < 62){
 			if (game.coins[ y()/64][ x()/64]){
 				game.coins[ y()/64][ x()/64] = false;
 				++ game.coinCount;
