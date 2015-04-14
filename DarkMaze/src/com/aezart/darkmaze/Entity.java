@@ -13,7 +13,7 @@ public class Entity {
 	int drawYOffset;
 
 	
-	XYCoords position = XYCoords.fromAbsolute(0,0);
+	XYCoords position = new XYCoords(0,0);
 	
 	BufferedImage sprite;
 	DarkMaze game;
@@ -47,11 +47,11 @@ public class Entity {
 		return position.yTile(yOffset);
 	}
 	void setPosition(XYCoords xy){
-		position.set(xy);
+		position = xy;
 	}
 	
 	void setTile(int xTile, int yTile, int xOffset, int yOffset){
-		position.setTile(xTile, yTile, xOffset, yOffset);
+		position = new XYCoords(xTile, yTile, xOffset, yOffset);
 	}
 	int directionTo(XYCoords t){
 		return directionTo(t.x(), t.y());
@@ -139,11 +139,11 @@ public class Entity {
 		return validMove(xy.x(), xy.y());
 	}
 	public boolean validMove(int x, int y){
-		XYCoords topLeft = XYCoords.fromAbsolute(x+bboxX1, y+bboxY1);
-		XYCoords bottomLeft = XYCoords.fromAbsolute(x+bboxX1, y+bboxY2);
+		XYCoords topLeft = new XYCoords(x+bboxX1, y+bboxY1);
+		XYCoords bottomLeft = new XYCoords(x+bboxX1, y+bboxY2);
 		
-		XYCoords topRight = XYCoords.fromAbsolute(x+bboxX2, y+bboxY1);
-		XYCoords bottomRight = XYCoords.fromAbsolute(x+bboxX2, y+bboxY2);
+		XYCoords topRight = new XYCoords(x+bboxX2, y+bboxY1);
+		XYCoords bottomRight = new XYCoords(x+bboxX2, y+bboxY2);
 
 		if (game.maze[topLeft.yTile(0)][topLeft.xTile(0)]){
 			return false;
@@ -176,6 +176,6 @@ public class Entity {
 			nextY += 2;
 		}
 		
-		return XYCoords.fromAbsolute(nextX, nextY);
+		return new XYCoords(nextX, nextY);
 	}
 }

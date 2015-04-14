@@ -80,7 +80,7 @@ public class DarkMaze extends JFrame{
 			e.printStackTrace();
 		}
 		stairs = new Stairs(this);
-		stairs.setPosition(XYCoords.fromTile(5, 5, 0, 0));
+		stairs.setPosition(new XYCoords(5, 5, 0, 0));
 		entities.add(stairs);
 		knight = new Knight(this);
 		textAlert = new TextAlert(this);
@@ -103,7 +103,7 @@ public class DarkMaze extends JFrame{
 		cloaks.get(3).drawYOffset += 8;
 		entities.addAll(cloaks);
 		
-		knight.setPosition(XYCoords.fromTile(9, 7, 8, 8));
+		knight.setPosition(new XYCoords(9, 7, 8, 8));
 		final Graphics sg = screen.mapSurface.getGraphics();
 		
 		screen.setPreferredSize(new Dimension(608,480));
@@ -141,7 +141,7 @@ public class DarkMaze extends JFrame{
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
 					entities.add(new Torch(DarkMaze.this));
-					entities.lastElement().setPosition(XYCoords.fromTile(knight.xTile(0), knight.yTile(0), 8, 8));
+					entities.lastElement().setPosition(new XYCoords(knight.xTile(0), knight.yTile(0), 8, 8));
 				}
 			}
 
@@ -217,7 +217,7 @@ public class DarkMaze extends JFrame{
 		int firstX = rng.nextInt(visited[0].length);
 		int firstY = rng.nextInt(visited.length);
 		
-		deadEnds.add(XYCoords.fromTile(firstX, firstY, 0, 0));
+		deadEnds.add(new XYCoords(firstX, firstY, 0, 0));
 		entities.add(new Torch(this));
 		entities.lastElement().setTile(deadEnds.lastElement().xTile(0)*2 + 1, deadEnds.lastElement().yTile(0)*2 + 1, 16, 16);
 
@@ -226,16 +226,16 @@ public class DarkMaze extends JFrame{
 		for (XYCoords d: deadEnds){
 			ArrayList<XYCoords> adjacentCells = new ArrayList<XYCoords>();
 			if (d.xTile(0) > 0){
-				adjacentCells.add(XYCoords.fromTile(2*d.xTile(0),2*d.yTile(0)+1, 0, 0));
+				adjacentCells.add(new XYCoords(2*d.xTile(0),2*d.yTile(0)+1, 0, 0));
 			}
 			if (d.xTile(0) < (maze[0].length-1)/2-1){
-				adjacentCells.add(XYCoords.fromTile(2*d.xTile(0)+2,2*d.yTile(0)+1, 0, 0));
+				adjacentCells.add(new XYCoords(2*d.xTile(0)+2,2*d.yTile(0)+1, 0, 0));
 			}
 			if (d.yTile(0) > 0){
-				adjacentCells.add(XYCoords.fromTile(2*d.xTile(0)+1,2*d.yTile(0), 0, 0));
+				adjacentCells.add(new XYCoords(2*d.xTile(0)+1,2*d.yTile(0), 0, 0));
 			}
 			if (d.yTile(0) < (maze.length-1)/2-1){
-				adjacentCells.add(XYCoords.fromTile(2*d.xTile(0)+1,2*d.yTile(0)+2, 0, 0));
+				adjacentCells.add(new XYCoords(2*d.xTile(0)+1,2*d.yTile(0)+2, 0, 0));
 			}
 			Collections.shuffle(adjacentCells);
 			for (XYCoords t: adjacentCells){
@@ -251,16 +251,16 @@ public class DarkMaze extends JFrame{
 		visited[y][x] = true;
 		ArrayList<XYCoords> adjacentCells = new ArrayList<XYCoords>();
 		if (x > 0){
-			adjacentCells.add(XYCoords.fromTile(x-1,y, 0, 0));
+			adjacentCells.add(new XYCoords(x-1,y, 0, 0));
 		}
 		if (x < visited[0].length - 1){
-			adjacentCells.add(XYCoords.fromTile(x+1,y, 0, 0));
+			adjacentCells.add(new XYCoords(x+1,y, 0, 0));
 		}
 		if (y>0){
-			adjacentCells.add(XYCoords.fromTile(x,y-1, 0, 0));
+			adjacentCells.add(new XYCoords(x,y-1, 0, 0));
 		}
 		if (y < visited.length - 1){
-			adjacentCells.add(XYCoords.fromTile(x,y+1, 0, 0));
+			adjacentCells.add(new XYCoords(x,y+1, 0, 0));
 		}
 		
 		Collections.shuffle(adjacentCells);
@@ -278,7 +278,7 @@ public class DarkMaze extends JFrame{
 			}
 		}
 		if (numVisited == 0){
-			deadEnds.add(XYCoords.fromTile(x,y, 0, 0));
+			deadEnds.add(new XYCoords(x,y, 0, 0));
 			entities.add(new Torch(this));
 			entities.lastElement().setTile(deadEnds.lastElement().xTile(0)*2 + 1, deadEnds.lastElement().yTile(0)*2 + 1, 16, 16);
 		}
@@ -337,8 +337,8 @@ public class DarkMaze extends JFrame{
 		cloaks.get(3).setTile(17,13, 16, 16);
 		
 		for (Cloak c: cloaks){
-			c.playerLastSeen.set(0,0);
-			c.playerNextTurn.set(0,0);
+			c.playerLastSeen = new XYCoords(0,0);
+			c.playerNextTurn = new XYCoords(0,0);
 			c.playerStillInView = false;
 		}
 
@@ -350,7 +350,7 @@ public class DarkMaze extends JFrame{
 		resetMaze();
 		generateMaze(maze);
 		paintBackground(screen.mapSurface.getGraphics());
-		knight.setPosition(XYCoords.fromTile(9, 7, 8, 8));
+		knight.setPosition(new XYCoords(9, 7, 8, 8));
 		for (int i = 0; i < coins.length; ++i){
 			for (int k = 0; k < coins[0].length; ++k){
 				coins[i][k] = true;

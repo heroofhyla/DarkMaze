@@ -6,8 +6,8 @@ import java.awt.Graphics;
 
 public class Cloak extends Entity{
 	int direction = game.rng.nextInt(4) * 2;
-	XYCoords playerLastSeen = XYCoords.fromAbsolute(0,0);
-	XYCoords playerNextTurn = XYCoords.fromAbsolute(0,0);
+	XYCoords playerLastSeen = new XYCoords(0,0);
+	XYCoords playerNextTurn = new XYCoords(0,0);
 	boolean playerStillInView = false;
 	
 	public Cloak(DarkMaze game){
@@ -93,14 +93,14 @@ public class Cloak extends Entity{
 			if (game.debug){
 				System.out.println(this + " reports: player in line of sight!");
 			}
-			playerLastSeen.setTile(game.knight.position,16,16);
+			playerLastSeen = new XYCoords(game.knight.position,16,16);
 			playerStillInView = true;
 		}else if (playerStillInView){
 			if (game.debug){
 				System.out.println(this + " lost sight of player.");
 			}
 			playerStillInView = false;
-			playerNextTurn.setTile(game.knight.position,16,16);
+			playerNextTurn = new XYCoords(game.knight.position,16,16);
 			
 		}
 
@@ -127,7 +127,7 @@ public class Cloak extends Entity{
 					System.out.println("my xy: " + position.x() + "," + position.y());
 					System.out.println("target xy: " + playerNextTurn.x() + "," + playerNextTurn.y());
 				}				
-				playerNextTurn.set(0,0);
+				playerNextTurn = new XYCoords(0,0);
 			}
 		}
 
@@ -142,10 +142,10 @@ public class Cloak extends Entity{
 			nextCoord = nextCoord(direction);
 		}
 		
-		position.set(nextCoord);
+		position = nextCoord;
 		 
 		 if (x() == playerLastSeen.x() && y() == playerLastSeen.y()){
-			 playerLastSeen.set(0,0);
+			 playerLastSeen = new XYCoords(0,0);
 		 }
 		 
 		 if (xTile(0) == game.knight.xTile(0) && yTile(0) == game.knight.yTile(0)){

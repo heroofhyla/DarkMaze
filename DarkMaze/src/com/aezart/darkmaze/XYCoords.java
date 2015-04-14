@@ -1,86 +1,43 @@
 package com.aezart.darkmaze;
 
-public class XYCoords {
-	private int x;
-	private int y;
+public final class XYCoords {
+	private final int x;
+	private final int y;
 	
-	private XYCoords(){
-	}
-	
-	static XYCoords fromAbsolute(int x, int y){
-		XYCoords xy = new XYCoords();
-		xy.x = x;
-		xy.y = y;
-		return xy;
-	}
-	
-	static XYCoords fromTile(int xTile, int yTile, int xOffset, int yOffset){
-		XYCoords xy = new XYCoords();
-		xy.x = xTile*32 + xOffset;
-		xy.y = yTile*32 + yOffset;
-		return xy;
-	}
-	
-	public int x(){
-		return x;
-	}
-	
-	public int y(){
-		return y;
-	}
-	
-	public void xPlus(int x){
-		this.x += x;
-	}
-	
-	public void yPlus(int y){
-		this.y += y;
-	}
-	
-	public int xTile(int xOffset){
-		return (x+xOffset)/32;
-	}
-	
-	public int yTile(int yOffset){
-		return (y+yOffset)/32;
-	}
-	
-	public void setX(int x){
-		this.x = x;
-	}
-	
-	public void setY(int y){
-		this.y = y;
-	}
-	
-	public void set(int x, int y){
+	public XYCoords(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
 	
-	public void set(XYCoords xy){
-		this.x = xy.x();
-		this.y = xy.y();
-	}
-
-	public void setTile(XYCoords xy, int xOffset, int yOffset){
-		setXTile(xy.xTile(0), xOffset);
-		setYTile(xy.yTile(0), yOffset);
-	}
-	
-	public void setTile(int xTile, int yTile, int xOffset, int yOffset){
-		setXTile(xTile, xOffset);
-		setYTile(yTile, yOffset);
-	}
-	
-	private void setXTile(int xTile, int xOffset){
+	public XYCoords(int xTile, int yTile, int xOffset, int yOffset){
 		this.x = xTile*32 + xOffset;
-	}
-	
-	private void setYTile(int yTile, int yOffset){
-		javax.swing.JPanel c;
-		
 		this.y = yTile*32 + yOffset;
 	}
 	
+	//in the same tile as xy, but with a different offset
+	//to have the exact same x and y as an existing XYCoords,
+	// just use = (don't worry, they're immutable!)
+	public XYCoords(XYCoords xy, int xOffset, int yOffset){
+		this.x = xy.xTile(0) * 32 + xOffset;
+		this.y = xy.yTile(0) * 32 + yOffset;
+	}
+	
+	public final int x(){
+		return x;
+	}
+	
+	public final int y(){
+		return y;
+	}
+	
+	public final XYCoords plus(int x, int y){
+		return new XYCoords(this.x+x, this.y+y);
+	}
+	public final int xTile(int xOffset){
+		return (x+xOffset)/32;
+	}
+	
+	public final int yTile(int yOffset){
+		return (y+yOffset)/32;
+	}	
 }

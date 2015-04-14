@@ -10,7 +10,7 @@ public class TextAlert extends Entity {
 	String message;
 	public TextAlert(DarkMaze game){
 		super (game.noSprite, game);
-		position.setY(240);
+		position = new XYCoords(0, 240); //x does not matter, string will be centered based on length
 	}
 	
 	public void showTextAlert(String message, int duration){
