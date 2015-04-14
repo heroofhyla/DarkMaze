@@ -46,7 +46,6 @@ public class DarkMaze extends JFrame{
 	BufferedImage cloakSprite;
 	BufferedImage noSprite = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
 	boolean debug = false;
-	boolean showmap = false;
 	Random rng = new Random();
 	boolean[][] maze = new boolean[15][19];
 	boolean[][] coins = new boolean[7][9];
@@ -128,7 +127,6 @@ public class DarkMaze extends JFrame{
 			public void keyReleased(KeyEvent arg0) {
 				keyStates.put(arg0.getKeyCode(), false);
 				if (arg0.getKeyCode() == KeyEvent.VK_SHIFT){
-					//showmap = !showmap;
 					displayMode = (displayMode+1)%5;
 					debug = !debug;
 					textAlert.showTextAlert("Debug mode toggle", 30);
@@ -144,9 +142,6 @@ public class DarkMaze extends JFrame{
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
 					entities.add(new Torch(DarkMaze.this));
 					entities.lastElement().setPosition(XYCoords.fromTile(knight.xTile(0), knight.yTile(0), 8, 8));
-					//entities.add(new Entity(torchType));
-					//entities.lastElement().x = knight.x;
-					//entities.lastElement().y = knight.y;
 				}
 			}
 

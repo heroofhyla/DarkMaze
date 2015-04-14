@@ -28,7 +28,7 @@ public class Cloak extends Entity{
 	public void draw(Graphics g){
 		if (game.debug){
 			g.setColor(Color.green);
-			g.drawRect(xTile()*32, yTile()*32, 32, 32);
+			g.drawRect(xTile(0)*32, yTile(0)*32, 32, 32);
 			g.setColor(Color.white);
 			g.drawRect(playerLastSeen.xTile(0)*32, playerLastSeen.yTile(0)*32, 32, 32);
 			g.setColor(Color.red);
@@ -148,7 +148,7 @@ public class Cloak extends Entity{
 			 playerLastSeen.set(0,0);
 		 }
 		 
-		 if (xTile() == game.knight.xTile(0) && yTile() == game.knight.yTile(0)){
+		 if (xTile(0) == game.knight.xTile(0) && yTile(0) == game.knight.yTile(0)){
 			 game.lives -= 1;
 			 game.resetMaze();
 			 game.knight.setTile(9, 7, 16, 16);

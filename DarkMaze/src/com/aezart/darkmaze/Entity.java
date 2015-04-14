@@ -37,20 +37,12 @@ public class Entity {
 	int y(){
 		return position.y();
 	}
-	//TODO: Don't make these functions assume a 16x16 image
-	int xTile(){
-		return position.xTile(0);
-		//return (x+8)/32;
-	}
-	
+
 	int xTile(int xOffset){
 		return position.xTile(xOffset);
 	}
-	int yTile(){
-		return position.yTile(0);
-		//return (y+8)/32;
-	}
 	
+
 	int yTile(int yOffset){
 		return position.yTile(yOffset);
 	}
@@ -119,18 +111,18 @@ public class Entity {
 	}
 	public boolean lineOfSight(int xTile, int yTile){
 		boolean lineOfSight = false;
-		if (yTile() == yTile){
+		if (yTile(0) == yTile){
 			lineOfSight = true;
-			for (int j = Math.min(xTile(), xTile); j < Math.max(xTile(), xTile); ++j){
-				if (game.maze[yTile()][j]){
+			for (int j = Math.min(xTile(0), xTile); j < Math.max(xTile(0), xTile); ++j){
+				if (game.maze[yTile(0)][j]){
 					lineOfSight = false;
 				}
 			}
 		}
-		if (xTile() == xTile){
+		if (xTile(0) == xTile){
 			lineOfSight = true;
-			for (int j = Math.min(yTile(), yTile); j < Math.max(yTile(), yTile); ++j){
-				if (game.maze[j][xTile()]){
+			for (int j = Math.min(yTile(0), yTile); j < Math.max(yTile(0), yTile); ++j){
+				if (game.maze[j][xTile(0)]){
 					lineOfSight = false;
 				}
 			}

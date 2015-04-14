@@ -30,7 +30,7 @@ public class Stairs extends Entity{
 			game.textAlert.showTextAlert("The stairs have appeared!", 60);
 		}
 		
-		if (stairsReady && game.knight.xTile() == xTile() && game.knight.yTile() == yTile()){
+		if (stairsReady && game.knight.xTile(0) == xTile(0) && game.knight.yTile(0) == yTile(0)){
 			game.nextLevel();
 			stairsReady = false;
 			coinTarget = game.coinCount + 40;

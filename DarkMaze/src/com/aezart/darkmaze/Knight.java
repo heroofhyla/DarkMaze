@@ -15,7 +15,7 @@ public class Knight extends Entity{
 	public void draw(Graphics g){
 		if (game.debug){
 			g.setColor(Color.green);
-			g.drawRect(xTile()*32, yTile()*32, 32, 32);
+			g.drawRect(xTile(0)*32, yTile(0)*32, 32, 32);
 		}
 		super.draw(g);
 	}
