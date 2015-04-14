@@ -1,6 +1,7 @@
 package com.aezart.darkmaze;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -15,9 +16,25 @@ public class Knight extends Entity{
 	public void draw(Graphics g){
 		if (game.debug){
 			g.setColor(Color.green);
-			g.drawRect(xTile(0)*32, yTile(0)*32, 32, 32);
+			g.drawRect(xTile()*32, yTile()*32, 32, 32);
 		}
 		super.draw(g);
+	}
+	
+	@Override
+	public void drawEffects(Graphics g){
+		if (game.debug){
+			FontMetrics fm = g.getFontMetrics();
+			g.setColor(Color.black);
+			g.fillRect(position.x()-fm.stringWidth(this.toString())/2, position.y()-8, fm.stringWidth(this.toString()), 8);
+			g.fillRect(position.x()-fm.stringWidth(this.toString())/2, position.y()+1, 40, 18);
+			g.setColor(Color.cyan);
+			g.drawString(this.toString(), position.x()-fm.stringWidth(this.toString())/2, position.y());
+			
+			g.drawString("x: " + position.x(), position.x()-fm.stringWidth(this.toString())/2, position.y()+9);
+			
+			g.drawString("y: " + position.y(), position.x()-fm.stringWidth(this.toString())/2, position.y()+18);
+		}
 	}
 	@Override
 	public void tick(){
@@ -48,6 +65,11 @@ public class Knight extends Entity{
 				 position = position.plus(0, 2);
 			}
 		}
+	}
+	
+	@Override
+	public String toString(){
+		return super.toString().substring(26);
 	}
 
 }

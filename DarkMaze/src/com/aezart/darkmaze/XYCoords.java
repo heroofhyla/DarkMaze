@@ -18,8 +18,8 @@ public final class XYCoords {
 	//to have the exact same x and y as an existing XYCoords,
 	// just use = (don't worry, they're immutable!)
 	public XYCoords(XYCoords xy, int xOffset, int yOffset){
-		this.x = xy.xTile(0) * 32 + xOffset;
-		this.y = xy.yTile(0) * 32 + yOffset;
+		this.x = xy.xTile() * 32 + xOffset;
+		this.y = xy.yTile() * 32 + yOffset;
 	}
 	
 	public final int x(){
@@ -33,11 +33,37 @@ public final class XYCoords {
 	public final XYCoords plus(int x, int y){
 		return new XYCoords(this.x+x, this.y+y);
 	}
-	public final int xTile(int xOffset){
-		return (x+xOffset)/32;
+	public final int xTile(){
+		return x/32;
 	}
 	
-	public final int yTile(int yOffset){
-		return (y+yOffset)/32;
-	}	
+	public final int yTile(){
+		return y/32;
+	}
+	
+	public final boolean equalsTile(XYCoords xy){
+		if (xy == null){
+			return false;
+		}
+		if (! (xy instanceof XYCoords)){
+			return false;
+		}
+		return this.xTile() == xy.xTile() && this.yTile() == xy.yTile();
+	}
+	
+	@Override
+	public final boolean equals(Object xy){
+		if (xy == null){
+			return false;
+		}
+		if (! (xy instanceof XYCoords)){
+			return false;
+		}
+		return this.x() == ((XYCoords)xy).x() && this.y() == ((XYCoords)xy).y();
+	}
+	
+	@Override
+	public final int hashCode(){
+		return ((x * y) + 29)*37;
+	}
 }

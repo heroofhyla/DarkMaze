@@ -10,12 +10,15 @@ public class Cloak extends Entity{
 	XYCoords playerNextTurn = new XYCoords(0,0);
 	boolean playerStillInView = false;
 	XYCoords[]spriteCoords = {new XYCoords(16, 0), new XYCoords(0, 0), new XYCoords(0, 16), new XYCoords(16,16)};
-	public Cloak(DarkMaze game){
+	public Cloak(DarkMaze game, int bboxX1, int bboxY1, int bboxX2, int bboxY2){
 		super(game.cloakSprite, game);
-		bboxX1 = -16;
-		bboxX2 = 15;
-		bboxY1 = -16;
-		bboxY2 = 15;
+		drawXOffset = -sprite.getWidth()/4;
+		drawYOffset = -sprite.getHeight()/4;
+
+		this.bboxX1 = bboxX1;
+		this.bboxX2 = bboxX2;
+		this.bboxY1 = bboxY1;
+		this.bboxY2 = bboxY2;
 	}
 	
 	/*@Override 
@@ -28,15 +31,15 @@ public class Cloak extends Entity{
 	public void draw(Graphics g){
 		if (game.debug){
 			g.setColor(Color.green);
-			g.drawRect(xTile(0)*32, yTile(0)*32, 32, 32);
+			g.drawRect(xTile()*32, yTile()*32, 32, 32);
 			g.setColor(Color.white);
-			g.drawRect(playerLastSeen.xTile(0)*32, playerLastSeen.yTile(0)*32, 32, 32);
+			g.drawRect(playerLastSeen.xTile()*32, playerLastSeen.yTile()*32, 32, 32);
 			g.setColor(Color.red);
-			g.drawRect(playerNextTurn.xTile(0)*32, playerNextTurn.yTile(0)*32, 32, 32);
+			g.drawRect(playerNextTurn.xTile()*32, playerNextTurn.yTile()*32, 32, 32);
 		}
-			g.drawImage(sprite, x()+drawXOffset+8, y()+drawYOffset+8, x()+drawXOffset+24, y()+drawYOffset+24, spriteCoords[direction/2].x(),spriteCoords[direction/2].y(),spriteCoords[direction/2].x() + 16, spriteCoords[direction/2].y() + 16, null);
+		g.drawImage(sprite, x()+drawXOffset, y()+drawYOffset, x()+drawXOffset+16, y()+drawYOffset+16, spriteCoords[direction/2].x(),spriteCoords[direction/2].y(),spriteCoords[direction/2].x() + 16, spriteCoords[direction/2].y() + 16, null);
 
-			//super.draw(g);
+		//super.draw(g);
 	}
 	@Override
 	public void drawEffects(Graphics g){
@@ -60,10 +63,11 @@ public class Cloak extends Entity{
 			g.setColor(Color.cyan);
 			g.drawString(this.toString(), position.x()-fm.stringWidth(this.toString())/2, position.y());
 			
-			g.drawString("x: " + position.x(), position.x()-fm.stringWidth(this.toString())/2, position.y()+9);
+			g.drawString("xT: " + position.xTile(), position.x()-fm.stringWidth(this.toString())/2, position.y()+9);
 			
-			g.drawString("y: " + position.y(), position.x()-fm.stringWidth(this.toString())/2, position.y()+18);
+			g.drawString("yT: " + position.yTile(), position.x()-fm.stringWidth(this.toString())/2, position.y()+18);
 			g.drawString("dir: " + direction, position.x()-fm.stringWidth(this.toString())/2, position.y()+27);
+			g.drawString("toPLS: " + directionToTile(playerLastSeen),position.x()-fm.stringWidth(this.toString())/2, y()+36);
 			
 			g.setColor(Color.black);
 			
@@ -91,25 +95,24 @@ public class Cloak extends Entity{
 			int variation = game.rng.nextInt(3) - 1;
 			direction = (direction + 2*variation+8)%8;
 		}
-		if (lineOfSight(game.knight) && directionTo(new XYCoords(game.knight.position, 16, 16)) == direction){
+		if (lineOfSight(game.knight) && directionToTile(game.knight.position) == direction){
 			if (game.debug){
 				System.out.println(this + " reports: player in line of sight!");
 			}
-			playerLastSeen = new XYCoords(game.knight.position,16,16);
+			playerLastSeen = game.knight.position;
 			playerStillInView = true;
 		}else if (playerStillInView){
 			if (game.debug){
 				System.out.println(this + " lost sight of player.");
 			}
 			playerStillInView = false;
-			playerNextTurn = new XYCoords(game.knight.position,16,16);
+			playerNextTurn = game.knight.position;
 			
 		}
 
 		if (lineOfSight(playerLastSeen)){
-			if (directionTo(playerLastSeen)%2 == 0){
-				if (validMove(nextCoord(directionTo(playerLastSeen)))){
-					direction = directionTo(playerLastSeen);
+				if (validMove(nextCoord(directionToTile(playerLastSeen)))){
+					direction = directionToTile(playerLastSeen);
 					if (game.debug){
 						System.out.println(this + ": setting direction to " + direction);
 					}
@@ -117,13 +120,13 @@ public class Cloak extends Entity{
 					//direction = directionTo(position.xTile(0)*32 + 8, position.yTile(0)*32 + 8);
 					//System.out.println("Recentering on tile: " + direction);
 				}
-			}
+			//}
 			
 		}
 		
 		if (lineOfSight(playerNextTurn)){
-			if (directionTo(playerNextTurn)%2 == 0 && validMove(nextCoord(directionTo(playerNextTurn)))){
-				direction = directionTo(playerNextTurn);
+			if (validMove(nextCoord(directionToTile(playerNextTurn)))){
+				direction = directionToTile(playerNextTurn);
 				if (game.debug){
 					System.out.println(this + " Following trail: " + direction);
 					System.out.println("my xy: " + position.x() + "," + position.y());
@@ -145,17 +148,19 @@ public class Cloak extends Entity{
 		}
 		
 		position = nextCoord;
-		 
-		 if (x() == playerLastSeen.x() && y() == playerLastSeen.y()){
-			 playerLastSeen = new XYCoords(0,0);
-		 }
-		 
-		 if (Math.abs(x() - game.knight.x()) < 10 && Math.abs(y() - game.knight.y()) < 10){
-			 game.lives -= 1;
-			 game.resetMaze();
-			 game.knight.setTile(9, 7, 16, 16);
-
-		 }
+		
+		if (position.equalsTile(playerLastSeen)){
+		//if (xTile() == playerLastSeen.xTile() && yTile() == playerLastSeen.yTile()){
+			playerLastSeen = new XYCoords(0,0);
+		} 
+		
+		if (position.equalsTile(game.knight.position)){
+		//if (Math.abs(x() - game.knight.x()) < 10 && Math.abs(y() - game.knight.y()) < 10){
+			game.lives -= 1;
+			game.resetMaze();
+			game.knight.setTile(9, 7, 16, 16);
+		
+		}
 	}
 	
 	@Override

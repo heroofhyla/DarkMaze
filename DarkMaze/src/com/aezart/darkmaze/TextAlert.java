@@ -31,6 +31,7 @@ public class TextAlert extends Entity {
 	public void drawEffects(Graphics g){
 		FontMetrics fm = g.getFontMetrics();
 		if (duration > 0){
+			g.setColor(Color.black);
 			g.fillRect(304-fm.stringWidth(message)/2, y()-11, fm.stringWidth(message), 13);
 			g.setColor(Color.white);
 			g.drawString(message, 304-fm.stringWidth(message)/2, y());

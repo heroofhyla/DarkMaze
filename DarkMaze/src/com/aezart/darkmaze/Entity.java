@@ -38,13 +38,13 @@ public class Entity {
 		return position.y();
 	}
 
-	int xTile(int xOffset){
-		return position.xTile(xOffset);
+	int xTile(){
+		return position.xTile();
 	}
 	
 
-	int yTile(int yOffset){
-		return position.yTile(yOffset);
+	int yTile(){
+		return position.yTile();
 	}
 	void setPosition(XYCoords xy){
 		position = xy;
@@ -53,16 +53,50 @@ public class Entity {
 	void setTile(int xTile, int yTile, int xOffset, int yOffset){
 		position = new XYCoords(xTile, yTile, xOffset, yOffset);
 	}
-	int directionTo(XYCoords t){
-		return directionTo(t.x(), t.y());
-	}
+	//int directionTo(XYCoords t){
+		//return directionTo(t.x(), t.y());
+	//}
+	
 	//returns: int 0 through seven, with 0 east, 1 north east, 2 north, ... 7 southwest
 	//behavior undefined when x == e.x && y == e.y
-	int directionTo(Entity e){
-		return directionTo(e.x(), e.y());
-	}
+	//int directionTo(Entity e){
+		//return directionTo(e.x(), e.y());
+	//}
 	
-	int directionTo(int x, int y){
+	int directionToTile(XYCoords xy){
+		return directionToTile(xy.xTile(), xy.yTile());
+	}
+	int directionToTile(int xTile, int yTile){
+		int deltaX = xTile - this.xTile();
+		int deltaY = yTile - this.yTile();
+		int absDeltaX = Math.abs(deltaX);
+		int absDeltaY = Math.abs(deltaY);
+		if (deltaX > 0){
+			if (absDeltaX > absDeltaY){
+				return 0;
+			}else if (deltaY > 0){
+				return 6;
+			}else{
+				return 2;
+			}
+		}
+		if (deltaX < 0){
+			if (absDeltaX > absDeltaY){
+				return 4;
+			}else if (deltaY > 0){
+				return 6;
+			}else{
+				return 2;
+			}
+		}else{
+			if (deltaY > 0){
+				return 6;
+			}else{
+				return 2;
+			}
+		}
+	}
+	/*int directionTo(int x, int y){
 		if (this.x() > x){
 			if (this.y() > y){
 				return 3; 
@@ -88,7 +122,7 @@ public class Entity {
 		}
 		return 6;
 		
-	}
+	}*/
 
 	public void draw(Graphics g) {
 		g.drawImage(sprite, x()+drawXOffset, y()+drawYOffset, null);
@@ -103,26 +137,26 @@ public class Entity {
 	}
 	
 	public boolean lineOfSight(Entity e){
-		return lineOfSight(e.xTile(0),e.yTile(0));
+		return lineOfSight(e.xTile(),e.yTile());
 	}
 	
 	public boolean lineOfSight(XYCoords t){
-		return lineOfSight(t.xTile(0), t.yTile(0));
+		return lineOfSight(t.xTile(), t.yTile());
 	}
 	public boolean lineOfSight(int xTile, int yTile){
 		boolean lineOfSight = false;
-		if (yTile(0) == yTile){
+		if (yTile() == yTile){
 			lineOfSight = true;
-			for (int j = Math.min(xTile(0), xTile); j < Math.max(xTile(0), xTile); ++j){
-				if (game.maze[yTile(0)][j]){
+			for (int j = Math.min(xTile(), xTile); j < Math.max(xTile(), xTile); ++j){
+				if (game.maze[yTile()][j]){
 					lineOfSight = false;
 				}
 			}
 		}
-		if (xTile(0) == xTile){
+		if (xTile() == xTile){
 			lineOfSight = true;
-			for (int j = Math.min(yTile(0), yTile); j < Math.max(yTile(0), yTile); ++j){
-				if (game.maze[j][xTile(0)]){
+			for (int j = Math.min(yTile(), yTile); j < Math.max(yTile(), yTile); ++j){
+				if (game.maze[j][xTile()]){
 					lineOfSight = false;
 				}
 			}
@@ -145,16 +179,16 @@ public class Entity {
 		XYCoords topRight = new XYCoords(x+bboxX2, y+bboxY1);
 		XYCoords bottomRight = new XYCoords(x+bboxX2, y+bboxY2);
 
-		if (game.maze[topLeft.yTile(0)][topLeft.xTile(0)]){
+		if (game.maze[topLeft.yTile()][topLeft.xTile()]){
 			return false;
 		}
-		if (game.maze[topRight.yTile(0)][topRight.xTile(0)]){
+		if (game.maze[topRight.yTile()][topRight.xTile()]){
 			return false;
 		}
-		if (game.maze[bottomLeft.yTile(0)][bottomLeft.xTile(0)]){
+		if (game.maze[bottomLeft.yTile()][bottomLeft.xTile()]){
 			return false;
 		}
-		if (game.maze[bottomRight.yTile(0)][bottomRight.xTile(0)]){
+		if (game.maze[bottomRight.yTile()][bottomRight.xTile()]){
 			return false;
 		}
 		return true;
