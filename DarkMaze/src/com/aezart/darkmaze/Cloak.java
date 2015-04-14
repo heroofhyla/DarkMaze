@@ -9,7 +9,7 @@ public class Cloak extends Entity{
 	XYCoords playerLastSeen = new XYCoords(0,0);
 	XYCoords playerNextTurn = new XYCoords(0,0);
 	boolean playerStillInView = false;
-	
+	XYCoords[]spriteCoords = {new XYCoords(16, 0), new XYCoords(0, 0), new XYCoords(0, 16), new XYCoords(16,16)};
 	public Cloak(DarkMaze game){
 		super(game.cloakSprite, game);
 		bboxX1 = -16;
@@ -18,12 +18,12 @@ public class Cloak extends Entity{
 		bboxY2 = 15;
 	}
 	
-	@Override 
+	/*@Override 
 	public void drawLights(java.awt.Graphics2D g) {
 		if (!lineOfSight(playerLastSeen)){
 			super.drawLights(g);
 		}
-	};
+	};*/
 	@Override 
 	public void draw(Graphics g){
 		if (game.debug){
@@ -34,15 +34,17 @@ public class Cloak extends Entity{
 			g.setColor(Color.red);
 			g.drawRect(playerNextTurn.xTile(0)*32, playerNextTurn.yTile(0)*32, 32, 32);
 		}
-			super.draw(g);
+			g.drawImage(sprite, x()+drawXOffset+8, y()+drawYOffset+8, x()+drawXOffset+24, y()+drawYOffset+24, spriteCoords[direction/2].x(),spriteCoords[direction/2].y(),spriteCoords[direction/2].x() + 16, spriteCoords[direction/2].y() + 16, null);
+
+			//super.draw(g);
 	}
 	@Override
 	public void drawEffects(Graphics g){
-		if ((lineOfSight(playerLastSeen)) || (lineOfSight(playerNextTurn))){
+		/*if ((lineOfSight(playerLastSeen)) || (lineOfSight(playerNextTurn))){
 			g.drawImage(game.redEyes, x()+drawXOffset, y()+drawYOffset, null);
 		}else{
 			g.drawImage(game.glowingEyes, x()+drawXOffset, y()+drawYOffset, null);
-		}
+		}*/
 		if (game.debug){
 			if (playerLastSeen.x() != 0){
 				g.setColor(Color.white);

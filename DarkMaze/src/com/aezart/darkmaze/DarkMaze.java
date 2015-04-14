@@ -77,7 +77,7 @@ public class DarkMaze extends JFrame{
 			redEyes = ImageIO.read(new File("redeyes.png"));
 			droppedTorch = ImageIO.read(new File("droppedtorch.png"));
 			knightSprite = ImageIO.read(new File("littleknight.png"));
-			cloakSprite = ImageIO.read(new File("littlecloak.png"));
+			cloakSprite = ImageIO.read(new File("littlecloaksheet.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
