@@ -72,16 +72,17 @@ public class DarkMaze extends JFrame{
 			
 		}
 		try {
-			tileset  = ImageIO.read(new File("tileset2.png"));
-			light = ImageIO.read(new File("alphalight.png"));
-			wallshadow = ImageIO.read(new File("wallshadow.png"));
-			glowingEyes = ImageIO.read(new File("glowingeyes.png"));
-			redEyes = ImageIO.read(new File("redeyes.png"));
-			droppedTorch = ImageIO.read(new File("droppedtorch.png"));
-			knightSprite = ImageIO.read(new File("littleknight.png"));
-			cloakSprite = ImageIO.read(new File("littlecloaksheet.png"));
-			alertIcon = ImageIO.read(new File("alerticon.png"));
-			lostIcon = ImageIO.read(new File("losticon.png"));
+			//tileset  = ImageIO.read(new File("tileset2.png"));
+			tileset = ImageIO.read(this.getClass().getResource("resources/tileset2.png"));
+			light = ImageIO.read(this.getClass().getResource("resources/alphalight.png"));
+			wallshadow = ImageIO.read(this.getClass().getResource("resources/wallshadow.png"));
+			glowingEyes = ImageIO.read(this.getClass().getResource("resources/glowingeyes.png"));
+			redEyes = ImageIO.read(this.getClass().getResource("resources/redeyes.png"));
+			droppedTorch = ImageIO.read(this.getClass().getResource("resources/droppedtorch.png"));
+			knightSprite = ImageIO.read(this.getClass().getResource("resources/littleknight.png"));
+			cloakSprite = ImageIO.read(this.getClass().getResource("resources/littlecloaksheet.png"));
+			alertIcon = ImageIO.read(this.getClass().getResource("resources/alerticon.png"));
+			lostIcon = ImageIO.read(this.getClass().getResource("resources/losticon.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

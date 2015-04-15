@@ -103,7 +103,7 @@ public class Cloak extends Entity{
 		}
 		
 		if (freedirections > 2){
-			if (alertState != 1 || confusionTimer%5 == 0){
+			if (alertState != 1 || (confusionTimer%5 == 0 && confusionTimer < 21)){
 			int variation = game.rng.nextInt(3) - 1;
 			direction = (lastdirection + 2*variation+8)%8;
 			if (!lineOfSight(playerLastSeen) && !lineOfSight(playerNextTurn) && alertState == 2){
@@ -118,7 +118,7 @@ public class Cloak extends Entity{
 			playerLastSeen = game.knight.position;
 			playerStillInView = true;
 			alertState = 2;
-			confusionTimer = 30;
+			confusionTimer = 34;
 		}else if (playerStillInView){
 			if (game.debug){
 				System.out.println(this + " lost sight of player.");
