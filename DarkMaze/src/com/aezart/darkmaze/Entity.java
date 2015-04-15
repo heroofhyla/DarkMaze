@@ -21,10 +21,10 @@ public class Entity {
 	public Entity(BufferedImage sprite, DarkMaze game){
 		this.sprite = sprite;
 		this.game = game;
-		bboxX1 = 0 - sprite.getWidth()/2;
-		bboxY1 = 0 - sprite.getHeight()/2;
-		bboxX2 = sprite.getWidth()/2;
-		bboxY2 = sprite.getHeight()/2;
+		bboxX1 = 0 - sprite.getWidth()/4;
+		bboxY1 = 0 - sprite.getHeight()/4;
+		bboxX2 = sprite.getWidth()/4;
+		bboxY2 = sprite.getHeight()/4;
 		
 		drawXOffset = -sprite.getWidth()/2;
 		drawYOffset = -sprite.getHeight()/2;

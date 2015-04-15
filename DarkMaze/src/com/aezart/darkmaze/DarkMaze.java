@@ -79,7 +79,7 @@ public class DarkMaze extends JFrame{
 			glowingEyes = ImageIO.read(this.getClass().getResource("resources/glowingeyes.png"));
 			redEyes = ImageIO.read(this.getClass().getResource("resources/redeyes.png"));
 			droppedTorch = ImageIO.read(this.getClass().getResource("resources/droppedtorch.png"));
-			knightSprite = ImageIO.read(this.getClass().getResource("resources/littleknight.png"));
+			knightSprite = ImageIO.read(this.getClass().getResource("resources/littleknightsheet.png"));
 			cloakSprite = ImageIO.read(this.getClass().getResource("resources/littlecloaksheet.png"));
 			alertIcon = ImageIO.read(this.getClass().getResource("resources/alerticon.png"));
 			lostIcon = ImageIO.read(this.getClass().getResource("resources/losticon.png"));

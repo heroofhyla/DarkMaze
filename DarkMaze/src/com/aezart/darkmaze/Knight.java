@@ -7,9 +7,14 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class Knight extends Entity{
+	int direction = 6;
+	XYCoords[]spriteCoords = {new XYCoords(16, 0), new XYCoords(0, 0), new XYCoords(0, 16), new XYCoords(16,16)};
 
 	public Knight(DarkMaze game) {
 		super(game.knightSprite, game);
+		drawXOffset = -sprite.getWidth()/4;
+		drawYOffset = -sprite.getHeight()/4;
+
 	}
 	
 	@Override
@@ -18,7 +23,8 @@ public class Knight extends Entity{
 			g.setColor(Color.green);
 			g.drawRect(xTile()*32, yTile()*32, 32, 32);
 		}
-		super.draw(g);
+		g.drawImage(sprite, x()+drawXOffset, y()+drawYOffset, x()+drawXOffset+16, y()+drawYOffset+16, spriteCoords[direction/2].x(),spriteCoords[direction/2].y(),spriteCoords[direction/2].x() + 16, spriteCoords[direction/2].y() + 16, null);
+		//super.draw(g);
 	}
 	
 	@Override
@@ -49,11 +55,13 @@ public class Knight extends Entity{
 			if (validMove(x()-2,y())){
 				position = position.plus(-2, 0);
 			}
+
 		}
 		if ((game.keyStates.get(KeyEvent.VK_RIGHT) == true)){
 			if (validMove(x()+2, y())){
 				position = position.plus(2, 0);
 			}
+
 		}
 		if ((game.keyStates.get(KeyEvent.VK_UP) == true)){
 			if (validMove(x(), y()-2)){
@@ -65,6 +73,33 @@ public class Knight extends Entity{
 				 position = position.plus(0, 2);
 			}
 		}
+		
+		if (game.keyStates.get(KeyEvent.VK_LEFT) == true && game.keyStates.get(KeyEvent.VK_UP) == false && game.keyStates.get(KeyEvent.VK_DOWN) == false){
+			direction = 4;
+		}
+		if (game.keyStates.get(KeyEvent.VK_RIGHT) == true && game.keyStates.get(KeyEvent.VK_UP) == false && game.keyStates.get(KeyEvent.VK_DOWN) == false){
+			direction = 0;
+		}
+		if (game.keyStates.get(KeyEvent.VK_UP) == true && game.keyStates.get(KeyEvent.VK_LEFT) == false && game.keyStates.get(KeyEvent.VK_RIGHT) == false){
+			direction = 2;
+		}
+		if (game.keyStates.get(KeyEvent.VK_DOWN) == true && game.keyStates.get(KeyEvent.VK_LEFT) == false && game.keyStates.get(KeyEvent.VK_RIGHT) == false){
+			direction = 6;
+		}
+		
+		if (game.keyStates.get(KeyEvent.VK_DOWN) == true && direction == 2){
+			direction = 6;
+		}
+		if (game.keyStates.get(KeyEvent.VK_UP) == true && direction == 6){
+			direction = 2;
+		}
+		if (game.keyStates.get(KeyEvent.VK_LEFT) == true && direction == 0){
+			direction = 4;
+		}
+		if (game.keyStates.get(KeyEvent.VK_RIGHT) == true && direction == 4){
+			direction = 0;
+		}
+		
 	}
 	
 	@Override
