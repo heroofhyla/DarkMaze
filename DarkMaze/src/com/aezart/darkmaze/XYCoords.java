@@ -14,13 +14,6 @@ public final class XYCoords {
 		this.y = yTile*32 + yOffset;
 	}
 	
-	//in the same tile as xy, but with a different offset
-	//to have the exact same x and y as an existing XYCoords,
-	// just use = (don't worry, they're immutable!)
-	public XYCoords(XYCoords xy, int xOffset, int yOffset){
-		this.x = xy.xTile() * 32 + xOffset;
-		this.y = xy.yTile() * 32 + yOffset;
-	}
 	
 	public final int x(){
 		return x;
