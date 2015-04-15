@@ -5,6 +5,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 public class Cloak extends Entity{
+	int confusionTimer = -1;
+	int alertState = 0;
 	int direction = game.rng.nextInt(4) * 2;
 	XYCoords playerLastSeen = new XYCoords(0,0);
 	XYCoords playerNextTurn = new XYCoords(0,0);
@@ -43,9 +45,12 @@ public class Cloak extends Entity{
 	}
 	@Override
 	public void drawEffects(Graphics g){
-		/*if ((lineOfSight(playerLastSeen)) || (lineOfSight(playerNextTurn))){
-			g.drawImage(game.redEyes, x()+drawXOffset, y()+drawYOffset, null);
-		}else{
+		if (alertState == 2){
+			g.drawImage(game.alertIcon, x()-8, y()-24, null);
+		} else if (alertState == 1){
+			g.drawImage(game.lostIcon, x()-8, y()-24, null);
+		}
+		/*else{
 			g.drawImage(game.glowingEyes, x()+drawXOffset, y()+drawYOffset, null);
 		}*/
 		if (game.debug){
@@ -83,6 +88,12 @@ public class Cloak extends Entity{
 	
 	@Override
 	public void tick(){
+		if (alertState == 1){
+			--confusionTimer;
+		}
+		if (confusionTimer < 0){
+			alertState = 0;
+		}
 		int lastdirection = direction;
 		int freedirections = 0;
 		for (int i = 0; i < 4; ++i){
@@ -92,8 +103,13 @@ public class Cloak extends Entity{
 		}
 		
 		if (freedirections > 2){
+			if (alertState != 1 || confusionTimer%5 == 0){
 			int variation = game.rng.nextInt(3) - 1;
-			direction = (direction + 2*variation+8)%8;
+			direction = (lastdirection + 2*variation+8)%8;
+			if (!lineOfSight(playerLastSeen) && !lineOfSight(playerNextTurn) && alertState == 2){
+				alertState = 1;
+			}
+			}
 		}
 		if (lineOfSight(game.knight) && directionToTile(game.knight.position) == direction){
 			if (game.debug){
@@ -101,6 +117,8 @@ public class Cloak extends Entity{
 			}
 			playerLastSeen = game.knight.position;
 			playerStillInView = true;
+			alertState = 2;
+			confusionTimer = 30;
 		}else if (playerStillInView){
 			if (game.debug){
 				System.out.println(this + " lost sight of player.");
@@ -147,7 +165,9 @@ public class Cloak extends Entity{
 			nextCoord = nextCoord(direction);
 		}
 		
-		position = nextCoord;
+		if (alertState != 1){
+			position = nextCoord;
+		}
 		
 		if (position.equalsTile(playerLastSeen)){
 		//if (xTile() == playerLastSeen.xTile() && yTile() == playerLastSeen.yTile()){

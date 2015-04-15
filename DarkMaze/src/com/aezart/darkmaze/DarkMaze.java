@@ -46,6 +46,8 @@ public class DarkMaze extends JFrame{
 	BufferedImage wallshadow;
 	BufferedImage knightSprite;
 	BufferedImage cloakSprite;
+	BufferedImage alertIcon;
+	BufferedImage lostIcon;
 	BufferedImage noSprite = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
 	boolean debug = false;
 	Random rng = new Random();
@@ -78,6 +80,8 @@ public class DarkMaze extends JFrame{
 			droppedTorch = ImageIO.read(new File("droppedtorch.png"));
 			knightSprite = ImageIO.read(new File("littleknight.png"));
 			cloakSprite = ImageIO.read(new File("littlecloaksheet.png"));
+			alertIcon = ImageIO.read(new File("alerticon.png"));
+			lostIcon = ImageIO.read(new File("losticon.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -340,6 +344,7 @@ public class DarkMaze extends JFrame{
 			c.playerLastSeen = new XYCoords(0,0);
 			c.playerNextTurn = new XYCoords(0,0);
 			c.playerStillInView = false;
+			c.alertState = 0;
 		}
 
 	}
