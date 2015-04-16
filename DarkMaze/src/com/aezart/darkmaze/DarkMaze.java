@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -19,6 +21,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 public class DarkMaze extends JFrame{
 	
@@ -162,42 +165,26 @@ public class DarkMaze extends JFrame{
 	
 	public static void main(String[] args){
 		final DarkMaze darkMaze = new DarkMaze();
-		
-		new Thread(new Runnable(){
-
+		ActionListener gameLoop = new ActionListener() {
 			@Override
-			public void run() {
-				while(true){
-					for (Entity e: darkMaze.entities){
-						e.tick();
-					}
-					
-					if (darkMaze.readyForNextLevel){
-						darkMaze.nextLevel();
-						darkMaze.stairs.stairsReady = false;
-						darkMaze.stairs.coinTarget = darkMaze.coinCount + 40;
-						
-						darkMaze.readyForNextLevel = false;
-
-					}
-						SwingUtilities.invokeLater(new Runnable(){
-
-							@Override
-							public void run() {
-								darkMaze.screen.repaint();
-							}
-							
-						});
-					try {
-						Thread.sleep(33);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+			public void actionPerformed(ActionEvent a) {
+				for (Entity e: darkMaze.entities){
+					e.tick();
 				}
+				
+				if (darkMaze.readyForNextLevel){
+					darkMaze.nextLevel();
+					darkMaze.stairs.stairsReady = false;
+					darkMaze.stairs.coinTarget = darkMaze.coinCount + 40;
+					
+					darkMaze.readyForNextLevel = false;
+
+				}
+				darkMaze.screen.repaint();
 			}
-			
-		}).start();
+		};
 		
+		new Timer(30, gameLoop).start();
 	}
 	
 	void generateMaze(boolean[][] maze){

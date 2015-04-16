@@ -24,7 +24,6 @@ public class Screen extends JPanel{
 	}
 	@Override
 	protected void paintComponent(Graphics g) {
-		long paintTime = System.currentTimeMillis();
 		super.paintComponent(g);
 		
 		drawingG.drawImage(mapImage, 0, 0, null);
@@ -61,8 +60,7 @@ public class Screen extends JPanel{
 			e.drawEffects(finalG);
 		}
 		
-		g.drawImage(finalRender, 0, 0, null);
-		System.out.println(System.currentTimeMillis() - paintTime);
-		
+		g.drawImage(finalRender, 0, 0, null);		
+		//System.out.println(System.nanoTime());
 	}
 }
