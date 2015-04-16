@@ -104,7 +104,7 @@ public class DarkMaze extends JFrame{
 		entities.addAll(cloaks);
 		
 		knight.setPosition(new XYCoords(9, 7, 8, 8));
-		final Graphics sg = screen.mapSurface.getGraphics();
+		final Graphics sg = screen.mapLayer.getGraphics();
 		
 		screen.setPreferredSize(new Dimension(608,480));
 		add(screen);
@@ -136,7 +136,7 @@ public class DarkMaze extends JFrame{
 				if (arg0.getKeyCode() == KeyEvent.VK_Z){
 					resetMaze();
 					generateMaze(maze);
-					paintBackground(screen.mapSurface.getGraphics());
+					paintBackground(screen.mapLayer.getGraphics());
 
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
@@ -224,7 +224,7 @@ public class DarkMaze extends JFrame{
 		
 		deadEnds.add(new XYCoords(firstX, firstY, 0, 0));
 		entities.add(new Torch(this));
-		entities.lastElement().setTile(deadEnds.lastElement().xTile()*2 + 1, deadEnds.lastElement().yTile()*2 + 1, 16, 16);
+		entities.lastElement().setTile(deadEnds.lastElement().xTile()*2 + 1, deadEnds.lastElement().yTile()*2 + 1, 8, 8);
 
 		generateNext(firstX, firstY, maze, visited, deadEnds);
 		
@@ -285,7 +285,7 @@ public class DarkMaze extends JFrame{
 		if (numVisited == 0){
 			deadEnds.add(new XYCoords(x,y, 0, 0));
 			entities.add(new Torch(this));
-			entities.lastElement().setTile(deadEnds.lastElement().xTile()*2 + 1, deadEnds.lastElement().yTile()*2 + 1, 16, 16);
+			entities.lastElement().setTile(deadEnds.lastElement().xTile()*2 + 1, deadEnds.lastElement().yTile()*2 + 1, 8, 8);
 		}
 	}
 	
@@ -355,7 +355,7 @@ public class DarkMaze extends JFrame{
 		textAlert.showTextAlert("Depth: " + 10*level + "ft", 60);
 		resetMaze();
 		generateMaze(maze);
-		paintBackground(screen.mapSurface.getGraphics());
+		paintBackground(screen.mapLayer.getGraphics());
 		knight.setPosition(new XYCoords(9, 7, 8, 8));
 		for (int i = 0; i < coins.length; ++i){
 			for (int k = 0; k < coins[0].length; ++k){

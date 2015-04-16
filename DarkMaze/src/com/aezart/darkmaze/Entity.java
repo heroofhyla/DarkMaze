@@ -136,7 +136,7 @@ public class Entity {
 	}
 	//TODO: Don't assume light is 72x72
 	public void drawLights(Graphics2D g){
-		g.drawImage(game.light, x()-game.light.getWidth()/2 + drawXOffset, y()-game.light.getHeight()/2+drawYOffset, null);	
+		g.drawImage(game.light, x()-game.light.getWidth()/2 + drawXOffset + 8, y()-game.light.getHeight()/2+drawYOffset + 8, null);	
 	}
 	
 	public void drawEffects(Graphics g){
