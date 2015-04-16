@@ -5,6 +5,14 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class Entity {
+	public final static int EAST = 0;
+	public final static int NORTHEAST = 1;
+	public final static int NORTH = 2;
+	public final static int NORTHWEST = 3;
+	public final static int WEST = 4;
+	public final static int SOUTHWEST = 5;
+	public final static int SOUTH = 6;
+	public final static int SOUTHEAST = 7;
 	
 	int bboxX1;
 	int bboxX2;
@@ -72,26 +80,26 @@ public class Entity {
 		int absDeltaY = Math.abs(deltaY);
 		if (deltaX > 0){
 			if (absDeltaX > absDeltaY){
-				return 0;
+				return EAST;
 			}else if (deltaY > 0){
-				return 6;
+				return SOUTH;
 			}else{
-				return 2;
+				return NORTH;
 			}
 		}
 		if (deltaX < 0){
 			if (absDeltaX > absDeltaY){
-				return 4;
+				return WEST;
 			}else if (deltaY > 0){
-				return 6;
+				return SOUTH;
 			}else{
-				return 2;
+				return NORTH;
 			}
 		}else{
 			if (deltaY > 0){
-				return 6;
+				return SOUTH;
 			}else{
-				return 2;
+				return NORTH;
 			}
 		}
 	}
@@ -196,16 +204,16 @@ public class Entity {
 	public XYCoords nextCoord(int direction){
 		int nextX = x();
 		int nextY = y();
-		if (direction == 0 || direction == 1 || direction == 7){
+		if (direction == EAST || direction == NORTHEAST || direction == SOUTHEAST){
 			nextX += 2;
 		}
-		if (direction == 3 || direction == 4 || direction == 5){
+		if (direction == NORTHWEST || direction == WEST || direction == SOUTHWEST){
 			nextX -= 2;
 		}
-		if (direction == 1 || direction == 2 || direction == 3){
+		if (direction == NORTHWEST || direction == NORTH || direction == NORTHEAST){
 			nextY -= 2;
 		}
-		if (direction == 5 || direction == 6 || direction == 7){
+		if (direction == SOUTHWEST || direction == SOUTH || direction == SOUTHEAST){
 			nextY += 2;
 		}
 		

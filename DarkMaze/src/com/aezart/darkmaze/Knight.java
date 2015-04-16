@@ -74,30 +74,33 @@ public class Knight extends Entity{
 			}
 		}
 		
+		//If not moving diagonally, change facing to match direction moving. Don't change facing if moving diagonally
+		//This looks like Link to the Past's system
 		if (game.keyStates.get(KeyEvent.VK_LEFT) == true && game.keyStates.get(KeyEvent.VK_UP) == false && game.keyStates.get(KeyEvent.VK_DOWN) == false){
-			direction = 4;
+			direction = WEST;
 		}
 		if (game.keyStates.get(KeyEvent.VK_RIGHT) == true && game.keyStates.get(KeyEvent.VK_UP) == false && game.keyStates.get(KeyEvent.VK_DOWN) == false){
-			direction = 0;
+			direction = EAST;
 		}
 		if (game.keyStates.get(KeyEvent.VK_UP) == true && game.keyStates.get(KeyEvent.VK_LEFT) == false && game.keyStates.get(KeyEvent.VK_RIGHT) == false){
-			direction = 2;
+			direction = NORTH;
 		}
 		if (game.keyStates.get(KeyEvent.VK_DOWN) == true && game.keyStates.get(KeyEvent.VK_LEFT) == false && game.keyStates.get(KeyEvent.VK_RIGHT) == false){
-			direction = 6;
+			direction = SOUTH;
 		}
 		
-		if (game.keyStates.get(KeyEvent.VK_DOWN) == true && direction == 2){
-			direction = 6;
+		//If facing entirely wrong way, flip around
+		if (game.keyStates.get(KeyEvent.VK_DOWN) == true && direction == NORTH){
+			direction = SOUTH;
 		}
-		if (game.keyStates.get(KeyEvent.VK_UP) == true && direction == 6){
-			direction = 2;
+		if (game.keyStates.get(KeyEvent.VK_UP) == true && direction == SOUTH){
+			direction = NORTH;
 		}
-		if (game.keyStates.get(KeyEvent.VK_LEFT) == true && direction == 0){
-			direction = 4;
+		if (game.keyStates.get(KeyEvent.VK_LEFT) == true && direction == EAST){
+			direction = WEST;
 		}
-		if (game.keyStates.get(KeyEvent.VK_RIGHT) == true && direction == 4){
-			direction = 0;
+		if (game.keyStates.get(KeyEvent.VK_RIGHT) == true && direction == WEST){
+			direction = EAST;
 		}
 		
 	}
