@@ -104,7 +104,7 @@ public class DarkMaze extends JFrame{
 		entities.addAll(cloaks);
 		
 		knight.setPosition(new XYCoords(9, 7, 8, 8));
-		final Graphics sg = screen.mapLayer.getGraphics();
+		final Graphics sg = screen.mapImage.getGraphics();
 		
 		screen.setPreferredSize(new Dimension(608,480));
 		add(screen);
@@ -136,7 +136,7 @@ public class DarkMaze extends JFrame{
 				if (arg0.getKeyCode() == KeyEvent.VK_Z){
 					resetMaze();
 					generateMaze(maze);
-					paintBackground(screen.mapLayer.getGraphics());
+					paintBackground(screen.mapImage.getGraphics());
 
 				}
 				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
@@ -355,7 +355,7 @@ public class DarkMaze extends JFrame{
 		textAlert.showTextAlert("Depth: " + 10*level + "ft", 60);
 		resetMaze();
 		generateMaze(maze);
-		paintBackground(screen.mapLayer.getGraphics());
+		paintBackground(screen.mapImage.getGraphics());
 		knight.setPosition(new XYCoords(9, 7, 8, 8));
 		for (int i = 0; i < coins.length; ++i){
 			for (int k = 0; k < coins[0].length; ++k){
