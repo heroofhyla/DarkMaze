@@ -38,9 +38,7 @@ public final class XYCoords {
 		if (xy == null){
 			return false;
 		}
-		if (! (xy instanceof XYCoords)){
-			return false;
-		}
+
 		return this.xTile() == xy.xTile() && this.yTile() == xy.yTile();
 	}
 	

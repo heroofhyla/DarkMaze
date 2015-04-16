@@ -156,7 +156,7 @@ public class Cloak extends Entity{
 
 		XYCoords nextCoord = nextCoord(direction);
 		
-		while (!validMove(nextCoord.x(), nextCoord.y())){
+		while (!validMove(nextCoord)){
 			if (game.rng.nextBoolean()){
 				direction = (lastdirection+2)%8;
 			}else{

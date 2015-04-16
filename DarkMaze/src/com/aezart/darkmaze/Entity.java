@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class Entity {
+	
 	int bboxX1;
 	int bboxX2;
 	int bboxY1;
@@ -25,9 +26,6 @@ public class Entity {
 		bboxY1 = 0 - sprite.getHeight()/4;
 		bboxX2 = sprite.getWidth()/4;
 		bboxY2 = sprite.getHeight()/4;
-		
-		drawXOffset = -sprite.getWidth()/2;
-		drawYOffset = -sprite.getHeight()/2;
 	}
 	
 	int x(){
@@ -66,6 +64,7 @@ public class Entity {
 	int directionToTile(XYCoords xy){
 		return directionToTile(xy.xTile(), xy.yTile());
 	}
+	
 	int directionToTile(int xTile, int yTile){
 		int deltaX = xTile - this.xTile();
 		int deltaY = yTile - this.yTile();
@@ -129,7 +128,7 @@ public class Entity {
 	}
 	//TODO: Don't assume light is 72x72
 	public void drawLights(Graphics2D g){
-		g.drawImage(game.light, x()-28 + drawXOffset, y()-28+drawYOffset, null);	
+		g.drawImage(game.light, x()-game.light.getWidth()/2 + drawXOffset, y()-game.light.getHeight()/2+drawYOffset, null);	
 	}
 	
 	public void drawEffects(Graphics g){
