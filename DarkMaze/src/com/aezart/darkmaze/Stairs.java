@@ -31,7 +31,7 @@ public class Stairs extends Entity{
 		}
 		
 		if (stairsReady && scene.knight.xTile() == xTile() && scene.knight.yTile() == yTile()){
-			game.readyForNextLevel = true;
+			scene.readyForNextLevel = true;
 		}
 	}
 }
