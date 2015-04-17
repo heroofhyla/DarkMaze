@@ -25,8 +25,8 @@ public class Screen extends JPanel{
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
-		drawingG.drawImage(mapImage, 0, 0, null);
+		darkMaze.currentScene.draw(g);
+		/*drawingG.drawImage(mapImage, 0, 0, null);
 		lightG2D.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
 		lightG2D.fillRect(0, 0, 608, 480);
 		lightG2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
@@ -61,6 +61,6 @@ public class Screen extends JPanel{
 		}
 		
 		g.drawImage(finalRender, 0, 0, null);		
-		//System.out.println(System.nanoTime());
+		//System.out.println(System.nanoTime());*/
 	}
 }

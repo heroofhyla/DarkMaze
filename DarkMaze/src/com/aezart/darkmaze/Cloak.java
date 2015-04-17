@@ -12,8 +12,8 @@ public class Cloak extends Entity{
 	XYCoords playerNextTurn = new XYCoords(0,0);
 	boolean playerStillInView = false;
 	XYCoords[]spriteCoords = {new XYCoords(16, 0), new XYCoords(0, 0), new XYCoords(0, 16), new XYCoords(16,16)};
-	public Cloak(DarkMaze game, int bboxX1, int bboxY1, int bboxX2, int bboxY2){
-		super(game.cloakSprite, game);
+	public Cloak(DungeonScene scene, int bboxX1, int bboxY1, int bboxX2, int bboxY2){
+		super(scene.game.cloakSprite, scene);
 		drawXOffset = -sprite.getWidth()/4;
 		drawYOffset = -sprite.getHeight()/4;
 
@@ -111,11 +111,11 @@ public class Cloak extends Entity{
 			}
 			}
 		}
-		if (lineOfSight(game.knight) && directionToTile(game.knight.position) == direction){
+		if (lineOfSight(scene.knight) && directionToTile(scene.knight.position) == direction){
 			if (game.debug){
 				System.out.println(this + " reports: player in line of sight!");
 			}
-			playerLastSeen = game.knight.position;
+			playerLastSeen = scene.knight.position;
 			playerStillInView = true;
 			alertState = 2;
 			confusionTimer = 34;
@@ -124,7 +124,7 @@ public class Cloak extends Entity{
 				System.out.println(this + " lost sight of player.");
 			}
 			playerStillInView = false;
-			playerNextTurn = game.knight.position;
+			playerNextTurn = scene.knight.position;
 			
 		}
 
@@ -174,11 +174,11 @@ public class Cloak extends Entity{
 			playerLastSeen = new XYCoords(0,0);
 		} 
 		
-		if (position.equalsTile(game.knight.position)){
-		//if (Math.abs(x() - game.knight.x()) < 10 && Math.abs(y() - game.knight.y()) < 10){
+		if (position.equalsTile(scene.knight.position)){
+		//if (Math.abs(x() - scene.knight.x()) < 10 && Math.abs(y() - scene.knight.y()) < 10){
 			game.lives -= 1;
-			game.resetMaze();
-			game.knight.setTile(9, 7, 16, 16);
+			scene.resetEntities();
+			//scene.knight.setTile(9, 7, 16, 16);
 		
 		}
 	}

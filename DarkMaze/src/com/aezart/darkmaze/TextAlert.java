@@ -8,8 +8,8 @@ import java.awt.Graphics2D;
 public class TextAlert extends Entity {
 	int duration = 0;
 	String message;
-	public TextAlert(DarkMaze game){
-		super (game.noSprite, game);
+	public TextAlert(DungeonScene scene){
+		super (scene.game.noSprite, scene);
 		position = new XYCoords(0, 240); //x does not matter, string will be centered based on length
 	}
 	

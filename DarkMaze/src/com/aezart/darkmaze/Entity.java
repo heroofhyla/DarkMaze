@@ -26,14 +26,17 @@ public class Entity {
 	
 	BufferedImage sprite;
 	DarkMaze game;
+	
+	DungeonScene scene;
 		
-	public Entity(BufferedImage sprite, DarkMaze game){
+	public Entity(BufferedImage sprite, DungeonScene scene){
 		this.sprite = sprite;
-		this.game = game;
+		this.scene = scene;
 		bboxX1 = 0 - sprite.getWidth()/4;
 		bboxY1 = 0 - sprite.getHeight()/4;
 		bboxX2 = sprite.getWidth()/4;
 		bboxY2 = sprite.getHeight()/4;
+		this.game = scene.game;
 	}
 	
 	int x(){
@@ -155,7 +158,7 @@ public class Entity {
 		if (yTile() == yTile){
 			lineOfSight = true;
 			for (int j = Math.min(xTile(), xTile); j < Math.max(xTile(), xTile); ++j){
-				if (game.maze[yTile()][j]){
+				if (scene.maze[yTile()][j]){
 					lineOfSight = false;
 				}
 			}
@@ -163,7 +166,7 @@ public class Entity {
 		if (xTile() == xTile){
 			lineOfSight = true;
 			for (int j = Math.min(yTile(), yTile); j < Math.max(yTile(), yTile); ++j){
-				if (game.maze[j][xTile()]){
+				if (scene.maze[j][xTile()]){
 					lineOfSight = false;
 				}
 			}
@@ -186,16 +189,16 @@ public class Entity {
 		XYCoords topRight = new XYCoords(x+bboxX2, y+bboxY1);
 		XYCoords bottomRight = new XYCoords(x+bboxX2, y+bboxY2);
 
-		if (game.maze[topLeft.yTile()][topLeft.xTile()]){
+		if (scene.maze[topLeft.yTile()][topLeft.xTile()]){
 			return false;
 		}
-		if (game.maze[topRight.yTile()][topRight.xTile()]){
+		if (scene.maze[topRight.yTile()][topRight.xTile()]){
 			return false;
 		}
-		if (game.maze[bottomLeft.yTile()][bottomLeft.xTile()]){
+		if (scene.maze[bottomLeft.yTile()][bottomLeft.xTile()]){
 			return false;
 		}
-		if (game.maze[bottomRight.yTile()][bottomRight.xTile()]){
+		if (scene.maze[bottomRight.yTile()][bottomRight.xTile()]){
 			return false;
 		}
 		return true;

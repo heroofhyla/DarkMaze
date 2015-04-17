@@ -10,8 +10,8 @@ public class Knight extends Entity{
 	int direction = 6;
 	XYCoords[]spriteCoords = {new XYCoords(16, 0), new XYCoords(0, 0), new XYCoords(0, 16), new XYCoords(16,16)};
 
-	public Knight(DarkMaze game) {
-		super(game.knightSprite, game);
+	public Knight(DungeonScene scene) {
+		super(scene.game.knightSprite, scene);
 		drawXOffset = -sprite.getWidth()/4;
 		drawYOffset = -sprite.getHeight()/4;
 
@@ -46,8 +46,8 @@ public class Knight extends Entity{
 	public void tick(){
 		if ( x()%64 > 34 &&  x()%64 < 62 && 
 				 y()%64 >34 &&  y()%64 < 62){
-			if (game.coins[ y()/64][ x()/64]){
-				game.coins[ y()/64][ x()/64] = false;
+			if (scene.coins[ y()/64][ x()/64]){
+				scene.coins[ y()/64][ x()/64] = false;
 				++ game.coinCount;
 			}
 		}

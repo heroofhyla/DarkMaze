@@ -7,8 +7,8 @@ public class Stairs extends Entity{
 	boolean stairsReady = false;
 	int coinTarget = 40;
 	
-	public Stairs(DarkMaze game){
-		super(game.tileset.getSubimage(0, 16, 16, 16), game);
+	public Stairs(DungeonScene scene){
+		super(scene.game.tileset.getSubimage(0, 16, 16, 16), scene);
 	}
 	
 	@Override
@@ -27,10 +27,10 @@ public class Stairs extends Entity{
 	public void tick(){
 		if (game.coinCount > coinTarget && !stairsReady){
 			stairsReady = true;
-			game.textAlert.showTextAlert("The stairs have appeared!", 60);
+			scene.textAlert.showTextAlert("The stairs have appeared!", 60);
 		}
 		
-		if (stairsReady && game.knight.xTile() == xTile() && game.knight.yTile() == yTile()){
+		if (stairsReady && scene.knight.xTile() == xTile() && scene.knight.yTile() == yTile()){
 			game.readyForNextLevel = true;
 		}
 	}
