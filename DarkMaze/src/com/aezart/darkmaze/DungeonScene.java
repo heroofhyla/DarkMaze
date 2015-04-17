@@ -66,7 +66,10 @@ public class DungeonScene extends Scene{
 			
 			readyForNextLevel = false;
 
-		}		
+		}
+		if (game.lives < 0){
+			game.currentScene = new GameOverScene(game);
+		}
 	}
 
 	@Override

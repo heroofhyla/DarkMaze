@@ -47,6 +47,7 @@ public class DarkMaze extends JFrame{
 	BufferedImage cloakSprite;
 	BufferedImage alertIcon;
 	BufferedImage lostIcon;
+	BufferedImage gameOver;
 	BufferedImage noSprite = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
 	boolean debug = false;
 	Random rng = new Random();
@@ -56,6 +57,7 @@ public class DarkMaze extends JFrame{
 	Scene currentScene;
 	public DarkMaze(){
 		try {
+			gameOver = ImageIO.read(this.getClass().getResource("resources/gameover.png"));
 			tileset = ImageIO.read(this.getClass().getResource("resources/tileset2.png"));
 			light = ImageIO.read(this.getClass().getResource("resources/alphalight.png"));
 			wallshadow = ImageIO.read(this.getClass().getResource("resources/wallshadow.png"));
