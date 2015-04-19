@@ -1,7 +1,6 @@
 package com.aezart.darkmaze;
 
 import java.awt.AlphaComposite;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -271,6 +270,16 @@ public class DungeonScene extends Scene{
 			entities.add(new Torch(this));
 			entities.lastElement().setPosition(knight.position);
 		}
+		if (keyEvent.getKeyCode() == KeyEvent.VK_F){
+			game.fancygraphics = !game.fancygraphics;
+			
+			if (game.fancygraphics){
+				game.light = game.fancyLight;
+			}else{
+				game.light = game.fastLight;
+			}
+		}
+		
 
 	}
 }
