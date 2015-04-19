@@ -77,6 +77,7 @@ public class DarkMaze extends JFrame{
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				keyStates.put(arg0.getKeyCode(), true);
+				currentScene.keyPressed(arg0);
 			}
 
 			@Override
@@ -94,10 +95,6 @@ public class DarkMaze extends JFrame{
 					//generateMaze(maze);
 					//paintBackground(screen.mapImage.getGraphics());
 
-				}
-				if (arg0.getKeyCode() == KeyEvent.VK_SPACE){
-					//entities.add(new Torch(DarkMaze.this));
-					//entities.lastElement().setPosition(new XYCoords(knight.xTile(), knight.yTile(), 8, 8));
 				}
 			}
 
