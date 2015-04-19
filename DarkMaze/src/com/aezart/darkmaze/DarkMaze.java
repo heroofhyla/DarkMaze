@@ -26,7 +26,6 @@ public class DarkMaze extends JFrame{
 			
 	int displayMode = ALL_TORCHES;
 	int[] directions = new int[5];
-	int testingMerges;
 	BufferedImage glowingEyes;
 	BufferedImage redEyes;
 	BufferedImage light;
