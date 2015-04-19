@@ -27,7 +27,7 @@ public class GameOverScene extends Scene{
 		g.drawImage(game.gameOver, 0, 0, null);
 		g.setColor(Color.white);
 		
-		g.drawString("Press [enter] to play again.", 304 - fm.stringWidth("Press [enter] to play again.")/2, 256);
+		g.drawString("Press enter to play again.", 304 - fm.stringWidth("Press [enter] to play again.")/2, 256);
 		// TODO Auto-generated method stub
 		
 	}
