@@ -64,7 +64,7 @@ public class DarkMaze extends JFrame{
 		
 		final Graphics sg = screen.mapImage.getGraphics();
 		
-		currentScene = new DungeonScene(this);
+		currentScene = new TitleScene(this);
 
 		screen.setPreferredSize(new Dimension(608,480));
 		add(screen);
