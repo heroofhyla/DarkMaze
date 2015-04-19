@@ -2,6 +2,7 @@ package com.aezart.darkmaze;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -44,18 +45,27 @@ public class DarkMaze extends JFrame{
 	Scene currentScene;
 	public DarkMaze(){
 		try {
-		
-			gameOver = ImageIO.read(this.getClass().getResource("resources/gameover.png"));
-			tileset = ImageIO.read(this.getClass().getResource("resources/tileset2.png"));
-			light = ImageIO.read(this.getClass().getResource("resources/alphalight.png"));
-			wallshadow = ImageIO.read(this.getClass().getResource("resources/wallshadow.png"));
-			glowingEyes = ImageIO.read(this.getClass().getResource("resources/glowingeyes.png"));
-			redEyes = ImageIO.read(this.getClass().getResource("resources/redeyes.png"));
-			droppedTorch = ImageIO.read(this.getClass().getResource("resources/droppedtorch.png"));
-			knightSprite = ImageIO.read(this.getClass().getResource("resources/littleknightsheet.png"));
-			cloakSprite = ImageIO.read(this.getClass().getResource("resources/littlecloaksheet.png"));
-			alertIcon = ImageIO.read(this.getClass().getResource("resources/alerticon.png"));
-			lostIcon = ImageIO.read(this.getClass().getResource("resources/losticon.png"));
+	
+			gameOver = importImage("resources/gameover.png", Transparency.TRANSLUCENT);
+			//gameOver = ImageIO.read(this.getClass().getResource("resources/gameover.png"));
+			tileset = importImage("resources/tileset2.png", Transparency.BITMASK);
+			//tileset = ImageIO.read(this.getClass().getResource("resources/tileset2.png"));
+			//light = ImageIO.read(this.getClass().getResource("resources/alphalight.png"));
+			light = importImage("resources/alphalight.png",Transparency.TRANSLUCENT);
+			//wallshadow = ImageIO.read(this.getClass().getResource("resources/wallshadow.png"));
+			wallshadow = importImage("resources/wallshadow.png",Transparency.TRANSLUCENT);
+			//glowingEyes = ImageIO.read(this.getClass().getResource("resources/glowingeyes.png"));
+			//redEyes = ImageIO.read(this.getClass().getResource("resources/redeyes.png"));
+			//droppedTorch = ImageIO.read(this.getClass().getResource("resources/droppedtorch.png"));
+			droppedTorch = importImage("resources/droppedtorch.png",Transparency.BITMASK);
+			//knightSprite = ImageIO.read(this.getClass().getResource("resources/littleknightsheet.png"));
+			knightSprite = importImage("resources/littleknightsheet.png",Transparency.BITMASK);
+			//cloakSprite = ImageIO.read(this.getClass().getResource("resources/littlecloaksheet.png"));
+			cloakSprite = importImage("resources/littlecloaksheet.png",Transparency.BITMASK);
+			//alertIcon = ImageIO.read(this.getClass().getResource("resources/alerticon.png"));
+			alertIcon = importImage("resources/alerticon.png",Transparency.BITMASK);
+			//lostIcon = ImageIO.read(this.getClass().getResource("resources/losticon.png"));
+			lostIcon = importImage("resources/losticon.png", Transparency.BITMASK);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -120,5 +130,12 @@ public class DarkMaze extends JFrame{
 		};
 		
 		new Timer(30, gameLoop).start();
+	}
+	
+	public BufferedImage importImage(String filePath, int transparency) throws IOException{
+		BufferedImage rawImage = ImageIO.read(this.getClass().getResource(filePath));
+		BufferedImage optimizedImage = getGraphicsConfiguration().createCompatibleImage(rawImage.getWidth(), rawImage.getHeight(), transparency);
+		optimizedImage.getGraphics().drawImage(rawImage, 0, 0, null);
+		return optimizedImage;
 	}
 }
