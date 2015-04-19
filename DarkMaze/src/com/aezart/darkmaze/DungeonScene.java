@@ -69,7 +69,7 @@ public class DungeonScene extends Scene{
 
 		}
 		if (game.lives < 0){
-			game.currentScene = new GameOverScene(game);
+			game.currentScene = new GameOverScene(game,finalRender);
 		}
 	}
 
