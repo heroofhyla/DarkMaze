@@ -16,10 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 public class DarkMaze extends JFrame{
-	
-	int lives = 3;
-	int coinCount = 0;
-	
+		
 	static final int FULLBRIGHT = 0;
 	static final int ALL_TORCHES = 1;
 	static final int ENEMY_TORCHES = 2;
@@ -47,6 +44,7 @@ public class DarkMaze extends JFrame{
 	Scene currentScene;
 	public DarkMaze(){
 		try {
+		
 			gameOver = ImageIO.read(this.getClass().getResource("resources/gameover.png"));
 			tileset = ImageIO.read(this.getClass().getResource("resources/tileset2.png"));
 			light = ImageIO.read(this.getClass().getResource("resources/alphalight.png"));

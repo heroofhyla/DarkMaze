@@ -25,7 +25,7 @@ public class Stairs extends Entity{
 	
 	@Override
 	public void tick(){
-		if (game.coinCount > coinTarget && !stairsReady){
+		if (scene.coinCount > coinTarget && !stairsReady){
 			stairsReady = true;
 			scene.textAlert.showTextAlert("The stairs have appeared!", 60);
 		}

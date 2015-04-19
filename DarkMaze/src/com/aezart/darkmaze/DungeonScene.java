@@ -1,6 +1,7 @@
 package com.aezart.darkmaze;
 
 import java.awt.AlphaComposite;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -23,6 +24,8 @@ public class DungeonScene extends Scene{
 	Graphics finalG = finalRender.getGraphics();
 	
 	int level = 0;
+	int coinCount = 0;
+	int lives = 3;
 	boolean readyForNextLevel;
 	boolean[][] maze = new boolean[15][19];
 	boolean[][] coins = new boolean[7][9];
@@ -63,22 +66,24 @@ public class DungeonScene extends Scene{
 		if (readyForNextLevel){
 			nextLevel();
 			stairs.stairsReady = false;
-			stairs.coinTarget = game.coinCount + 40;
+			stairs.coinTarget = coinCount + 40;
 			
 			readyForNextLevel = false;
 
 		}
-		if (game.lives < 0){
+		if (lives < 0){
 			game.currentScene = new GameOverScene(game,finalRender);
 		}
 	}
 
 	@Override
 	public void draw(Graphics g) {
+		long drawStartTime = System.currentTimeMillis();
 		drawingG.drawImage(mapImage, 0, 0, null);
 		lightG2D.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
 		lightG2D.fillRect(0, 0, 608, 480);
 		lightG2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+		
 		
 		for (int i = 0; i < coins.length; ++i){
 			for (int k = 0; k < coins[0].length; ++k){
@@ -106,12 +111,13 @@ public class DungeonScene extends Scene{
 		finalG.setColor(Color.black);
 		finalG.fillRect(0,468,608,480);
 		finalG.setColor(Color.white);
-		finalG.drawString("Lives: " + game.lives + " Depth: " + (10*level)  + "ft Coins: " + game.coinCount, 0, 478);
+		finalG.drawString("Lives: " + lives + " Depth: " + (10*level)  + "ft Coins: " + coinCount, 0, 478);
 
 		for (Entity e: entities){
 			e.drawEffects(finalG);
 		}
-		g.drawImage(finalRender, 0, 0, null);		
+		g.drawImage(finalRender, 0, 0, null);
+		System.out.println((System.currentTimeMillis() - drawStartTime));
 	}
 	
 	public void nextLevel(){

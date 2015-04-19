@@ -34,8 +34,6 @@ public class GameOverScene extends Scene{
 	@Override
 	public void keyPressed(KeyEvent keyEvent) {
 		if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER){
-			game.lives = 3;
-			game.coinCount = 0;
 			game.currentScene = new DungeonScene(game);
 		}
 		

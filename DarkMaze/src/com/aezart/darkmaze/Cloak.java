@@ -176,7 +176,7 @@ public class Cloak extends Entity{
 		
 		if (position.equalsTile(scene.knight.position)){
 		//if (Math.abs(x() - scene.knight.x()) < 10 && Math.abs(y() - scene.knight.y()) < 10){
-			game.lives -= 1;
+			scene.lives -= 1;
 			scene.resetEntities();
 			//scene.knight.setTile(9, 7, 16, 16);
 		

@@ -48,7 +48,7 @@ public class Knight extends Entity{
 				 y()%64 >34 &&  y()%64 < 62){
 			if (scene.coins[ y()/64][ x()/64]){
 				scene.coins[ y()/64][ x()/64] = false;
-				++ game.coinCount;
+				++ scene.coinCount;
 			}
 		}
 		if ((game.keyStates.get(KeyEvent.VK_LEFT) == true)){
