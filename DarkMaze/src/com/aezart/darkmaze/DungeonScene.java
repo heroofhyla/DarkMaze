@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.Transparency;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -15,15 +14,23 @@ import java.util.Vector;
 
 public class DungeonScene extends Scene{
 	boolean fancyGraphics = true;
-	BufferedImage mapImage = new BufferedImage(608, 480, BufferedImage.TYPE_3BYTE_BGR);
-	BufferedImage drawingSurface = new BufferedImage(608, 480, BufferedImage.TYPE_3BYTE_BGR);
-	BufferedImage lightSurface = new BufferedImage(608, 480, BufferedImage.TYPE_4BYTE_ABGR);
-	BufferedImage finalRender = new BufferedImage(608,480,BufferedImage.TYPE_3BYTE_BGR);
+	DarkMaze game;
+
+	//BufferedImage mapImage = new BufferedImage(608, 480, BufferedImage.TYPE_3BYTE_BGR);
+	BufferedImage mapImage;
+	BufferedImage drawingSurface;
+	//BufferedImage drawingSurface = new BufferedImage(608, 480, BufferedImage.TYPE_3BYTE_BGR);
+	BufferedImage fancyLightSurface;
+	BufferedImage fastLightSurface;
+	//BufferedImage lightSurface = new BufferedImage(608, 480, BufferedImage.TYPE_4BYTE_ABGR);
+	BufferedImage lightSurface;
+	//BufferedImage finalRender = new BufferedImage(608,480,BufferedImage.TYPE_3BYTE_BGR);
+	BufferedImage finalRender;
 	
-	Graphics mapG = mapImage.getGraphics();
-	Graphics drawingG = drawingSurface.getGraphics();
-	Graphics2D lightG2D = (Graphics2D) lightSurface.getGraphics();
-	Graphics finalG = finalRender.getGraphics();
+	Graphics mapG;
+	Graphics drawingG;
+	Graphics2D lightG2D;
+	Graphics finalG;
 	
 	int level = 0;
 	int coinCount = 0;
@@ -40,9 +47,19 @@ public class DungeonScene extends Scene{
 	int lastTorch = -1;
 
 
-	DarkMaze game;
 	public DungeonScene(DarkMaze game){
 		this.game = game;
+		mapImage = game.createImage(608, 480, Transparency.OPAQUE);
+		drawingSurface = game.createImage(608, 480, Transparency.OPAQUE);
+		fancyLightSurface = game.createImage(608,480,Transparency.TRANSLUCENT);
+		fastLightSurface = game.createImage(608, 480, Transparency.BITMASK);
+		lightSurface = fancyLightSurface;
+		finalRender = game.createImage(608, 480, Transparency.OPAQUE);
+
+		mapG = mapImage.getGraphics();
+		drawingG = drawingSurface.getGraphics();
+		lightG2D = (Graphics2D) lightSurface.getGraphics();
+		finalG = finalRender.getGraphics();
 		
 		stairs = new Stairs(this);
 		stairs.setPosition(new XYCoords(5, 5, 0, 0));
@@ -278,10 +295,13 @@ public class DungeonScene extends Scene{
 			game.fancygraphics = !game.fancygraphics;
 			
 			if (game.fancygraphics){
+				lightSurface = fancyLightSurface;
 				game.light = game.fancyLight;
 			}else{
+				lightSurface = fastLightSurface;
 				game.light = game.fastLight;
 			}
+			lightG2D = (Graphics2D)lightSurface.getGraphics();
 		}
 		
 	}

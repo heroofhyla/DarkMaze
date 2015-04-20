@@ -144,4 +144,8 @@ public class DarkMaze extends JFrame{
 		optimizedImage.getGraphics().drawImage(rawImage, 0, 0, null);
 		return optimizedImage;
 	}
+	
+	public BufferedImage createImage(int x, int y, int transparency){
+		return getGraphicsConfiguration().createCompatibleImage(x, y, transparency);
+	}
 }
