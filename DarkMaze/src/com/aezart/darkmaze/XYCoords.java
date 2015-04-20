@@ -1,8 +1,8 @@
 package com.aezart.darkmaze;
 
 public final class XYCoords {
-	private final int x;
-	private final int y;
+	private int x;
+	private int y;
 	
 	public XYCoords(int x, int y){
 		this.x = x;

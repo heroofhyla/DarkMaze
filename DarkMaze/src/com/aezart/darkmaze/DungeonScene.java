@@ -78,6 +78,7 @@ public class DungeonScene extends Scene{
 	}
 	@Override
 	public void tick() {
+		long startTime = System.currentTimeMillis();
 		for (Entity e: entities){
 			e.tick();
 		}
@@ -93,6 +94,7 @@ public class DungeonScene extends Scene{
 		if (lives < 0){
 			game.currentScene = new GameOverScene(game,finalRender);
 		}
+		System.out.println(System.currentTimeMillis() - startTime);
 	}
 
 	@Override
@@ -136,7 +138,7 @@ public class DungeonScene extends Scene{
 			e.drawEffects(finalG);
 		}
 		g.drawImage(finalRender, 0, 0, null);
-		System.out.println((System.currentTimeMillis() - drawStartTime));
+		//System.out.println((System.currentTimeMillis() - drawStartTime));
 	}
 	
 	public void nextLevel(){
