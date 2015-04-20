@@ -23,12 +23,16 @@ public class DarkMaze extends JFrame{
 	static final int ENEMY_TORCHES = 2;
 	static final int PLAYER_TORCH = 3;
 	static final int FULLDARK = 4;
+	
+	boolean fancygraphics = true;
 			
 	int displayMode = ALL_TORCHES;
 	int[] directions = new int[5];
 	BufferedImage glowingEyes;
 	BufferedImage redEyes;
 	BufferedImage light;
+	BufferedImage fastLight;
+	BufferedImage fancyLight;
 	BufferedImage droppedTorch;
 	BufferedImage wallshadow;
 	BufferedImage knightSprite;
@@ -51,7 +55,8 @@ public class DarkMaze extends JFrame{
 			tileset = importImage("resources/tileset2.png", Transparency.BITMASK);
 			//tileset = ImageIO.read(this.getClass().getResource("resources/tileset2.png"));
 			//light = ImageIO.read(this.getClass().getResource("resources/alphalight.png"));
-			light = importImage("resources/alphalight.png",Transparency.TRANSLUCENT);
+			fancyLight = importImage("resources/alphalight.png",Transparency.TRANSLUCENT);
+			fastLight = importImage("resources/alphalight.png",Transparency.BITMASK);
 			//wallshadow = ImageIO.read(this.getClass().getResource("resources/wallshadow.png"));
 			wallshadow = importImage("resources/wallshadow.png",Transparency.TRANSLUCENT);
 			//glowingEyes = ImageIO.read(this.getClass().getResource("resources/glowingeyes.png"));
@@ -70,6 +75,7 @@ public class DarkMaze extends JFrame{
 			e.printStackTrace();
 		}
 		
+		light = fancyLight;
 		final Graphics sg = screen.mapImage.getGraphics();
 		
 		currentScene = new TitleScene(this);

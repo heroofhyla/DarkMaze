@@ -273,23 +273,17 @@ public class DungeonScene extends Scene{
 			entities.add(new Torch(this));
 			entities.lastElement().setPosition(knight.position);
 		}
-		
+
 		if (keyEvent.getKeyCode() == KeyEvent.VK_F){
+			game.fancygraphics = !game.fancygraphics;
 			
-			fancyGraphics = !fancyGraphics;
-			
-			try {
-				if (fancyGraphics){
-					game.light = game.importImage("resources/overlaylight.png", Transparency.TRANSLUCENT);
-				}else{
-					game.light = game.importImage("resources/overlaylight.png", Transparency.BITMASK);
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (game.fancygraphics){
+				game.light = game.fancyLight;
+			}else{
+				game.light = game.fastLight;
 			}
 		}
-
+		
 	}
 }
 	
