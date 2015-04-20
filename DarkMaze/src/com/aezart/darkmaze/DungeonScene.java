@@ -1,18 +1,20 @@
 package com.aezart.darkmaze;
 
 import java.awt.AlphaComposite;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Transparency;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Vector;
 
 public class DungeonScene extends Scene{
+	boolean fancyGraphics = true;
 	BufferedImage mapImage = new BufferedImage(608, 480, BufferedImage.TYPE_3BYTE_BGR);
 	BufferedImage drawingSurface = new BufferedImage(608, 480, BufferedImage.TYPE_3BYTE_BGR);
 	BufferedImage lightSurface = new BufferedImage(608, 480, BufferedImage.TYPE_4BYTE_ABGR);
@@ -270,6 +272,22 @@ public class DungeonScene extends Scene{
 		if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE){
 			entities.add(new Torch(this));
 			entities.lastElement().setPosition(knight.position);
+		}
+		
+		if (keyEvent.getKeyCode() == KeyEvent.VK_F){
+			
+			fancyGraphics = !fancyGraphics;
+			
+			try {
+				if (fancyGraphics){
+					game.light = game.importImage("resources/overlaylight.png", Transparency.TRANSLUCENT);
+				}else{
+					game.light = game.importImage("resources/overlaylight.png", Transparency.BITMASK);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
