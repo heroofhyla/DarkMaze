@@ -13,8 +13,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Vector;
 
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;

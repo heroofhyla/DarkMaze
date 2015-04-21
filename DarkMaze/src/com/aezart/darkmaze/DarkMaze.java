@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -56,6 +57,7 @@ public class DarkMaze extends JFrame{
 	BufferedImage noSprite = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
 	
 	AudioInputStream coinAIS;
+	BufferedInputStream coinBIS;
 	Clip coinClip;
 	Player bgmPlayer;
 	InputStream bgmIS;
@@ -78,7 +80,9 @@ public class DarkMaze extends JFrame{
 			alertIcon = importImage("resources/alerticon.png",Transparency.BITMASK);
 			lostIcon = importImage("resources/losticon.png", Transparency.BITMASK);
 			
-			coinAIS = AudioSystem.getAudioInputStream(this.getClass().getResourceAsStream("resources/audio/coin.wav"));
+			//coinAIS = AudioSystem.getAudioInputStream(this.getClass().getResourceAsStream("resources/audio/coin.wav"));
+			coinBIS = new BufferedInputStream(this.getClass().getResourceAsStream("resources/audio/coin.wav"));
+			coinAIS = AudioSystem.getAudioInputStream(coinBIS);
 			coinClip = AudioSystem.getClip();
 		} catch (IOException e) {
 			e.printStackTrace();
