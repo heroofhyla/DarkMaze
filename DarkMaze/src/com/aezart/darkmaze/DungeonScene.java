@@ -16,6 +16,9 @@ import java.util.Vector;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
+
 public class DungeonScene extends Scene{
 	boolean fancyGraphics = true;
 	DarkMaze game;
@@ -51,13 +54,32 @@ public class DungeonScene extends Scene{
 	int lastTorch = -1;
 
 
-	public DungeonScene(DarkMaze game){
+	public DungeonScene(final DarkMaze game){
 		try {
-			game.coinClip.open(game.audioIS);
+			game.coinClip.open(game.coinAIS);
 			((FloatControl) game.coinClip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-5);
+			game.bgmIS =  (this.getClass().getResourceAsStream("resources/audio/Oppressive Gloom.mp3"));
+			game.bgmPlayer = new Player(game.bgmIS);
+			
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					try {
+						game.bgmPlayer.play();
+					} catch (JavaLayerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			).start();
+			
 		} catch (LineUnavailableException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (JavaLayerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		this.game = game;
 		mapImage = game.createImage(608, 480, Transparency.OPAQUE);

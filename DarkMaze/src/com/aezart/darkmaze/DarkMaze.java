@@ -8,18 +8,25 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.Timer;
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
 
 public class DarkMaze extends JFrame{
 		
@@ -48,8 +55,11 @@ public class DarkMaze extends JFrame{
 	BufferedImage tileset;
 	BufferedImage noSprite = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
 	
-	AudioInputStream audioIS;
+	AudioInputStream coinAIS;
 	Clip coinClip;
+	Player bgmPlayer;
+	InputStream bgmIS;
+	
 	boolean debug = false;
 	Random rng = new Random();
 	HashMap<Integer, Boolean> keyStates = new HashMap<Integer, Boolean>();
@@ -57,7 +67,6 @@ public class DarkMaze extends JFrame{
 	Scene currentScene;
 	public DarkMaze(){
 		try {
-	
 			gameOver = importImage("resources/gameover.png", Transparency.TRANSLUCENT);
 			tileset = importImage("resources/tileset2.png", Transparency.BITMASK);
 			fancyLight = importImage("resources/alphalight.png",Transparency.TRANSLUCENT);
@@ -69,7 +78,7 @@ public class DarkMaze extends JFrame{
 			alertIcon = importImage("resources/alerticon.png",Transparency.BITMASK);
 			lostIcon = importImage("resources/losticon.png", Transparency.BITMASK);
 			
-			audioIS = AudioSystem.getAudioInputStream(this.getClass().getResourceAsStream("resources/audio/coin.wav"));
+			coinAIS = AudioSystem.getAudioInputStream(this.getClass().getResourceAsStream("resources/audio/coin.wav"));
 			coinClip = AudioSystem.getClip();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -154,4 +163,5 @@ public class DarkMaze extends JFrame{
 	public BufferedImage createImage(int x, int y, int transparency){
 		return getGraphicsConfiguration().createCompatibleImage(x, y, transparency);
 	}
+	
 }

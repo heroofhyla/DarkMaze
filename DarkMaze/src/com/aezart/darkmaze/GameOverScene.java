@@ -6,14 +6,21 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import javax.sound.sampled.AudioSystem;
+
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
+
 public class GameOverScene extends Scene{
 	DarkMaze game;
 	BufferedImage bgImage;
 	
 	public GameOverScene(DarkMaze game, BufferedImage bgImage){
 		game.coinClip.close();
+		game.bgmPlayer.close();
 		this.game = game;
 		this.bgImage = bgImage;
+		
 	}
 	@Override
 	public void tick() {
