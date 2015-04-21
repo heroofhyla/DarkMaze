@@ -11,6 +11,7 @@ public class GameOverScene extends Scene{
 	BufferedImage bgImage;
 	
 	public GameOverScene(DarkMaze game, BufferedImage bgImage){
+		game.coinClip.close();
 		this.game = game;
 		this.bgImage = bgImage;
 	}

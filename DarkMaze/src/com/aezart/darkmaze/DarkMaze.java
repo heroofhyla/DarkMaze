@@ -15,6 +15,11 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.Timer;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class DarkMaze extends JFrame{
 		
@@ -25,7 +30,7 @@ public class DarkMaze extends JFrame{
 	static final int FULLDARK = 4;
 	
 	boolean fancygraphics = true;
-			
+	
 	int displayMode = ALL_TORCHES;
 	int[] directions = new int[5];
 	BufferedImage glowingEyes;
@@ -40,38 +45,39 @@ public class DarkMaze extends JFrame{
 	BufferedImage alertIcon;
 	BufferedImage lostIcon;
 	BufferedImage gameOver;
+	BufferedImage tileset;
 	BufferedImage noSprite = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
+	
+	AudioInputStream audioIS;
+	Clip coinClip;
 	boolean debug = false;
 	Random rng = new Random();
 	HashMap<Integer, Boolean> keyStates = new HashMap<Integer, Boolean>();
-	BufferedImage tileset;
 	Screen screen = new Screen(this);
 	Scene currentScene;
 	public DarkMaze(){
 		try {
 	
 			gameOver = importImage("resources/gameover.png", Transparency.TRANSLUCENT);
-			//gameOver = ImageIO.read(this.getClass().getResource("resources/gameover.png"));
 			tileset = importImage("resources/tileset2.png", Transparency.BITMASK);
-			//tileset = ImageIO.read(this.getClass().getResource("resources/tileset2.png"));
-			//light = ImageIO.read(this.getClass().getResource("resources/alphalight.png"));
 			fancyLight = importImage("resources/alphalight.png",Transparency.TRANSLUCENT);
 			fastLight = importImage("resources/alphalight.png",Transparency.BITMASK);
-			//wallshadow = ImageIO.read(this.getClass().getResource("resources/wallshadow.png"));
 			wallshadow = importImage("resources/wallshadow.png",Transparency.TRANSLUCENT);
-			//glowingEyes = ImageIO.read(this.getClass().getResource("resources/glowingeyes.png"));
-			//redEyes = ImageIO.read(this.getClass().getResource("resources/redeyes.png"));
-			//droppedTorch = ImageIO.read(this.getClass().getResource("resources/droppedtorch.png"));
 			droppedTorch = importImage("resources/droppedtorch.png",Transparency.BITMASK);
-			//knightSprite = ImageIO.read(this.getClass().getResource("resources/littleknightsheet.png"));
 			knightSprite = importImage("resources/littleknightsheet.png",Transparency.BITMASK);
-			//cloakSprite = ImageIO.read(this.getClass().getResource("resources/littlecloaksheet.png"));
 			cloakSprite = importImage("resources/littlecloaksheet.png",Transparency.BITMASK);
-			//alertIcon = ImageIO.read(this.getClass().getResource("resources/alerticon.png"));
 			alertIcon = importImage("resources/alerticon.png",Transparency.BITMASK);
-			//lostIcon = ImageIO.read(this.getClass().getResource("resources/losticon.png"));
 			lostIcon = importImage("resources/losticon.png", Transparency.BITMASK);
+			
+			audioIS = AudioSystem.getAudioInputStream(this.getClass().getResourceAsStream("resources/audio/coin.wav"));
+			coinClip = AudioSystem.getClip();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

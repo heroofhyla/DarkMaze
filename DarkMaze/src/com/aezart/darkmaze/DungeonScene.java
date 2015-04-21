@@ -7,10 +7,14 @@ import java.awt.Graphics2D;
 import java.awt.Transparency;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Vector;
+
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
 
 public class DungeonScene extends Scene{
 	boolean fancyGraphics = true;
@@ -48,6 +52,13 @@ public class DungeonScene extends Scene{
 
 
 	public DungeonScene(DarkMaze game){
+		try {
+			game.coinClip.open(game.audioIS);
+			((FloatControl) game.coinClip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-5);
+		} catch (LineUnavailableException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.game = game;
 		mapImage = game.createImage(608, 480, Transparency.OPAQUE);
 		drawingSurface = game.createImage(608, 480, Transparency.OPAQUE);
