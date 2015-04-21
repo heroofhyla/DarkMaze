@@ -115,7 +115,7 @@ public class Cloak extends Entity{
 			if (game.debug){
 				System.out.println(this + " reports: player in line of sight!");
 			}
-			playerLastSeen = scene.knight.position;
+			playerLastSeen.setPosition(scene.knight.position);
 			playerStillInView = true;
 			alertState = 2;
 			confusionTimer = 34;
@@ -124,7 +124,7 @@ public class Cloak extends Entity{
 				System.out.println(this + " lost sight of player.");
 			}
 			playerStillInView = false;
-			playerNextTurn = scene.knight.position;
+			playerNextTurn.setPosition(scene.knight.position);
 			
 		}
 
@@ -150,7 +150,7 @@ public class Cloak extends Entity{
 					System.out.println("my xy: " + position.x() + "," + position.y());
 					System.out.println("target xy: " + playerNextTurn.x() + "," + playerNextTurn.y());
 				}				
-				playerNextTurn = new XYCoords(0,0);
+				playerNextTurn.setPosition(0,0);
 			}
 		}
 
@@ -162,16 +162,16 @@ public class Cloak extends Entity{
 			}else{
 				direction = (lastdirection+6)%8;
 			}
-			nextCoord = nextCoord(direction);
+			nextCoord.setPosition(nextCoord(direction));
 		}
 		
 		if (alertState != 1){
-			position = nextCoord;
+			position.setPosition(nextCoord);
 		}
 		
 		if (position.equalsTile(playerLastSeen)){
 		//if (xTile() == playerLastSeen.xTile() && yTile() == playerLastSeen.yTile()){
-			playerLastSeen = new XYCoords(0,0);
+			playerLastSeen.setPosition(0,0);
 		} 
 		
 		if (position.equalsTile(scene.knight.position)){

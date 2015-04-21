@@ -62,7 +62,7 @@ public class DungeonScene extends Scene{
 		finalG = finalRender.getGraphics();
 		
 		stairs = new Stairs(this);
-		stairs.setPosition(new XYCoords(5, 5, 0, 0));
+		stairs.setTile(5, 5, 0, 0);
 		entities.add(stairs);
 		knight = new Knight(this);
 		textAlert = new TextAlert(this);
@@ -78,7 +78,6 @@ public class DungeonScene extends Scene{
 	}
 	@Override
 	public void tick() {
-		long startTime = System.currentTimeMillis();
 		for (Entity e: entities){
 			e.tick();
 		}
@@ -94,7 +93,6 @@ public class DungeonScene extends Scene{
 		if (lives < 0){
 			game.currentScene = new GameOverScene(game,finalRender);
 		}
-		System.out.println(System.currentTimeMillis() - startTime);
 	}
 
 	@Override
@@ -164,12 +162,12 @@ public class DungeonScene extends Scene{
 		cloaks.get(3).setTile(17,13,24, 24);
 		
 		for (Cloak c: cloaks){
-			c.playerLastSeen = new XYCoords(0,0);
-			c.playerNextTurn = new XYCoords(0,0);
+			c.playerLastSeen.setPosition(0,0);
+			c.playerNextTurn.setPosition(0,0);
 			c.playerStillInView = false;
 			c.alertState = 0;
 		}
-		knight.setPosition(new XYCoords(9, 7, 8, 8));
+		knight.setTile(9, 7, 8, 8);
 
 
 	}

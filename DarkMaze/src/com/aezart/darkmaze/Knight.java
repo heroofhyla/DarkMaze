@@ -53,24 +53,24 @@ public class Knight extends Entity{
 		}
 		if ((game.keyStates.get(KeyEvent.VK_LEFT) == true)){
 			if (validMove(x()-2,y())){
-				position = position.plus(-2, 0);
+				position.add(-2, 0);
 			}
 
 		}
 		if ((game.keyStates.get(KeyEvent.VK_RIGHT) == true)){
 			if (validMove(x()+2, y())){
-				position = position.plus(2, 0);
+				position.add(2, 0);
 			}
 
 		}
 		if ((game.keyStates.get(KeyEvent.VK_UP) == true)){
 			if (validMove(x(), y()-2)){
-				 position = position.plus(0, -2);
+				 position.add(0, -2);
 			}
 		}
 		if ((game.keyStates.get(KeyEvent.VK_DOWN) == true)){
 			if (validMove(x(), y()+2)){
-				 position = position.plus(0, 2);
+				 position.add(0, 2);
 			}
 		}
 		

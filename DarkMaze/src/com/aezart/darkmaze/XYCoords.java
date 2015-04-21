@@ -14,7 +14,20 @@ public final class XYCoords {
 		this.y = yTile*32 + yOffset;
 	}
 	
+	public void setPosition(XYCoords xy){
+		this.x = xy.x;
+		this.y = xy.y;
+	}
 	
+	public void setPosition(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
+	
+	public void setPosition(int xTile, int yTile, int xOffset, int yOffset){
+		this.x = xTile*32 + xOffset;
+		this.y = yTile*32 + yOffset;
+	}
 	public final int x(){
 		return x;
 	}
@@ -23,8 +36,13 @@ public final class XYCoords {
 		return y;
 	}
 	
-	public final XYCoords plus(int x, int y){
+	/*public final XYCoords plus(int x, int y){
 		return new XYCoords(this.x+x, this.y+y);
+	}*/
+	
+	public void add(int x, int y){
+		this.x += x;
+		this.y += y;
 	}
 	public final int xTile(){
 		return x/32;

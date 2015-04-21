@@ -13,7 +13,12 @@ public class Entity {
 	public final static int SOUTHWEST = 5;
 	public final static int SOUTH = 6;
 	public final static int SOUTHEAST = 7;
-	
+	private XYCoords nextPosition = new XYCoords(0,0);
+	//storing these here instead of at scope to avoid garbage collection
+	XYCoords topLeft = new XYCoords(0,0);
+	XYCoords topRight = new XYCoords(0,0);
+	XYCoords bottomLeft = new XYCoords(0,0);
+	XYCoords bottomRight = new XYCoords(0,0);
 	int bboxX1;
 	int bboxX2;
 	int bboxY1;
@@ -56,11 +61,12 @@ public class Entity {
 		return position.yTile();
 	}
 	void setPosition(XYCoords xy){
-		position = xy;
+		position.setPosition(xy);
 	}
 	
 	void setTile(int xTile, int yTile, int xOffset, int yOffset){
-		position = new XYCoords(xTile, yTile, xOffset, yOffset);
+		//position = new XYCoords(xTile, yTile, xOffset, yOffset);
+		position.setPosition(xTile, yTile, xOffset, yOffset);
 	}
 	//int directionTo(XYCoords t){
 		//return directionTo(t.x(), t.y());
@@ -183,11 +189,10 @@ public class Entity {
 		return validMove(xy.x(), xy.y());
 	}
 	public boolean validMove(int x, int y){
-		XYCoords topLeft = new XYCoords(x+bboxX1, y+bboxY1);
-		XYCoords bottomLeft = new XYCoords(x+bboxX1, y+bboxY2);
-		
-		XYCoords topRight = new XYCoords(x+bboxX2, y+bboxY1);
-		XYCoords bottomRight = new XYCoords(x+bboxX2, y+bboxY2);
+		topLeft.setPosition(x+bboxX1, y+bboxY1);
+		bottomLeft.setPosition(x+bboxX1, y+bboxY2);
+		topRight.setPosition(x+bboxX2, y+bboxY1);
+		bottomRight.setPosition(x+bboxX2, y+bboxY2);
 
 		if (scene.maze[topLeft.yTile()][topLeft.xTile()]){
 			return false;
@@ -220,6 +225,7 @@ public class Entity {
 			nextY += 2;
 		}
 		
-		return new XYCoords(nextX, nextY);
+		nextPosition.setPosition(nextX,nextY);
+		return nextPosition;
 	}
 }
