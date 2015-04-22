@@ -23,6 +23,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -83,7 +84,11 @@ public class DarkMaze extends JFrame{
 			//coinAIS = AudioSystem.getAudioInputStream(this.getClass().getResourceAsStream("resources/audio/coin.wav"));
 			coinBIS = new BufferedInputStream(this.getClass().getResourceAsStream("resources/audio/coin.wav"));
 			coinAIS = AudioSystem.getAudioInputStream(coinBIS);
-			coinClip = AudioSystem.getClip();
+			AudioFormat coinAF = coinAIS.getFormat();
+			DataLine.Info coinInfo = new DataLine.Info(Clip.class, coinAF);
+			coinClip = (Clip)AudioSystem.getLine(coinInfo);
+			//coinClip = AudioSystem.getClip();
+			coinClip.open(coinAIS);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (UnsupportedAudioFileException e) {

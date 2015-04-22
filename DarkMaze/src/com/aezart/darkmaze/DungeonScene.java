@@ -15,8 +15,6 @@ import java.util.Vector;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
@@ -58,8 +56,19 @@ public class DungeonScene extends Scene{
 
 	public DungeonScene(final DarkMaze game){
 		try {
-			game.coinClip.open(game.coinAIS);
-			((FloatControl) game.coinClip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-5);
+			for (Object o: AudioSystem.getAudioFileTypes()){
+				System.out.println(o);
+			}
+			
+			for (Object o: game.coinClip.getControls()){
+				System.out.println(o);
+			}
+			try{
+				((FloatControl) game.coinClip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-5);
+			} catch (IllegalArgumentException e){
+				((FloatControl) game.coinClip.getControl(FloatControl.Type.VOLUME)).setValue(40000);
+				System.out.println("MASTER_GAIN not supported, using VOLUME");
+			}
 			game.bgmIS =  (this.getClass().getResourceAsStream("resources/audio/Oppressive Gloom.mp3"));
 			game.bgmPlayer = new Player(game.bgmIS);
 			
@@ -76,9 +85,6 @@ public class DungeonScene extends Scene{
 			}
 			).start();
 			
-		} catch (LineUnavailableException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (JavaLayerException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
