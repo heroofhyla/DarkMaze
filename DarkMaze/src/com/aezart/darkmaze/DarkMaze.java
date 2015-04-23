@@ -81,14 +81,7 @@ public class DarkMaze extends JFrame{
 			alertIcon = importImage("resources/alerticon.png",Transparency.BITMASK);
 			lostIcon = importImage("resources/losticon.png", Transparency.BITMASK);
 			
-			//coinAIS = AudioSystem.getAudioInputStream(this.getClass().getResourceAsStream("resources/audio/coin.wav"));
-			coinBIS = new BufferedInputStream(this.getClass().getResourceAsStream("resources/audio/coin.wav"));
-			coinAIS = AudioSystem.getAudioInputStream(coinBIS);
-			AudioFormat coinAF = coinAIS.getFormat();
-			DataLine.Info coinInfo = new DataLine.Info(Clip.class, coinAF);
-			coinClip = (Clip)AudioSystem.getLine(coinInfo);
-			//coinClip = AudioSystem.getClip();
-			coinClip.open(coinAIS);
+			coinClip = createSoundClip("resources/audio/coin.wav");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (UnsupportedAudioFileException e) {
@@ -171,6 +164,17 @@ public class DarkMaze extends JFrame{
 	
 	public BufferedImage createImage(int x, int y, int transparency){
 		return getGraphicsConfiguration().createCompatibleImage(x, y, transparency);
+	}
+	
+	public Clip createSoundClip(String filePath) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+		BufferedInputStream bis = new BufferedInputStream(this.getClass().getResourceAsStream(filePath));
+		AudioInputStream ais = AudioSystem.getAudioInputStream(bis);
+		AudioFormat af = ais.getFormat();
+		DataLine.Info info = new DataLine.Info(Clip.class, af);
+		Clip clip = (Clip)AudioSystem.getLine(info);
+		clip.open(ais);
+		return clip;
+
 	}
 	
 }
