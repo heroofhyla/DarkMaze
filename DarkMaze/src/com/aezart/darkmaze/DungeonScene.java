@@ -64,6 +64,7 @@ public class DungeonScene extends Scene{
 				System.out.println(o);
 			}
 			try{
+				((FloatControl) game.footstepsClip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(2);
 				((FloatControl) game.coinClip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-5);
 			} catch (IllegalArgumentException e){
 				((FloatControl) game.coinClip.getControl(FloatControl.Type.VOLUME)).setValue(40000);
@@ -124,6 +125,9 @@ public class DungeonScene extends Scene{
 		}
 		
 		if (readyForNextLevel){
+			game.footstepsClip.stop();
+			game.footstepsClip.setFramePosition(0);
+			game.footstepsClip.start();
 			nextLevel();
 			stairs.stairsReady = false;
 			stairs.coinTarget = coinCount + 40;

@@ -57,9 +57,8 @@ public class DarkMaze extends JFrame{
 	BufferedImage tileset;
 	BufferedImage noSprite = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
 	
-	AudioInputStream coinAIS;
-	BufferedInputStream coinBIS;
 	Clip coinClip;
+	Clip footstepsClip;
 	Player bgmPlayer;
 	InputStream bgmIS;
 	
@@ -82,6 +81,7 @@ public class DarkMaze extends JFrame{
 			lostIcon = importImage("resources/losticon.png", Transparency.BITMASK);
 			
 			coinClip = createSoundClip("resources/audio/coin.wav");
+			footstepsClip = createSoundClip("resources/audio/footsteps.wav");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (UnsupportedAudioFileException e) {
@@ -93,7 +93,6 @@ public class DarkMaze extends JFrame{
 		}
 		
 		light = fancyLight;
-		final Graphics sg = screen.mapImage.getGraphics();
 		
 		currentScene = new TitleScene(this);
 
@@ -117,15 +116,6 @@ public class DarkMaze extends JFrame{
 				if (arg0.getKeyCode() == KeyEvent.VK_SHIFT){
 					displayMode = (displayMode+1)%5;
 					debug = !debug;
-					//textAlert.showTextAlert("Debug mode toggle", 30);
-
-					
-				}
-				if (arg0.getKeyCode() == KeyEvent.VK_Z){
-					//resetMaze();
-					//generateMaze(maze);
-					//paintBackground(screen.mapImage.getGraphics());
-
 				}
 			}
 
