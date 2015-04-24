@@ -178,6 +178,7 @@ public class Cloak extends Entity{
 		//if (Math.abs(x() - scene.knight.x()) < 10 && Math.abs(y() - scene.knight.y()) < 10){
 			scene.lives -= 1;
 			scene.resetEntities();
+			game.currentScene = new TransitionScene(scene, game);
 			//scene.knight.setTile(9, 7, 16, 16);
 		
 		}

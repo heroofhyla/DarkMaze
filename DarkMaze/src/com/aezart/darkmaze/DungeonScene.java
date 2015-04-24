@@ -186,7 +186,7 @@ public class DungeonScene extends Scene{
 	
 	public void nextLevel(){
 		++level;
-		textAlert.showTextAlert("Depth: " + 10*level + "ft", 60);
+		//textAlert.showTextAlert("Depth: " + 10*level + "ft", 60);
 		generateMaze(maze);
 		resetEntities();
 		paintBackground(mapG);
@@ -197,6 +197,7 @@ public class DungeonScene extends Scene{
 			coins[3][4] = false;
 			
 		}
+		game.currentScene = new TransitionScene(this, game);
 
 	}
 	
