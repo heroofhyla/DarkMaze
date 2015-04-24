@@ -350,6 +350,10 @@ public class DungeonScene extends Scene{
 			lightG2D = (Graphics2D)lightSurface.getGraphics();
 		}
 		
+		if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE){
+			game.currentScene = new PauseScene(this, finalRender);
+		}
+		
 	}
 }
 	
