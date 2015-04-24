@@ -66,7 +66,7 @@ public class DungeonScene extends Scene{
 			try{
 				((FloatControl) game.coinClip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-5);
 			} catch (IllegalArgumentException e){
-				((FloatControl) game.coinClip.getControl(FloatControl.Type.VOLUME)).setValue(40000);
+				((FloatControl) game.coinClip.getControl(FloatControl.Type.VOLUME)).setValue(50000);
 				System.out.println("MASTER_GAIN not supported, using VOLUME");
 			}
 			game.bgmIS =  (this.getClass().getResourceAsStream("resources/audio/Oppressive Gloom.mp3"));
