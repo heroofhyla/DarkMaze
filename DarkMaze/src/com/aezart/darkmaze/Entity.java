@@ -14,6 +14,8 @@ public class Entity {
 	public final static int SOUTH = 6;
 	public final static int SOUTHEAST = 7;
 	private XYCoords nextPosition = new XYCoords(0,0);
+	
+	boolean dead = false;
 	//storing these here instead of at scope to avoid garbage collection
 	XYCoords topLeft = new XYCoords(0,0);
 	XYCoords topRight = new XYCoords(0,0);

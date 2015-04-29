@@ -42,8 +42,7 @@ public class DarkMaze extends JFrame{
 	
 	int displayMode = ALL_TORCHES;
 	int[] directions = new int[5];
-	BufferedImage glowingEyes;
-	BufferedImage redEyes;
+	
 	BufferedImage light;
 	BufferedImage fastLight;
 	BufferedImage fancyLight;
@@ -55,10 +54,13 @@ public class DarkMaze extends JFrame{
 	BufferedImage lostIcon;
 	BufferedImage gameOver;
 	BufferedImage tileset;
+	BufferedImage firecracker;
 	BufferedImage noSprite = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
+	BufferedImage explosion;
 	
 	Clip coinClip;
 	Clip footstepsClip;
+	Clip firecrackerClip;
 	Player bgmPlayer;
 	InputStream bgmIS;
 	
@@ -79,9 +81,13 @@ public class DarkMaze extends JFrame{
 			cloakSprite = importImage("resources/littlecloaksheet.png",Transparency.BITMASK);
 			alertIcon = importImage("resources/alerticon.png",Transparency.BITMASK);
 			lostIcon = importImage("resources/losticon.png", Transparency.BITMASK);
+			firecracker = importImage("resources/firecracker.png", Transparency.BITMASK);
+			explosion = importImage("resources/explosion1.png", Transparency.BITMASK);
 			
 			coinClip = createSoundClip("resources/audio/coin.wav");
 			footstepsClip = createSoundClip("resources/audio/footsteps.wav");
+			firecrackerClip = createSoundClip("resources/audio/firecracker.wav");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (UnsupportedAudioFileException e) {

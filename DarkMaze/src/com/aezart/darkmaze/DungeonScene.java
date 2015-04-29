@@ -23,15 +23,11 @@ public class DungeonScene extends Scene{
 	boolean fancyGraphics = true;
 	DarkMaze game;
 
-	//BufferedImage mapImage = new BufferedImage(608, 480, BufferedImage.TYPE_3BYTE_BGR);
 	BufferedImage mapImage;
 	BufferedImage drawingSurface;
-	//BufferedImage drawingSurface = new BufferedImage(608, 480, BufferedImage.TYPE_3BYTE_BGR);
 	BufferedImage fancyLightSurface;
 	BufferedImage fastLightSurface;
-	//BufferedImage lightSurface = new BufferedImage(608, 480, BufferedImage.TYPE_4BYTE_ABGR);
 	BufferedImage lightSurface;
-	//BufferedImage finalRender = new BufferedImage(608,480,BufferedImage.TYPE_3BYTE_BGR);
 	BufferedImage finalRender;
 	
 	Graphics mapG;
@@ -46,7 +42,7 @@ public class DungeonScene extends Scene{
 	boolean[][] maze = new boolean[15][19];
 	boolean[][] coins = new boolean[7][9];
 	Vector<Entity> entities = new Vector<Entity>();
-	Vector<Entity> toRemove = new Vector<Entity>();
+	Vector<Entity> newEntityList = new Vector<Entity>();
 	Vector<Cloak> cloaks = new Vector<Cloak>(4);
 	Knight knight;
 	TextAlert textAlert;
@@ -120,6 +116,16 @@ public class DungeonScene extends Scene{
 	}
 	@Override
 	public void tick() {
+		if (!(entities.equals(newEntityList))){
+			for (Entity e: entities){
+				if (!e.dead){
+					newEntityList.addElement(e);
+				}
+			}
+	
+			entities = newEntityList;
+		}
+		newEntityList = new Vector<Entity>(entities.size());
 		for (Entity e: entities){
 			e.tick();
 		}
@@ -333,7 +339,7 @@ public class DungeonScene extends Scene{
 	@Override
 	public void keyPressed(KeyEvent keyEvent) {
 		if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE){
-			entities.add(new Torch(this));
+			entities.add(new Firecracker(this));
 			entities.lastElement().setPosition(knight.position);
 		}
 
