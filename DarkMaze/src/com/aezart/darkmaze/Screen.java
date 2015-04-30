@@ -4,6 +4,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
@@ -28,15 +29,31 @@ public class Screen extends JPanel{
 	}
 	@Override
 	protected void paintComponent(Graphics g) {
-		darkMaze.setTitle("" +this.getHeight());
 		super.paintComponent(g);
-		darkMaze.currentScene.draw(gameSurface.getGraphics());
-		if (this.getHeight() * 1.2667 <= this.getWidth()){
-			int renderWidth = (int) (this.getHeight() * 1.2667);
-			g.drawImage(gameSurface,(this.getWidth() - renderWidth)/2,0,renderWidth, this.getHeight(), null);
+		Graphics2D g2D = (Graphics2D)g;
+		if (darkMaze.light == darkMaze.fancyLight){
+			g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		}else{
-			int renderHeight = (int) (this.getWidth()*.7894);
-			g.drawImage(gameSurface,0,(this.getHeight() - renderHeight)/2,this.getWidth(), renderHeight, null);
+			g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+
+		}
+		darkMaze.currentScene.draw(gameSurface.getGraphics());
+		if (this.getWidth() == 608 && this.getHeight() == 480){
+			g.drawImage(gameSurface,0,0,null);
+			darkMaze.setTitle(":)");
+		}else{
+			int renderWidth;
+			int renderHeight;
+			if (this.getHeight() * 1.2667 <= this.getWidth()){
+				renderWidth = (int) (this.getHeight() * 1.2667);
+				renderHeight = this.getHeight();
+			}else{
+				renderWidth = (int) (this.getWidth());
+				renderHeight = (int) (this.getWidth()*.7894);
+			}
+			darkMaze.setTitle(this.getWidth() + "," +this.getHeight());
+
+			g.drawImage(gameSurface,(this.getWidth() - renderWidth)/2,(this.getHeight() - renderHeight)/2,renderWidth, renderHeight, null);
 		}
 	}
 }
