@@ -75,4 +75,9 @@ public final class XYCoords {
 	public final int hashCode(){
 		return ((x * y) + 29)*37;
 	}
+	
+	@Override
+	public String toString(){
+		return this.xTile() + "+" + x%32 + ", " + this.yTile() + "+" + y%32;
+	}
 }

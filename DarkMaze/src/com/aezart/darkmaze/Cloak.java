@@ -8,6 +8,8 @@ public class Cloak extends Entity{
 	int confusionTimer = -1;
 	int alertState = 0;
 	int direction = game.rng.nextInt(4) * 2;
+	int xOffset = 0;
+	int yOffset = 0;
 	XYCoords playerLastSeen = new XYCoords(0,0);
 	XYCoords playerNextTurn = new XYCoords(0,0);
 	boolean playerStillInView = false;
@@ -21,6 +23,39 @@ public class Cloak extends Entity{
 		this.bboxX2 = bboxX2;
 		this.bboxY1 = bboxY1;
 		this.bboxY2 = bboxY2;
+	}
+	
+	public Cloak(DungeonScene scene, int xOffset, int yOffset){
+		super(scene.game.cloakSprite, scene);
+		drawXOffset = -sprite.getWidth()/4;
+		drawYOffset = -sprite.getHeight()/4;
+
+		/*this.bboxX1 = xOffset - 16;
+		this.bboxY1 = yOffset - 16;
+		this.bboxX2 = xOffset + 7;
+		this.bboxY2 = yOffset + 7;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;*/
+		if (xOffset == 8){
+			bboxX1 = -8;
+			bboxX2 = 23;
+		}
+		if (xOffset == 24){
+			bboxX1 = -24;
+			bboxX2 = 7;
+		}
+		
+		if (yOffset == 8){
+			bboxY1 = -8;
+			bboxY2 = 23;
+		}
+		if (yOffset == 24){
+			bboxY1 = -24;
+			bboxY2 = 7;
+		}
+		
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
 	}
 	
 	/*@Override 
@@ -54,6 +89,7 @@ public class Cloak extends Entity{
 			g.drawImage(game.glowingEyes, x()+drawXOffset, y()+drawYOffset, null);
 		}*/
 		if (game.debug){
+		
 			if (playerLastSeen.x() != 0){
 				g.setColor(Color.white);
 				g.drawLine(x(), y(), playerLastSeen.x(), playerLastSeen.y());
@@ -64,10 +100,14 @@ public class Cloak extends Entity{
 			FontMetrics fm = g.getFontMetrics();
 			g.setColor(Color.black);
 			g.fillRect(position.x()-fm.stringWidth(this.toString())/2, position.y()-8, fm.stringWidth(this.toString()), 8);
-			g.fillRect(position.x()-fm.stringWidth(this.toString())/2, position.y()+1, 40, 27);
+			/*
+			g.fillRect(position.x()-fm.stringWidth(this.toString())/2, position.y()+1, 40, 27);*/
+			g.setColor(Color.blue);
+			g.drawRect(x() + bboxX1, y()+bboxY1, bboxX2 - bboxX1, bboxY2 - bboxY1);
 			g.setColor(Color.cyan);
-			g.drawString(this.toString(), position.x()-fm.stringWidth(this.toString())/2, position.y());
+			g.drawString(this.toString(), position.x()-fm.stringWidth(this.toString())/2, position.y()-18);
 			
+			/*
 			g.drawString("xT: " + position.xTile(), position.x()-fm.stringWidth(this.toString())/2, position.y()+9);
 			
 			g.drawString("yT: " + position.yTile(), position.x()-fm.stringWidth(this.toString())/2, position.y()+18);
@@ -82,7 +122,7 @@ public class Cloak extends Entity{
 			
 			g.setColor(Color.cyan);
 			g.drawString("x: " + playerNextTurn.x(), playerNextTurn.x(), playerNextTurn.y());
-			g.drawString("y: " + playerNextTurn.y(), playerNextTurn.x(), playerNextTurn.y()+9);
+			g.drawString("y: " + playerNextTurn.y(), playerNextTurn.x(), playerNextTurn.y()+9);*/
 		}
 	}
 	
@@ -115,7 +155,7 @@ public class Cloak extends Entity{
 			if (game.debug){
 				System.out.println(this + " reports: player in line of sight!");
 			}
-			playerLastSeen.setPosition(scene.knight.position);
+			playerLastSeen.setPosition(scene.knight.xTile(), scene.knight.yTile(), xOffset, yOffset);
 			playerStillInView = true;
 			alertState = 2;
 			confusionTimer = 34;
@@ -124,17 +164,38 @@ public class Cloak extends Entity{
 				System.out.println(this + " lost sight of player.");
 			}
 			playerStillInView = false;
-			playerNextTurn.setPosition(scene.knight.position);
+			playerNextTurn.setPosition(scene.knight.xTile(), scene.knight.yTile(), xOffset, yOffset);
 			
 		}
 
 		if (lineOfSight(playerLastSeen)){
+			System.out.println(this + "direction to PLS: " + directionToTile(playerLastSeen));
+
 				if (validMove(nextCoord(directionToTile(playerLastSeen)))){
 					direction = directionToTile(playerLastSeen);
 					if (game.debug){
 						System.out.println(this + ": setting direction to " + direction);
 					}
 				}else{
+					System.out.println(this + ": can't move to PLS" + nextCoord(directionToTile(playerLastSeen)));
+					if (direction == WEST && x() < playerLastSeen.x()){
+						System.out.println(this + ": Doubling back because " + x() + "<" + (playerLastSeen.x()));
+						direction = EAST;
+					}
+					if (direction == EAST && x() > playerLastSeen.x()){
+						System.out.println(this + ": Doubling back because " + x() + ">" + (playerLastSeen.x()));
+
+						direction = WEST;
+					}
+					if (direction == NORTH && y() < playerLastSeen.y()){
+						System.out.println(this + ": Doubling back because " + y() + "<" + (playerLastSeen.y()));
+
+						direction = SOUTH;
+					}
+					if (direction == SOUTH && y() > playerLastSeen.y()){
+						System.out.println(this + ": Doubling back because " + y() + ">" + (playerLastSeen.y()));
+						direction = NORTH;
+					}
 					//direction = directionTo(position.xTile(0)*32 + 8, position.yTile(0)*32 + 8);
 					//System.out.println("Recentering on tile: " + direction);
 				}
@@ -143,7 +204,9 @@ public class Cloak extends Entity{
 		}
 		
 		if (lineOfSight(playerNextTurn)){
+			System.out.println(this + "direction to PNT: " + directionToTile(playerNextTurn));
 			if (validMove(nextCoord(directionToTile(playerNextTurn)))){
+				System.out.println(this+ ": move is valid!");
 				direction = directionToTile(playerNextTurn);
 				if (game.debug){
 					System.out.println(this + " Following trail: " + direction);
@@ -151,6 +214,28 @@ public class Cloak extends Entity{
 					System.out.println("target xy: " + playerNextTurn.x() + "," + playerNextTurn.y());
 				}				
 				playerNextTurn.setPosition(0,0);
+			}else{
+				System.out.println(this + ": can't move to " + nextCoord(directionToTile(playerNextTurn)));
+
+				if (direction == WEST && x() < playerNextTurn.x()){
+					System.out.println(this + ": Doubling back because " + x() + "<" + (playerNextTurn.x()));
+
+					direction = EAST;
+				}
+				if (direction == EAST && x() > playerNextTurn.x()){
+					System.out.println(this + ": Doubling back because " + x() + ">" + (playerNextTurn.x()));
+
+					direction = WEST;
+				}
+				if (direction == NORTH && y() < playerNextTurn.y()){
+					System.out.println(this + ": Doubling back because " + y() + "<" + (playerNextTurn.y()));
+
+					direction = SOUTH;
+				}
+				if (direction == SOUTH && y() > playerNextTurn.y()){
+					System.out.println(this + ": Doubling back because " + y() + ">" + (playerNextTurn.y()));
+					direction = NORTH;
+				}
 			}
 		}
 

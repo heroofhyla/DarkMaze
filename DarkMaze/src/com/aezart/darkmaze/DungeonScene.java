@@ -106,10 +106,14 @@ public class DungeonScene extends Scene{
 		textAlert = new TextAlert(this);
 		entities.add(knight);
 		entities.add(textAlert);
-		cloaks.add(new Cloak(this, -8,-8,23,23));
+		/*cloaks.add(new Cloak(this, -8,-8,23,23));
 		cloaks.add(new Cloak(this, -24,-8,7,23));
 		cloaks.add(new Cloak(this, -8,-24,23,7));
-		cloaks.add(new Cloak(this, -24,-24,7,7));
+		cloaks.add(new Cloak(this, -24,-24,7,7));*/
+		cloaks.add(new Cloak(this, 8,8));
+		//cloaks.add(new Cloak(this, 24, 8));
+		//cloaks.add(new Cloak(this, 8, 24));
+		//cloaks.add(new Cloak(this, 24, 24));
 		entities.addAll(cloaks);		
 		nextLevel();
 
@@ -209,9 +213,9 @@ public class DungeonScene extends Scene{
 	
 	void resetEntities(){
 		cloaks.get(0).setTile(1, 1, 8, 8);
-		cloaks.get(1).setTile(17,1, 24, 8);
-		cloaks.get(2).setTile(1,13, 8, 24);
-		cloaks.get(3).setTile(17,13,24, 24);
+		//cloaks.get(1).setTile(17,1, 24, 8);
+		//cloaks.get(2).setTile(1,13, 8, 24);
+		//cloaks.get(3).setTile(17,13,24, 24);
 		
 		for (Cloak c: cloaks){
 			c.playerLastSeen.setPosition(0,0);
@@ -356,6 +360,9 @@ public class DungeonScene extends Scene{
 			lightG2D = (Graphics2D)lightSurface.getGraphics();
 		}
 		
+		if (keyEvent.getKeyCode() == KeyEvent.VK_Z){
+			//nextLevel();
+		}
 		if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE){
 			game.currentScene = new PauseScene(this, finalRender);
 		}
