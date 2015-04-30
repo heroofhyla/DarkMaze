@@ -106,10 +106,10 @@ public class DungeonScene extends Scene{
 		textAlert = new TextAlert(this);
 		entities.add(knight);
 		entities.add(textAlert);
-		cloaks.add(new Cloak(this, -8,-8,23,23));
-		cloaks.add(new Cloak(this, -24,-8,7,23));
-		cloaks.add(new Cloak(this, -8,-24,23,7));
-		cloaks.add(new Cloak(this, -24,-24,7,7));
+		cloaks.add(new Cloak(this, 8,8));
+		cloaks.add(new Cloak(this, 24, 8));
+		cloaks.add(new Cloak(this, 8, 24));
+		cloaks.add(new Cloak(this, 24, 24));
 		entities.addAll(cloaks);		
 		nextLevel();
 
@@ -356,6 +356,9 @@ public class DungeonScene extends Scene{
 			lightG2D = (Graphics2D)lightSurface.getGraphics();
 		}
 		
+		if (keyEvent.getKeyCode() == KeyEvent.VK_Z){
+			//nextLevel();
+		}
 		if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE){
 			game.currentScene = new PauseScene(this, finalRender);
 		}

@@ -38,7 +38,9 @@ public class Firecracker extends Entity{
 					c.direction = c.directionToTile(this.position);
 					c.alertState = 2;
 					c.confusionTimer = 34;
-					c.playerLastSeen.setPosition(this.position);
+					c.playerLastSeen.setPosition(this.xTile(), this.yTile(), c.xOffset, c.yOffset);
+					c.playerNextTurn.setPosition(this.xTile(), this.yTile(), c.xOffset, c.yOffset);
+
 					//c.playerNextTurn.setPosition(this.position);
 				}
 			}
