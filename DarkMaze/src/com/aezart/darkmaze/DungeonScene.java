@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Vector;
@@ -20,6 +21,38 @@ import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
 public class DungeonScene extends Scene{
+	
+	String[] tombTypes = {
+			"Tomb of ",
+			"Burial Chambers of ",
+			"Labyrinth of ",
+			"Sunken Tower of ",
+			"Hidden Vaults of ",
+			"Catacomb of ",
+			"Secret Maze of ",
+			"Forbidden Palace of ",
+			"Crypt of ",
+			"Grave of "
+	};
+	
+	String[] rulerNames = {
+		"Lady Clair d'Alandra",
+		"John XXVII",
+		"Sir Landon",
+		"The Spider Queen",
+		"The Lost Army",
+		"Riamana Korvera",
+		"The Handtaker",
+		"Lord and Lady Blackfeather",
+		"Emperor Kitt",
+		"Bavel the Great",
+		"Forgotten Lies"
+	};
+	
+	ArrayList<String> tombs = new ArrayList<String>(Arrays.asList(tombTypes));
+	ArrayList<String> names = new ArrayList<String>(Arrays.asList(rulerNames));
+
+
 	boolean fancyGraphics = true;
 	DarkMaze game;
 
@@ -51,6 +84,8 @@ public class DungeonScene extends Scene{
 
 
 	public DungeonScene(final DarkMaze game){
+		Collections.shuffle(tombs);
+		Collections.shuffle(names);
 		try {
 			for (Object o: AudioSystem.getAudioFileTypes()){
 				System.out.println(o);
@@ -209,9 +244,9 @@ public class DungeonScene extends Scene{
 	
 	void resetEntities(){
 		cloaks.get(0).setTile(1, 1, 8, 8);
-		//cloaks.get(1).setTile(17,1, 24, 8);
-		//cloaks.get(2).setTile(1,13, 8, 24);
-		//cloaks.get(3).setTile(17,13,24, 24);
+		cloaks.get(1).setTile(17,1, 24, 8);
+		cloaks.get(2).setTile(1,13, 8, 24);
+		cloaks.get(3).setTile(17,13,24, 24);
 		
 		for (Cloak c: cloaks){
 			c.playerLastSeen.setPosition(0,0);

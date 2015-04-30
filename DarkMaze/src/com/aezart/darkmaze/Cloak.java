@@ -153,7 +153,7 @@ public class Cloak extends Entity{
 		}
 		if (lineOfSight(scene.knight) && directionToTile(scene.knight.position) == direction){
 			if (game.debug){
-				System.out.println(this + " reports: player in line of sight!");
+				//System.out.println(this + " reports: player in line of sight!");
 			}
 			playerLastSeen.setPosition(scene.knight.xTile(), scene.knight.yTile(), xOffset, yOffset);
 			playerStillInView = true;
@@ -161,7 +161,7 @@ public class Cloak extends Entity{
 			confusionTimer = 34;
 		}else if (playerStillInView){
 			if (game.debug){
-				System.out.println(this + " lost sight of player.");
+				//System.out.println(this + " lost sight of player.");
 			}
 			playerStillInView = false;
 			playerNextTurn.setPosition(scene.knight.xTile(), scene.knight.yTile(), xOffset, yOffset);
@@ -169,31 +169,31 @@ public class Cloak extends Entity{
 		}
 
 		if (lineOfSight(playerLastSeen)){
-			System.out.println(this + "direction to PLS: " + directionToTile(playerLastSeen));
+			//System.out.println(this + "direction to PLS: " + directionToTile(playerLastSeen));
 
 				if (validMove(nextCoord(directionToTile(playerLastSeen)))){
 					direction = directionToTile(playerLastSeen);
 					if (game.debug){
-						System.out.println(this + ": setting direction to " + direction);
+						//System.out.println(this + ": setting direction to " + direction);
 					}
 				}else{
 					System.out.println(this + ": can't move to PLS" + nextCoord(directionToTile(playerLastSeen)));
 					if (direction == WEST && x() < playerLastSeen.x()){
-						System.out.println(this + ": Doubling back because " + x() + "<" + (playerLastSeen.x()));
+						//System.out.println(this + ": Doubling back because " + x() + "<" + (playerLastSeen.x()));
 						direction = EAST;
 					}
 					if (direction == EAST && x() > playerLastSeen.x()){
-						System.out.println(this + ": Doubling back because " + x() + ">" + (playerLastSeen.x()));
+						//System.out.println(this + ": Doubling back because " + x() + ">" + (playerLastSeen.x()));
 
 						direction = WEST;
 					}
 					if (direction == NORTH && y() < playerLastSeen.y()){
-						System.out.println(this + ": Doubling back because " + y() + "<" + (playerLastSeen.y()));
+						//System.out.println(this + ": Doubling back because " + y() + "<" + (playerLastSeen.y()));
 
 						direction = SOUTH;
 					}
 					if (direction == SOUTH && y() > playerLastSeen.y()){
-						System.out.println(this + ": Doubling back because " + y() + ">" + (playerLastSeen.y()));
+						//System.out.println(this + ": Doubling back because " + y() + ">" + (playerLastSeen.y()));
 						direction = NORTH;
 					}
 					//direction = directionTo(position.xTile(0)*32 + 8, position.yTile(0)*32 + 8);
@@ -209,31 +209,31 @@ public class Cloak extends Entity{
 				System.out.println(this+ ": move is valid!");
 				direction = directionToTile(playerNextTurn);
 				if (game.debug){
-					System.out.println(this + " Following trail: " + direction);
-					System.out.println("my xy: " + position.x() + "," + position.y());
-					System.out.println("target xy: " + playerNextTurn.x() + "," + playerNextTurn.y());
+					//System.out.println(this + " Following trail: " + direction);
+					//System.out.println("my xy: " + position.x() + "," + position.y());
+					//System.out.println("target xy: " + playerNextTurn.x() + "," + playerNextTurn.y());
 				}				
 				playerNextTurn.setPosition(0,0);
 			}else{
-				System.out.println(this + ": can't move to " + nextCoord(directionToTile(playerNextTurn)));
+				//System.out.println(this + ": can't move to " + nextCoord(directionToTile(playerNextTurn)));
 
 				if (direction == WEST && x() < playerNextTurn.x()){
-					System.out.println(this + ": Doubling back because " + x() + "<" + (playerNextTurn.x()));
+					//System.out.println(this + ": Doubling back because " + x() + "<" + (playerNextTurn.x()));
 
 					direction = EAST;
 				}
 				if (direction == EAST && x() > playerNextTurn.x()){
-					System.out.println(this + ": Doubling back because " + x() + ">" + (playerNextTurn.x()));
+					//System.out.println(this + ": Doubling back because " + x() + ">" + (playerNextTurn.x()));
 
 					direction = WEST;
 				}
 				if (direction == NORTH && y() < playerNextTurn.y()){
-					System.out.println(this + ": Doubling back because " + y() + "<" + (playerNextTurn.y()));
+					//System.out.println(this + ": Doubling back because " + y() + "<" + (playerNextTurn.y()));
 
 					direction = SOUTH;
 				}
 				if (direction == SOUTH && y() > playerNextTurn.y()){
-					System.out.println(this + ": Doubling back because " + y() + ">" + (playerNextTurn.y()));
+					//System.out.println(this + ": Doubling back because " + y() + ">" + (playerNextTurn.y()));
 					direction = NORTH;
 				}
 			}

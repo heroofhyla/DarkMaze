@@ -38,6 +38,7 @@ public class DarkMaze extends JFrame{
 	static final int PLAYER_TORCH = 3;
 	static final int FULLDARK = 4;
 	
+	
 	boolean fancygraphics = true;
 	
 	int displayMode = ALL_TORCHES;

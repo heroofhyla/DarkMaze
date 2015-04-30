@@ -29,6 +29,8 @@ public class TransitionScene extends Scene{
 		g.fillRect(0, 0, 608, 480);
 		FontMetrics fm = g.getFontMetrics();
 		g.setColor(Color.white);
+		String levelTitle = dungeonScene.tombs.get(dungeonScene.level%dungeonScene.names.size()) + dungeonScene.names.get(dungeonScene.level%dungeonScene.names.size());
+		g.drawString(levelTitle, 304 - fm.stringWidth(levelTitle)/2, 244);
 		g.drawString("Depth: " + dungeonScene.level*10 + "ft", 304 - fm.stringWidth("Depth: " + dungeonScene.level*10 + "ft")/2, 256);
 		g.drawString("Lives: " + dungeonScene.lives, 304-fm.stringWidth("Lives: " + dungeonScene.lives)/2, 268);
 	}
