@@ -209,9 +209,9 @@ public class DungeonScene extends Scene{
 	
 	void resetEntities(){
 		cloaks.get(0).setTile(1, 1, 8, 8);
-		cloaks.get(1).setTile(17,1, 24, 8);
-		cloaks.get(2).setTile(1,13, 8, 24);
-		cloaks.get(3).setTile(17,13,24, 24);
+		//cloaks.get(1).setTile(17,1, 24, 8);
+		//cloaks.get(2).setTile(1,13, 8, 24);
+		//cloaks.get(3).setTile(17,13,24, 24);
 		
 		for (Cloak c: cloaks){
 			c.playerLastSeen.setPosition(0,0);
