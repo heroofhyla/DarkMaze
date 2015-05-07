@@ -16,6 +16,7 @@ import java.util.Vector;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.FloatControl;
+import javax.swing.SwingUtilities;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
@@ -127,7 +128,13 @@ public class DungeonScene extends Scene{
 		cloaks.add(new Cloak(this, 24, 8));
 		cloaks.add(new Cloak(this, 8, 24));
 		cloaks.add(new Cloak(this, 24, 24));
-		entities.addAll(cloaks);		
+		entities.addAll(cloaks);
+		/*new Thread(new Runnable(){
+			@Override
+			public void run(){
+				nextLevel();
+			}
+		}).start();*/
 		nextLevel();
 
 	}
@@ -268,6 +275,21 @@ public class DungeonScene extends Scene{
 		generateNext(firstX, firstY, maze, visited, deadEnds);
 		
 		for (XYCoords d: deadEnds){
+			/*try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			paintBackground(mapImage.getGraphics());
+			SwingUtilities.invokeLater(new Runnable(){
+				@Override
+				public void run(){
+					game.screen.repaint();
+
+
+				}
+			});*/
 			ArrayList<XYCoords> adjacentCells = new ArrayList<XYCoords>();
 			if (d.xTile() > 0){
 				adjacentCells.add(new XYCoords(2*d.xTile(),2*d.yTile()+1, 0, 0));
@@ -292,6 +314,21 @@ public class DungeonScene extends Scene{
 	}
 	
 	void generateNext(int x, int y, boolean[][] maze, boolean[][] visited, Vector<XYCoords> deadEnds){
+		/*try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		paintBackground(mapImage.getGraphics());
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run(){
+				game.screen.repaint();
+
+
+			}
+		});	*/	
 		visited[y][x] = true;
 		ArrayList<XYCoords> adjacentCells = new ArrayList<XYCoords>();
 		if (x > 0){
