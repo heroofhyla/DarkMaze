@@ -32,7 +32,7 @@ public class TitleScene extends Scene{
 	@Override
 	public void keyPressed(KeyEvent keyEvent) {
 		if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER){
-			game.currentScene = new TransitionScene(new DungeonScene(game), game);
+			game.currentScene = new TransitionScene(new DungeonScene(game));
 		}
 	}
 

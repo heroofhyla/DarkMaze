@@ -55,9 +55,7 @@ public class DarkMaze extends JFrame{
 	BufferedImage noSprite = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
 	BufferedImage explosion;
 	
-	Clip coinClip;
-	Clip footstepsClip;
-	Clip firecrackerClip;
+	AudioPlayer sePlayer;
 	Player bgmPlayer;
 	InputStream bgmIS;
 	
@@ -67,7 +65,9 @@ public class DarkMaze extends JFrame{
 	Screen screen = new Screen(this);
 	Scene currentScene;
 	public DarkMaze(){
+		sePlayer = new AudioPlayer(this);
 		try {
+			
 			gameOver = importImage("resources/gameover.png", Transparency.TRANSLUCENT);
 			tileset = importImage("resources/tileset2.png", Transparency.BITMASK);
 			fancyLight = importImage("resources/alphalight.png",Transparency.TRANSLUCENT);
@@ -81,20 +81,10 @@ public class DarkMaze extends JFrame{
 			firecracker = importImage("resources/firecracker.png", Transparency.BITMASK);
 			explosion = importImage("resources/explosion1.png", Transparency.BITMASK);
 			
-			coinClip = createSoundClip("resources/audio/coin.wav");
-			footstepsClip = createSoundClip("resources/audio/footsteps.wav");
-			firecrackerClip = createSoundClip("resources/audio/firecracker.wav");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		
 		light = fancyLight;
 		
 		currentScene = new TitleScene(this);
@@ -132,6 +122,7 @@ public class DarkMaze extends JFrame{
 		keyStates.put(KeyEvent.VK_RIGHT, false);
 		keyStates.put(KeyEvent.VK_UP, false);
 		keyStates.put(KeyEvent.VK_DOWN, false);
+		
 	}
 	
 	public static void main(String[] args){
@@ -157,17 +148,6 @@ public class DarkMaze extends JFrame{
 	
 	public BufferedImage createImage(int x, int y, int transparency){
 		return getGraphicsConfiguration().createCompatibleImage(x, y, transparency);
-	}
-	
-	public Clip createSoundClip(String filePath) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
-		BufferedInputStream bis = new BufferedInputStream(this.getClass().getResourceAsStream(filePath));
-		AudioInputStream ais = AudioSystem.getAudioInputStream(bis);
-		AudioFormat af = ais.getFormat();
-		DataLine.Info info = new DataLine.Info(Clip.class, af);
-		Clip clip = (Clip)AudioSystem.getLine(info);
-		clip.open(ais);
-		return clip;
-
 	}
 	
 }

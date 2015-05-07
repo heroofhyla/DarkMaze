@@ -29,9 +29,7 @@ public class Firecracker extends Entity{
 	public void tick(){
 		++lifetime;
 		if (lifetime == 16){
-			game.firecrackerClip.stop();
-			game.firecrackerClip.setFramePosition(0);
-			game.firecrackerClip.start();
+			game.sePlayer.play(game.sePlayer.FIRECRACKER);
 
 			for (Cloak c: scene.cloaks){
 				if (lineOfSight(c) && c.alertState != 2){

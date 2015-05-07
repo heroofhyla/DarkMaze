@@ -22,7 +22,7 @@ import javazoom.jl.player.Player;
 
 public class DungeonScene extends Scene{
 	
-	String[] tombTypes = {
+	ArrayList<String> tombs = new ArrayList<String>(Arrays.asList(
 			"Tomb of ",
 			"Burial Chambers of ",
 			"Labyrinth of ",
@@ -32,25 +32,19 @@ public class DungeonScene extends Scene{
 			"Secret Maze of ",
 			"Forbidden Palace of ",
 			"Crypt of ",
-			"Grave of "
-	};
-	
-	String[] rulerNames = {
-		"Lady Clair d'Alandra",
-		"John XXVII",
-		"Sir Landon",
-		"The Spider Queen",
-		"The Lost Army",
-		"Riamana Korvera",
-		"The Handtaker",
-		"Lord and Lady Blackfeather",
-		"Emperor Kitt",
-		"Bavel the Great",
-		"Forgotten Lies"
-	};
-	
-	ArrayList<String> tombs = new ArrayList<String>(Arrays.asList(tombTypes));
-	ArrayList<String> names = new ArrayList<String>(Arrays.asList(rulerNames));
+			"Grave of "));
+	ArrayList<String> names = new ArrayList<String>(Arrays.asList(
+			"Lady Clair d'Alandra",
+			"John XXVII",
+			"Sir Landon",
+			"The Spider Queen",
+			"The Lost Army",
+			"Riamana Korvera",
+			"The Handtaker",
+			"Lord and Lady Blackfeather",
+			"Emperor Kitt",
+			"Bavel the Great",
+			"Forgotten Lies"));
 
 
 	boolean fancyGraphics = true;
@@ -87,20 +81,8 @@ public class DungeonScene extends Scene{
 		Collections.shuffle(tombs);
 		Collections.shuffle(names);
 		try {
-			for (Object o: AudioSystem.getAudioFileTypes()){
-				System.out.println(o);
-			}
+
 			
-			for (Object o: game.coinClip.getControls()){
-				System.out.println(o);
-			}
-			try{
-				((FloatControl) game.footstepsClip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(2);
-				((FloatControl) game.coinClip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-5);
-			} catch (IllegalArgumentException e){
-				((FloatControl) game.coinClip.getControl(FloatControl.Type.VOLUME)).setValue(50000);
-				System.out.println("MASTER_GAIN not supported, using VOLUME");
-			}
 			game.bgmIS =  (this.getClass().getResourceAsStream("resources/audio/Oppressive Gloom.mp3"));
 			game.bgmPlayer = new Player(game.bgmIS);
 			
@@ -166,9 +148,7 @@ public class DungeonScene extends Scene{
 		}
 		
 		if (readyForNextLevel){
-			game.footstepsClip.stop();
-			game.footstepsClip.setFramePosition(0);
-			game.footstepsClip.start();
+			game.sePlayer.play(game.sePlayer.FOOTSTEPS);
 			nextLevel();
 			stairs.stairsReady = false;
 			stairs.coinTarget = coinCount + 40;
@@ -238,7 +218,7 @@ public class DungeonScene extends Scene{
 			coins[3][4] = false;
 			
 		}
-		game.currentScene = new TransitionScene(this, game);
+		game.currentScene = new TransitionScene(this);
 
 	}
 	
