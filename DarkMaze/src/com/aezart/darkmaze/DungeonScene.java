@@ -7,7 +7,12 @@ import java.awt.Graphics2D;
 import java.awt.Transparency;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,10 +23,13 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.FloatControl;
 import javax.swing.SwingUtilities;
 
+import com.aezart.darkmaze.map.Map;
+
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
 public class DungeonScene extends Scene{
+	Map levelMap;
 	
 	ArrayList<String> tombs = new ArrayList<String>(Arrays.asList(
 			"Tomb of ",
@@ -215,16 +223,20 @@ public class DungeonScene extends Scene{
 	public void nextLevel(){
 		++level;
 		//textAlert.showTextAlert("Depth: " + 10*level + "ft", 60);
-		generateMaze(maze);
+		levelMap = loadMaze("levels/testlevel2.dmap");
+		System.out.println(levelMap.toString());
+		maze = levelMap.mapTiles;
+		coins = levelMap.coinLocations;
+		//generateMaze(maze);
 		resetEntities();
 		paintBackground(mapG);
-		for (int i = 0; i < coins.length; ++i){
+		/*for (int i = 0; i < coins.length; ++i){
 			for (int k = 0; k < coins[0].length; ++k){
 				coins[i][k] = true;
 			}
 			coins[3][4] = false;
 			
-		}
+		}*/
 		game.currentScene = new TransitionScene(this);
 
 	}
@@ -244,6 +256,22 @@ public class DungeonScene extends Scene{
 		knight.setTile(9, 7, 8, 8);
 
 
+	}
+	
+	Map loadMaze(String filename){
+		InputStream fis = this.getClass().getResourceAsStream(filename);
+		ObjectInputStream ois;
+		Map levelMap = null;
+		try {
+			ois = new ObjectInputStream(fis);
+			levelMap = (Map) ois.readObject();
+
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(0);
+		}
+		return levelMap;
 	}
 	
 	void generateMaze(boolean[][] maze){
